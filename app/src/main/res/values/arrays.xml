@@ -1,0 +1,34 @@
+<resources>
+    <string-array name="snap_media_types" >
+        <item>Image</item>
+        <item>Video</item>
+        <item>Video (No Sound)</item>
+    </string-array>
+
+    <string-array name="snap_media_types_values">
+        <item>IMAGE</item>
+        <item>VIDEO</item>
+        <item>VIDEO_NO_SOUND</item>
+    </string-array>
+
+    <string-array name="friend_add_modes" >
+        <item>Username</item>
+        <item>Added Me Back</item>
+        <item>Suggested</item>
+        <item>Shared Username</item>
+        <item>Shared Story</item>
+        <item>Group Chat</item>
+    </string-array>
+
+    <string-array name="friend_add_modes_values">
+        <item>ADDED_BY_USERNAME</item>
+        <item>ADDED_BY_ADDED_ME_BACK</item>
+        <item>ADDED_BY_SUGGESTED</item>
+        <item>ADDED_BY_SHARED_USERNAME</item>
+        <item>ADDED_BY_SHARED_STORY</item>
+        <item>ADDED_BY_GROUP_CHAT</item>
+    </string-array>
+    <string-array name="sc_scope">
+        <item>com.snapchat.android</item>
+    </string-array>
+</resources>

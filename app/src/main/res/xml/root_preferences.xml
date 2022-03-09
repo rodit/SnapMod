@@ -1,0 +1,182 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory app:title="@string/privacy_header"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreferenceCompat
+            app:key="disable_camera"
+            app:title="@string/disable_camera_title"
+            app:iconSpaceReserved="false"/>
+
+        <SwitchPreferenceCompat
+            app:key="hide_read"
+            app:title="@string/hide_read_title"
+            app:iconSpaceReserved="false"/>
+
+        <SwitchPreferenceCompat
+            app:key="hide_save"
+            app:title="@string/hide_save_title"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="hide_screenshot"
+            app:title="@string/hide_screenshot_title"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="hide_save_gallery"
+            app:title="@string/hide_save_gallery_title"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="hide_replay"
+            app:title="@string/hide_replay_title"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="hide_enter_conversation"
+            app:title="@string/hide_enter_conversation_title"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="hide_exit_conversation"
+            app:title="@string/hide_exit_conversation_title"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="hide_typing"
+            app:title="@string/hide_typing_title"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="save_any"
+            app:title="@string/save_any_title"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="dont_release"
+            app:title="@string/dont_release_messages_title"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="disable_bitmojis"
+            app:title="@string/disable_bitmojis_title"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="allow_public_profile"
+            app:title="@string/allow_public_profile_title"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/snaps_header"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreferenceCompat
+            app:key="override_snap"
+            app:title="@string/send_gallery_as_snaps_title"
+            app:iconSpaceReserved="false" />
+
+        <EditTextPreference
+            app:key="override_snap_timer"
+            app:title="@string/gallery_snap_time_title"
+            app:iconSpaceReserved="false"
+            app:defaultValue="0" />
+
+        <SwitchPreferenceCompat
+            app:key="allow_save_snaps"
+            app:title="@string/allow_save_snaps_title"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="allow_download_stories"
+            app:title="@string/allow_download_stories_title"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="allow_download_public_dp"
+            app:title="@string/allow_download_public_dp_title"
+            app:iconSpaceReserved="false" />
+
+        <EditTextPreference
+            app:key="public_dp_resolution"
+            app:title="@string/public_dp_resolution_title"
+            app:iconSpaceReserved="false"
+            app:defaultValue="500" />
+
+        <SwitchPreferenceCompat
+            app:key="enable_snap_type_override"
+            app:title="@string/enable_snap_type_override_title"
+            app:iconSpaceReserved="false" />
+
+        <ListPreference
+            app:key="snap_type_override"
+            app:title="@string/snap_type_override_title"
+            app:entries="@array/snap_media_types"
+            app:entryValues="@array/snap_media_types_values"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="enable_friend_override"
+            app:title="@string/enable_friend_override_title"
+            app:iconSpaceReserved="false" />
+
+        <ListPreference
+            app:key="friend_override"
+            app:title="@string/friend_override_value_title"
+            app:entries="@array/friend_add_modes"
+            app:entryValues="@array/friend_add_modes_values"
+            app:defaultValue="ADDED_BY_USERNAME"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="bypass_video_length_restrictions"
+            app:title="@string/bypass_video_length_restrictions_title"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/location_header"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreferenceCompat
+            app:key="location_share_override"
+            app:title="@string/location_share_override_title"
+            app:iconSpaceReserved="false" />
+
+        <EditTextPreference
+            app:key="location_share_lat"
+            app:title="@string/location_share_lat_title"
+            app:iconSpaceReserved="false"
+            app:defaultValue="0" />
+
+        <EditTextPreference
+            app:key="location_share_long"
+            app:title="@string/location_share_long_title"
+            app:iconSpaceReserved="false"
+            app:defaultValue="0" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/debug_header"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreferenceCompat
+            app:key="more_profile_info"
+            app:title="@string/more_profile_info_title"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="log_network_requests"
+            app:title="@string/log_network_requests_title"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
+    <Preference
+        app:key="save_prefs"
+        app:title="@string/save_prefs"
+        app:iconSpaceReserved="false" />
+
+</PreferenceScreen>
