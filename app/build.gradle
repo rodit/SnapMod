@@ -32,9 +32,9 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'
 
-    implementation files('libs/clientlib.jar')
     implementation files('libs/snapmod.jar')
     implementation 'androidx.preference:preference:1.2.0'
+    implementation files('C:/Users/Rodi/AndroidStudioProjects/XposedTemplate/app/build/outputs/aar/app-debug.aar')
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

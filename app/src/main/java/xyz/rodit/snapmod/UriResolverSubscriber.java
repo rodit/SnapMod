@@ -1,17 +1,16 @@
 package xyz.rodit.snapmod;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.UUID;
 
 import de.robv.android.xposed.XposedBridge;
 import xyz.rodit.snapmod.mappings.MediaStreamProvider;
 import xyz.rodit.snapmod.mappings.RxObserver;
-import xyz.rodit.snapmod.utils.StreamUtils;
+import xyz.rodit.xposed.client.FileClient;
+import xyz.rodit.xposed.client.http.StreamServer;
+import xyz.rodit.xposed.client.http.streams.ProxyStreamProvider;
 
 public class UriResolverSubscriber implements InvocationHandler {
 
@@ -37,22 +36,28 @@ public class UriResolverSubscriber implements InvocationHandler {
 
     public static class MediaUriDownloader extends UriResolverSubscriber {
 
-        public MediaUriDownloader(File dest) {
-            super(new UriListener(dest));
+        public MediaUriDownloader(FileClient files, StreamServer server, String dest) {
+            super(new UriListener(files, server, dest));
         }
 
         private static class UriListener implements ResolutionListener {
 
-            private final File dest;
+            private final FileClient files;
+            private final StreamServer server;
+            private final String dest;
 
-            public UriListener(File dest) {
+            public UriListener(FileClient files, StreamServer server, String dest) {
+                this.files = files;
+                this.server = server;
                 this.dest = dest;
             }
 
             @Override
             public void accept(Object result) {
                 MediaStreamProvider streamProvider = MediaStreamProvider.wrap(result);
-                StreamUtils.copyTo(streamProvider.getMediaStream(), dest);
+                String uuid = UUID.randomUUID().toString();
+                server.mapStream(uuid, new ProxyStreamProvider(streamProvider::getMediaStream));
+                files.download(true, server.getRoot() + "/" + uuid, dest, "Audio Note", null);
             }
         }
     }

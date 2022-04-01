@@ -4,11 +4,14 @@ import android.os.Environment;
 
 public class Shared {
 
-    public static final String SNAP_PACKAGE = "com.snapchat.android";
-    public static final String SNAPMOD_ROOT = Environment.getExternalStorageDirectory().getPath() + "/SnapMod";
-    public static final String SNAPMOD_CONFIG = SNAPMOD_ROOT + "/config.xml";
-    public static final String SNAPMOD_MAPPINGS_DIR = SNAPMOD_ROOT + "/mappings";
-    public static final String SNAPMOD_MEDIA_DIR = SNAPMOD_ROOT + "/media";
+    public static final String SNAPCHAT_PACKAGE = "com.snapchat.android";
+
+    public static final String SNAPMOD_PACKAGE_NAME = "xyz.rodit.snapmod";
+    public static final String SNAPMOD_CONFIG_ACTION = SNAPMOD_PACKAGE_NAME + ".ACTION_CONFIG";
+    public static final String SNAPMOD_FILES_ACTION = SNAPMOD_PACKAGE_NAME + ".ACTION_FILES";
+
+    public static final String CONTEXT_HOOK_CLASS = "com.snap.mushroom.MainActivity";
+    public static final String CONTEXT_HOOK_METHOD = "attachBaseContext";
 
     public static final String SNAPMOD_MEDIA_PREFIX = "SnapMod_";
 
