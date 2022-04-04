@@ -1,17 +1,15 @@
 package xyz.rodit.snapmod;
 
+import android.app.admin.DevicePolicyManager;
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Proxy;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
@@ -52,6 +50,8 @@ import xyz.rodit.snapmod.mappings.LiveSnapMedia;
 import xyz.rodit.snapmod.mappings.LocalMessageContent;
 import xyz.rodit.snapmod.mappings.LocationMessage;
 import xyz.rodit.snapmod.mappings.LocationMessageBuilder;
+import xyz.rodit.snapmod.mappings.MediaBaseBase;
+import xyz.rodit.snapmod.mappings.MediaContainer;
 import xyz.rodit.snapmod.mappings.MediaType;
 import xyz.rodit.snapmod.mappings.MemoriesPickerVideoDurationConfig;
 import xyz.rodit.snapmod.mappings.MessageMetadata;
@@ -70,11 +70,11 @@ import xyz.rodit.snapmod.mappings.RxObserver;
 import xyz.rodit.snapmod.mappings.SavePolicy;
 import xyz.rodit.snapmod.mappings.SaveToCameraRollActionHandler;
 import xyz.rodit.snapmod.mappings.SaveType;
+import xyz.rodit.snapmod.mappings.SerializableContent;
 import xyz.rodit.snapmod.mappings.TopicSnapInAppReportClient;
 import xyz.rodit.xposed.HooksBase;
 import xyz.rodit.xposed.client.http.StreamProvider;
-import xyz.rodit.xposed.client.http.streams.ProxyStreamProvider;
-import xyz.rodit.xposed.client.http.streams.URLStreamProvider;
+import xyz.rodit.xposed.client.http.streams.FileProxyStreamProvider;
 
 public class SnapHooks extends HooksBase {
 
@@ -84,19 +84,43 @@ public class SnapHooks extends HooksBase {
     private ChatMediaHandler chatMediaHandler;
     private String lastPublicProfilePictureUrl;
 
+    private Context mainActivity;
+
     public SnapHooks() {
-        super(Collections.singletonList(Shared.SNAPCHAT_PACKAGE), Shared.SNAPMOD_PACKAGE_NAME, Shared.SNAPMOD_CONFIG_ACTION, Shared.CONTEXT_HOOK_CLASS, Shared.CONTEXT_HOOK_METHOD);
+        super(Collections.singletonList(Shared.SNAPCHAT_PACKAGE),
+                Shared.SNAPMOD_PACKAGE_NAME,
+                Shared.SNAPMOD_CONFIG_ACTION,
+                Shared.CONTEXT_HOOK_CLASS,
+                Shared.CONTEXT_HOOK_METHOD);
     }
 
     @Override
-    protected void onContextHook() {
-        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+    protected void onPackageLoad() {
+        XposedBridge.hookAllMethods(DevicePolicyManager.class, "getCameraDisabled", new XC_MethodHook() {
             @Override
-            public void uncaughtException(@NonNull Thread thread, @NonNull Throwable throwable) {
-                XposedBridge.log("Uncaught exception on thread " + thread + ".");
-                XposedBridge.log(throwable);
+            protected void beforeHookedMethod(MethodHookParam param) {
+                if (config == null || !config.isLoaded() || config.getBoolean("disable_camera")) {
+                    param.setResult(true);
+                }
             }
         });
+    }
+
+    @Override
+    protected void onContextHook(Context context) {
+        mainActivity = context;
+
+        Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
+            XposedBridge.log("Uncaught exception on thread " + thread + ".");
+            XposedBridge.log(throwable);
+        });
+    }
+
+    @Override
+    protected void onConfigLoaded(boolean first) {
+        Intent intent = new Intent();
+        intent.setClassName(Shared.SNAPMOD_PACKAGE_NAME, Shared.SNAPMOD_FORCE_RESUME_ACTIVITY);
+        mainActivity.startActivity(intent);
     }
 
     @Override
@@ -212,23 +236,27 @@ public class SnapHooks extends HooksBase {
             protected void beforeHookedMethod(MethodHookParam param) {
                 if (config.getBoolean("override_snap")) {
                     MessageSenderCrossroad $this = MessageSenderCrossroad.wrap(param.thisObject);
-                    Object media = $this.getMedia();
-                    if (GallerySnapMedia.isInstance(media)) {
-                        String id = GallerySnapMedia.wrap(media).getMedia().getId();
-                        LiveSnapMedia snap = new LiveSnapMedia();
-                        double timer = Double.parseDouble(config.getString("override_snap_timer", "0"));
-                        snap.setMediaId(id);
+                    MediaContainer container = $this.getPayload().getMedia();
+                    if (SerializableContent.isInstance(container.instance)) {
+                        SerializableContent content = SerializableContent.wrap(container.instance);
+                        MediaBaseBase message = content.getMessage();
+                        if (GallerySnapMedia.isInstance(message.instance)) {
+                            String id = GallerySnapMedia.wrap(message.instance).getMedia().getId();
+                            LiveSnapMedia snap = new LiveSnapMedia();
+                            double timer = Double.parseDouble(config.getString("override_snap_timer", "0"));
+                            snap.setMediaId(id);
 
-                        if (config.getBoolean("enable_snap_type_override")) {
-                            String overrideType = config.getString("snap_type_override", "IMAGE");
-                            snap.setMediaType(MediaType.valueOf(overrideType));
-                        } else {
-                            snap.setMediaType(MediaType.IMAGE());
+                            if (config.getBoolean("enable_snap_type_override")) {
+                                String overrideType = config.getString("snap_type_override", "IMAGE");
+                                snap.setMediaType(MediaType.valueOf(overrideType));
+                            } else {
+                                snap.setMediaType(MediaType.IMAGE());
+                            }
+
+                            ParameterPackage paramPackage = new ParameterPackage(timer == 0d, timer, null, null, null, null, null, null, null, null, null, null, false);
+                            snap.setParameterPackage(paramPackage);
+                            content.setMessage(MediaBaseBase.wrap(snap.instance));
                         }
-
-                        ParameterPackage paramPackage = new ParameterPackage(timer == 0d, timer, null, null, null, null, null, null, null, null, null, null, false);
-                        snap.setParameterPackage(paramPackage);
-                        $this.setMedia(snap);
                     }
                 }
             }
@@ -323,16 +351,16 @@ public class SnapHooks extends HooksBase {
                         int hashCode = param.args[1].hashCode();
                         LiveSnapMedia media = LiveSnapMedia.wrap(chatMediaMap.get(hashCode));
                         ChatModelBase base = ChatModelBase.wrap(param.args[1]);
-                        param.args[1] = new ChatModelSavedSnap(base.getContext(), base.getMessageData(), base.getSenderId(), Collections.emptyMap(), true, base.getReactionsViewModel(), true, 0, 0, media, null, base.getStatus(), true).instance;
+                        param.args[1] = new ChatModelSavedSnap(base.getContext(), base.getMessageData(), base.getSenderId(), Collections.emptyMap(), true, base.getReactionsViewModel(), true, 0, 0, media, null, base.getStatus(), true, true).instance;
                     } else if (ChatModelAudioNote.isInstance(param.args[1])) {
                         // Resolve audio uri and resolve through proxy of RxObserver.
+                        // Note: the content resolver provided by appContext cannot open a stream from the uri.
                         ChatModelBase base = ChatModelBase.wrap(param.args[1]);
                         ChatModelAudioNote audio = ChatModelAudioNote.wrap(param.args[1]);
                         String dest = Uri.fromFile(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES) + "/SnapMod/" + Shared.SNAPMOD_MEDIA_PREFIX + base.getSenderId() + "_" + System.currentTimeMillis() + ".aac")).toString();
                         XposedBridge.log("Downloading audio note from " + audio.getUri() + " to " + dest + ".");
-                        Object observerProxy = Proxy.newProxyInstance(lpparam.classLoader, new Class[]{RxObserver.getMappedClass()}, new UriResolverSubscriber.MediaUriDownloader(files, server, dest));
+                        Object observerProxy = Proxy.newProxyInstance(lpparam.classLoader, new Class[]{RxObserver.getMappedClass()}, new UriResolverSubscriber.MediaUriDownloader(appContext, files, server, dest));
                         chatMediaHandler.resolve(audio.getUri(), Collections.emptySet(), true, Collections.emptySet()).subscribe(RxObserver.wrap(observerProxy));
-                        Toast.makeText(appContext, "Downloading audio note...", Toast.LENGTH_SHORT).show();
                         param.setResult(null);
                     }
                 }
@@ -452,12 +480,13 @@ public class SnapHooks extends HooksBase {
                     OperaMediaInfo info = StoryHelper.getMediaInfo(ParamsMap.wrap(param.args[0]));
                     if (info != null && info.isNotNull()) {
                         XposedBridge.log("Downloading story media from " + info.getUri());
-                        StreamProvider provider = new ProxyStreamProvider(() -> {
+                        StreamProvider provider = new FileProxyStreamProvider(appContext, () -> {
                             try {
                                 InputStream stream = new URL(info.getUri()).openStream();
                                 EncryptionAlgorithm enc = info.getEncryption();
                                 if (enc.isNotNull()) {
                                     stream = enc.decryptStream(stream);
+                                    XposedBridge.log("Stream was encrypted.");
                                 }
 
                                 XposedBridge.log("Media stream opened.");
