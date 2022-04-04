@@ -34,7 +34,7 @@ dependencies {
 
     implementation files('libs/snapmod.jar')
     implementation 'androidx.preference:preference:1.2.0'
-    implementation files('C:/Users/Rodi/AndroidStudioProjects/XposedTemplate/app/build/outputs/aar/app-debug.aar')
+    implementation 'xyz.rodit:xposed:1.2.1'
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
