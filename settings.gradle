@@ -7,8 +7,8 @@ dependencyResolutionManagement {
         maven {
             url = uri("https://maven.pkg.github.com/rodit/XposedLib")
             credentials {
-                username = gh_user ?: System.getenv("GITHUB_ACTOR")
-                password = gh_key ?: System.getenv("GITHUB_TOKEN")
+                username = System.getenv("GITHUB_ACTOR") ?: gh_user
+                password = System.getenv("GITHUB_TOKEN") ?: gh_key
             }
         }
     }
