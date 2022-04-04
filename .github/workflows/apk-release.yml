@@ -25,6 +25,8 @@ jobs:
 
       - name: Generate Debug APK
         run: ./gradlew clean assembleDebug
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload APK
         uses: actions/upload-artifact@v1
