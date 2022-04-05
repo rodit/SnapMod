@@ -1,0 +1,849 @@
+#option access_modifiers strict
+
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Matrix;
+import android.net.Uri;
+
+import com.google.gson.annotations.SerializedName;
+
+import com.snapchat.client.messaging.Conversation;
+
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.lang.Boolean;
+import java.lang.Double;
+import java.lang.Object;
+import java.lang.String;
+import java.lang.Throwable;
+import java.lang.UnsupportedOperationException;
+import java.util.Collections;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+[certain]
+class MainActivity expects com.snap.mushroom.MainActivity {
+
+    void $attachBaseContext(Context)
+}
+
+[certain]
+class ConversationManager expects com.snapchat.client.messaging.ConversationManager$CppProxy {
+
+    void $sendMessageWithContent(...)
+    void $updateMessage(...)
+    void $displayedMessages(...)
+    void $enterConversation(...)
+    void $exitConversation(...)
+    void $sendTypingNotification(...)
+}
+
+[certain]
+class LocalMessageContent expects com.snapchat.client.messaging.LocalMessageContent {
+
+    * $getSavePolicy()
+}
+
+[certain]
+enum SavePolicy expects com.snapchat.client.messaging.SavePolicy {
+
+    static this PROHIBITED;
+    static this LIFETIME;
+    static this VIEW_SESSION;
+}
+
+[certain]
+class NetworkApi expects com.snapchat.client.network_api.NetworkApi$CppProxy {
+
+    void $submit(...)
+    void $submitToNetworkManagerDirectly(...)
+}
+
+[certain]
+enum ContentType expects com.snapchat.client.messaging.ContentType {
+
+    static this $UNKNOWN;
+    static this $SNAP;
+    static this $CHAT;
+    static this $LOCATION;
+    static this $STATUS_SAVE_TO_CAMERA_ROLL;
+    static this $STATUS_CONVERSATION_CAPTURE_SCREENSHOT;
+    static this $STATUS_CONVERSATION_CAPTURE_RECORD;
+}
+
+[certain]
+enum MessageUpdate expects com.snapchat.client.messaging.MessageUpdate {
+
+    static this $UNKNOWN;
+    static this $READ;
+    static this $RELEASE;
+    static this $SAVE;
+    static this $UNSAVE;
+    static this $ERASE;
+    static this $SCREENSHOT;
+    static this $SCREEN_RECORD;
+    static this $REPLAY;
+}
+
+[certain]
+class ChatReactionsBelowMessageViewModel expects com.snap.chat_reactions.ChatReactionsBelowMessageViewModel {
+
+}
+
+[certain]
+class MessageMetadata expects com.snapchat.client.messaging.MessageMetadata {
+
+    boolean $getIsSaveable()
+}
+
+[certain]
+enum MessageState {
+
+    static void $<clinit>() {
+        .string "NONE", bind field NONE next reference;
+        .string "SENT", bind field SENT next reference;
+        .string "DELIVERED", bind field DELIVERED next reference;
+        .string "VIEWED", bind field VIEWED next reference;
+        .string "SCREENSHOT", bind field SCREENSHOT next reference;
+        .string "PENDING", bind field PENDING next reference;
+    }
+}
+
+[certain]
+enum SnapPlaybackStatus {
+
+    static void $<clinit>() {
+        .string "PLAYABLE", bind field PLAYABLE next reference;
+        .string "VIEWEDREPLAYABLE", bind field VIEWEDREPLAYABLE next reference;
+        .string "PLAYING", bind field PLAYING next reference;
+        .string "VIEWEDNOTREPLAYABLE", bind field VIEWEDNOTREPLAYABLE next reference;
+        .string "SAVED", bind field SAVED next reference;
+        .string "NONE", bind field NONE next reference;
+    }
+}
+
+[certain]
+enum SaveType {
+
+    static void $<clinit>() {
+        .string "SNAPCHAT_ALBUM", bind field SNAPCHAT_ALBUM next reference;
+        .string "SPECTACLES_ALBUM", bind field SPECTACLES_ALBUM next reference;
+        .string "EXTERNAL_APPS", bind field EXTERNAL_APPS next reference;
+        .string "SMS", bind field SMS next reference;
+        .string "EMAIL", bind field EMAIL next reference;
+    }
+}
+
+
+[certain]
+enum ChatLayouts {
+
+    int layoutId;
+
+    static void $<clinit>() {
+        .string "UNKNOWN", bind field SNAPCHAT_ALBUM next reference;
+        .string "TEXT_WITH_MEDIA_CARDS", bind field TEXT_WITH_MEDIA_CARDS next reference;
+        .string "SNAP", bind field SNAP next reference;
+        .string "CHAT_MEDIA", bind field CHAT_MEDIA next reference;
+        .string "MEMORIES_STORY", bind field MEMORIES_STORY next reference;
+        .string "TEXT_STORY_REPLY", bind field TEXT_STORY_REPLY next reference;
+        .string "AUDIO_NOTE", bind field AUDIO_NOTE next reference;
+        .string "ERASE", bind field ERASE next reference;
+        .string "SAVED_SNAP", bind field SAVED_SNAP next reference;
+    }
+}
+
+[certain]
+enum SnapMediaType {
+
+    @SerializedName("text")
+    static this TEXT;
+    @SerializedName("media")
+    static this MEDIA;
+    @SerializedName("sticker")
+    static this STICKER;
+    @SerializedName("media_v3")
+    static this MEDIA_V3;
+    @SerializedName("media_v4")
+    static this MEDIA_V4;
+
+    String name;
+}
+
+[certain]
+class MediaPackage {
+    @SerializedName("session_id")
+    java.lang.String sessionId;
+    @SerializedName("content_id")
+    java.lang.String contentId;
+    @SerializedName("mediaId")
+    java.lang.String mediaId;
+}
+
+[certain]
+class MediaReference {
+
+    [late] Uri uri;
+
+    java.lang.String $toString() {
+        [conserve]
+        .string contains "MediaReference(";
+        .string contains "type=", bind field mediaType next reference;
+        [strict]
+        .string contains "uri=", bind field uri next reference;
+    }
+}
+
+[certain]
+enum MediaType {
+
+    static void $<clinit>() {
+        .string "IMAGE", bind field IMAGE next reference;
+        .string "VIDEO", bind field VIDEO next reference;
+        .string "VIDEO_NO_SOUND", bind field VIDEO_NO_SOUND next reference;
+        .string "AUDIO", bind field AUDIO next reference;
+        .string "WEB", bind field WEB next reference;
+    }
+}
+
+[late]
+interface RxObserver {
+
+    void accept(*)
+    void error(Throwable)
+    void disposable(*)
+}
+
+[certain]
+class RxSupplier {
+
+    void subscribe(#RxObserver) {
+        .string "observer is null";
+        .string contains "RxJavaPlugins.setOnSingleSubscribe";
+    }
+}
+
+[certain]
+@*("chat_media/*/*")
+class ChatMediaHandler {
+
+    !RxSupplier resolve(Uri, Set, boolean, Set)
+}
+
+interface MessageDataModel {
+
+    [discard] String str0()
+    [discard] String str1()
+    [discard] String str2()
+    [discard] String str3()
+
+    !MessageState getMessageState()
+    !SnapPlaybackStatus getPlaybackStatus()
+}
+
+class ChatModelBase {
+
+    Context context;
+    * chatLayout;
+    !MessageDataModel messageData;
+    String senderId;
+    [discard] Map map0;
+    boolean boolField;
+    [discard] boolean b0;
+    #MediaDownloadStatus status;
+    !ChatReactionsBelowMessageViewModel reactionsViewModel;
+
+    String $toString() {
+        .string contains "ChatViewModelV1";
+    }
+
+    [discard] boolean bm0()
+    [discard] boolean bm1()
+    [discard] boolean bm2()
+
+    boolean canSave()
+    !SaveType getSaveType()
+}
+
+class ChatActionHelper {
+
+    void $<init>(...) {
+        .string "ChatActionHelper";
+    }
+
+    [discard] boolean bm0(!ChatModelBase)
+    boolean canSave(!ChatModelBase)
+}
+
+[late]
+class ParameterPackage {
+
+    void $<init>(Boolean, Double, ...)
+
+    java.lang.String $toString() {
+        [conserve]
+        .string contains "ParameterPackage(";
+        .string contains "isInfiniteDuration", bind field isInfiniteDuration next reference;
+        .string contains "timerOrDurationSeconds", bind field timeOrDurationSeconds next reference;
+    }
+}
+
+[late]
+interface MediaBaseBase {
+    String getMediaType()
+    String getMessageType()
+}
+
+[late, discard]
+interface MediaBase implements #MediaBaseBase {
+
+    !RxSupplier s0(...)
+    List l0()
+}
+
+class LiveSnapMedia implements #MediaBase {
+    [discard] static * sf0;
+
+    @SerializedName("parameterPackage")
+    #ParameterPackage parameterPackage;
+    String mediaId;
+    [discard] String s0;
+    [discard] String s1;
+    #MediaType mediaType;
+
+    void $<init>()
+
+    [discard] List m0() {
+        .string "GetMedia isn\'t implemented on SnapParcelContent";
+    }
+}
+
+[certain]
+class MediaItem {
+
+    String $toString() {
+        [conserve]
+        .string "MediaItem(id=";
+        .string contains "id=", bind field id next reference;
+        .string contains "type=", bind field mediaType next reference;
+    }
+}
+
+class GallerySnapMedia {
+
+    !MediaItem media;
+
+    [discard] String s0() {
+        .field !SnapMediaType->!MEDIA_V4;
+    }
+
+    [discard] List l0() {
+        .method Collections->singletonList;
+    }
+
+    String getMediaType()
+}
+
+class ChatModelLiveSnap {
+
+    [discard] boolean b0;
+
+    void $<init>(Context, *, *, *, *, !MessageDataModel, !LiveSnapMedia, String, Map, boolean, ...)
+
+    [discard] boolean bm0(*)
+    [discard] boolean bm1()
+}
+
+class ChatModelSavedSnap {
+
+    !MediaType mediaType;
+    [discard] Uri u0;
+    [discard] Uri u1;
+    !LiveSnapMedia media;
+
+    void $<init>(Context, !MessageDataModel, String, Map, boolean, !ChatReactionsBelowMessageViewModel, boolean, int, int, !LiveSnapMedia, String, ...) {
+        .field !ChatLayouts->!SAVED_SNAP;
+        .method TimeUnit->toMillis;
+        .method Double->isNaN;
+        .method Context->getResources;
+    }
+}
+
+
+[certain, discard]
+class MixedServiceProvider {
+
+    void $<init>(...) {
+        .string "MushroomSerengetiUserData";
+    }
+
+    void $<init>(...) {
+        .string "AutoCaptionMultiSegmentUpdateHandler";
+    }
+}
+
+[certain, discard]
+class SendToSponsorManagerImpl {
+
+    void $<init>(...) {
+        .string "SendToSponsorManagerImpl";
+    }
+}
+
+class ChatModelAudioNote {
+
+    [discard] java.lang.String s0;
+    [discard] java.lang.String s1;
+    [discard] !SendToSponsorManagerImpl msp0;
+    [discard] boolean b0;
+
+    void $<init>(Context, !ChatLayouts, !MessageDataModel, *, java.lang.String, java.util.Map, boolean, ...)
+
+    Uri getUri()
+}
+
+[certain]
+class CalendarDate {
+
+    int month;
+    int day;
+
+    void $<init>(int, int)
+
+    String $toString() {
+        .string contains "CalendarDate";
+        .string contains "day=";
+    }
+}
+
+[certain]
+class FriendProfilePageData {
+
+    [late] #FriendLinkType friendLinkType;
+    [late] !CalendarDate birthday;
+
+    String $toString() {
+        .string contains "FriendProfilePageData";
+        .string contains "displayName", bind field displayName next reference;
+        .string contains "friendLinkType", bind field friendLinkType next reference;
+        .string contains "addedTimestamp", bind field addedTimestamp next reference;
+        .string contains "reverseAddedTimestamp", bind field reverseAddedTimestamp next reference;
+        .string contains "birthday", bind field birthday next reference;
+        .string contains "addSourceTypeForNonFriend", bind field addSourceTypeForNonFriend next reference;
+    }
+}
+
+[certain]
+enum ProfileSectionType {
+
+    static void $<clinit>() {
+        .string "FOOTER_INFO_ITEM", bind field FOOTER_INFO_ITEM next reference;
+        .string "IDENTITY_CAROUSEL";
+    }
+}
+
+class FooterInfoItem {
+
+    String text;
+
+    void $<init>(String, long) {
+        .field !ProfileSectionType->!FOOTER_INFO_ITEM;
+    }
+}
+
+class FriendProfileTransformer {
+
+    [discard] int i0;
+    [discard] Object target;
+
+    void $<init>(Object, int)
+
+    * $apply(...) {
+        .string "pageSessionModel";
+        .string "Required value was null.";
+        .string "sectionPerformanceLogger";
+        .method Collections->singletonList;
+        .field this->!target;
+        .new !FooterInfoItem;
+    }
+}
+
+class SaveToCameraRollActionHandler {
+
+    void $<init>(Context, ...) {
+        .string "SaveToCameraRollActionHandler";
+    }
+
+    void exportMedia(*, *, *) {
+        .string "SaveToCameraRollActionHandler";
+    }
+}
+
+[certain]
+class BitmojiUriHandler {
+
+    void $<init>(...) {
+        .string "BitmojiUriHandler";
+    }
+
+    * handle(Uri, ...) {
+        .string "BitmojiUriHandler";
+    }
+}
+
+[certain]
+enum FriendAddMethod {
+
+    @com.google.gson.annotations.SerializedName("ADDED_BY_USERNAME")
+    static * ADDED_BY_USERNAME;
+    @com.google.gson.annotations.SerializedName("ADDED_BY_ADDED_ME_BACK")
+    static * ADDED_BY_ADDED_ME_BACK;
+    @com.google.gson.annotations.SerializedName("ADDED_BY_SUGGESTED")
+    static * ADDED_BY_SUGGESTED;
+    @com.google.gson.annotations.SerializedName("ADDED_BY_SHARED_USERNAME")
+    static * ADDED_BY_SHARED_USERNAME;
+    @com.google.gson.annotations.SerializedName("ADDED_BY_SHARED_STORY")
+    static * ADDED_BY_SHARED_STORY;
+    @com.google.gson.annotations.SerializedName("ADDED_BY_GROUP_CHAT")
+    static * ADDED_BY_GROUP_CHAT;
+}
+
+[certain]
+class FriendActionRequest {
+
+    @com.google.gson.annotations.SerializedName("action")
+    java.lang.String action;
+    @com.google.gson.annotations.SerializedName("added_by")
+    java.lang.String addedBy;
+}
+
+class FriendActionClient {
+
+    void $<init>(...) {
+        .string "FriendActionClient";
+    }
+
+    * sendFriendAction(!FriendActionRequest)
+}
+
+[certain]
+class LocationMessage {
+
+    [discard] java.lang.String s0;
+    [discard] java.lang.String s1;
+    double latitude;
+    double longitude;
+
+    [discard] java.lang.String sm0() {
+        .string "share_location";
+    }
+}
+
+class LocationMessageBuilder {
+
+    * build(*, String, Conversation, Map) {
+        .type !LocationMessage;
+    }
+
+    * transform(*, *, !MediaReference)
+}
+
+[certain]
+class MemoriesPickerVideoDurationConfig {
+
+    long maxDuration;
+    TimeUnit timeUnit;
+    int warningTextResource;
+
+    String $toString() {
+        .string contains "MemoriesPickerVideoDurationConfig";
+        .string contains "durationUnits";
+    }
+}
+
+[certain]
+class FriendPublicProfileFinder {
+
+    void $<init>(...) {
+        .string "FRIEND_PROFILE_SNAP_PRO_PUBLIC_PROFILE";
+    }
+}
+
+class FriendPublicProfileTile {
+
+    String profilePictureUrl;
+
+    void $<init>(...) {
+        .field !FriendPublicProfileFinder->*;
+    }
+}
+
+[certain]
+class OperaActionMenuOptionViewModel {
+
+    java.lang.String $toString() {
+        [conserve]
+        .string contains "OperaActionMenuOptionViewModel";
+        .string contains "iconResource", bind field iconResource next reference;
+        .string contains "textResource", bind field textResource next reference;
+        .string contains "textColorResource", bind field textColorResource next reference;
+        .string contains "eventName", bind field eventName next reference;
+        .string contains "isLoading", bind field isLoading next reference;
+        .string contains "actionMenuId", bind field actionMenuId next reference;
+    }
+}
+
+class OperaContextActions {
+
+    [discard] static !OperaActionMenuOptionViewModel vm0;
+    [discard] static !OperaActionMenuOptionViewModel vm1;
+    [discard] static !OperaActionMenuOptionViewModel vm2;
+    [discard] static !OperaActionMenuOptionViewModel vm3;
+    [discard] static !OperaActionMenuOptionViewModel vm4;
+}
+
+
+class StreamingMethod {
+
+    String $toString() {
+        .string contains "StreamingInfo";
+        .string contains "requestHeaders";
+    }
+}
+
+[certain]
+interface LateInitialized {
+
+    * $getValue()
+    boolean $isInitialized()
+}
+
+[certain]
+class LateInitializedClass implements !LateInitialized {
+
+    String $toString() {
+        .string "Lazy value not initialized yet.";
+    }
+}
+
+class OperaMediaInfo {
+
+    String uri;
+    #EncryptionAlgorithm encryption;
+    !StreamingMethod streamingMethod;
+
+    [discard] List l0;
+    [discard] * a0;
+    [discard] Matrix m0;
+    [discard] !LateInitializedClass li0;
+
+    String $toString() {
+        .string "OperaMediaInfo";
+        .string "hasEncryptionAlgorithm";
+    }
+}
+
+[late]
+interface EncryptionAlgorithm {
+
+    InputStream encryptStream(InputStream)
+    InputStream decryptStream(InputStream)
+}
+
+[certain, discard]
+class FeatureMetadata {
+
+    String $toString() {
+        [conserve]
+        .string contains "FeatureMetadata";
+        .string contains "attribution=";
+    }
+}
+
+[certain, discard]
+class Metrics {
+
+    String $toString() {
+        .string "Metrics(loadSource=";
+    }
+}
+
+interface MediaStreamProvider {
+
+    [discard] !FeatureMetadata fm0()
+    InputStream getMediaStream()
+    void $dispose()
+    [discard] boolean b0()
+    [discard] !Metrics m0()
+}
+
+[certain]
+class SendingPacketBuilder {
+
+    void $<init>(...) {
+        .string "SendingPacketBuilder";
+    }
+}
+
+class SerializableContent extends #MediaContainer {
+
+    !MediaBaseBase message;
+
+    String $toString() {
+        .string "SerializableContent(message=";
+    }
+}
+
+class MessagePayload {
+
+    [discard] String s0;
+    !MediaContainer media;
+
+    void $dispose()
+}
+
+class SendAndRecycleProcessor {
+
+    void $<init>(...) {
+        .string "SendAndRecycleProcessor";
+    }
+}
+
+class MessageSenderCrossroad {
+
+    [late] !MessagePayload payload;
+
+    void $<init>(!MessagePayload, !SendAndRecycleProcessor) {
+        [strict]
+        .expr this->* = .p0, bind field payload current reference;
+    }
+
+    * $apply(*) {
+    }
+}
+
+[certain]
+class EmptyParamsMap extends #ParamsMap {
+
+    [discard] void m0(...) {
+        .string "Empty params is immutable";
+        .type UnsupportedOperationException;
+    }
+
+    [discard] void m1(...) {
+        .string "Empty params is immutable";
+        .type UnsupportedOperationException;
+    }
+}
+
+[late]
+class ParamsMap {
+
+    ConcurrentHashMap map;
+}
+
+class StoryMetadata extends !ParamsMap {
+
+    static void $<clinit>() {
+        .string "overlay_image_media_info", bind field overlayImageMediaInfo next reference;
+        .string "video_media_info", bind field videoMediaInfo next reference;
+        .string "image_media_info", bind field imageMediaInfo next reference;
+    }
+}
+
+[certain]
+class InAppReportManagerImpl {
+
+    void $<init>(...) {
+        .string "InAppReportManagerImpl";
+    }
+
+    * handle(*, ...)
+}
+
+[certain]
+class PublicUserReportParams {
+
+    String userId;
+    String username;
+
+    String $toString() {
+        .string contains "PublicUserReportParams";
+    }
+}
+
+class StoryReportParams {
+
+    String snapId;
+    !OperaMediaInfo mediaInfo;
+
+    String $toString() {
+        .string contains "StoryReportParams(";
+    }
+}
+
+class PublicUserStoryInAppReportClient {
+
+    void $<init>(...) {
+        .string "PublicUserStoryInAppReportClientImpl";
+    }
+
+    * report(#StoryMedia, ...)
+}
+
+class FriendStoryInAppReportClient {
+
+    void $<init>(...) {
+        .string "FriendStoryInAppReportClientImpl";
+    }
+
+    * report(#StoryMedia, ...)
+}
+
+class PublisherStoryInAppReportClient {
+
+    void $<init>(...) {
+        .string "PublisherStoryInAppReportClientImpl";
+    }
+
+    * report(#StoryMedia, ...)
+}
+
+class AdInAppReportClient {
+
+    void $<init>(...) {
+        .string "AdInAppReportClientImpl";
+    }
+
+    * report(#StoryMedia, ...)
+}
+
+class ChatMediaInAppReportClient {
+
+    void $<init>(...) {
+        .string "ChatMediaInAppReportClientImpl";
+    }
+
+    * report(#StoryMedia, ...)
+}
+
+class TopicSnapInAppReportClient {
+
+    void $<init>(...) {
+        .string "TopicSnapInAppReportClientImpl";
+    }
+
+    * report(#StoryMedia, ...)
+}
+
+class DirectSnapInAppReportClient {
+
+    void $<init>(...) {
+        .string "DirectSnapInAppReportClientImpl";
+    }
+
+    * report(#StoryMedia, ...)
+}
