@@ -34,19 +34,29 @@ jobs:
           name: apk
           path: app/build/outputs/apk/debug/app-debug.apk
 
-      - name: Get the version
-        id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-
-      - name: Create Release and Upload debug APK
-        uses: underwindfall/create-release-with-debugapk@v1.2.4
+      - name: Download Snapchat APK
+        run: wget -O snapchat.apk "$APK_URL"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          APK_URL: ${{ secrets.APK_URL }}
+
+      - name: Download dexsearch
+        run: wget -O dexsearch.jar "https://github.com/rodit/dexsearch/releases/download/$DEXSEARCH_VERSION/dexsearch-latest.jar"
+        env:
+          DEXSEARCH_VERSION: ${{ secrets.DEXSEARCH_VERSION }}
+
+      - name: Download Android Platform
+        run: wget -O android.zip "https://dl.google.com/android/repository/platform-32_r01.zip"
+      - name: Extract Android Platform
+        run: unzip android.zip
+
+      - name: Generate Bindings
+        run: java -jar dexsearch.jar -i snapchat.apk -s snap.ds -o bindings.json -a "android-12/android.jar"
+
+      - name: Publish Release APK and Bindings
+        uses: marvinpinto/action-automatic-releases@latest
         with:
-          tag_name: ${{ steps.get_version.outputs.VERSION }}
-          release_name: SnapMod ${{ steps.get_version.outputs.VERSION }}
-          asset_path: app/build/outputs/apk/debug/app-debug.apk
-          asset_name: SnapMod.apk
-          asset_content_type: application/zip
-          draft: false
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
+          files: |
+            app/build/outputs/apk/debug/app-debug.apk
+            bindings.json
