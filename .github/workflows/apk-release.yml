@@ -29,7 +29,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Download Snapchat APK
-        run: wget -O snapchat.apk "$APK_URL"
+        run: wget -q -O snapchat.apk "$APK_URL"
         env:
           APK_URL: ${{ secrets.APK_URL }}
 
@@ -39,8 +39,9 @@ jobs:
           DEXSEARCH_VERSION: ${{ secrets.DEXSEARCH_VERSION }}
 
       - name: Download Android Platform
-        run: wget -q -O android.zip "https://dl.google.com/android/repository/platform-32_r01.zip"
-      - run: unzip -qq android.zip
+        run: |
+          wget -q -O android.zip "https://dl.google.com/android/repository/platform-32_r01.zip"
+          unzip -qq android.zip
 
       - name: Generate Bindings
         run: java -jar dexsearch.jar -i snapchat.apk -s snap.ds -o bindings.json -a "android-12/android.jar"
