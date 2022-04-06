@@ -595,6 +595,20 @@ class OperaActionMenuOptionViewModel {
     }
 }
 
+[certain]
+enum OperaContextAction {
+
+    static void $<clinit>() {
+        .string "SEND", bind field SEND next reference;
+        .string "EDIT", bind field EDIT next reference;
+        .string "EXPORT", bind field EXPORT next reference;
+        .string "IN_APP_REPORT", bind field IN_APP_REPORT next reference;
+        .string "REPORT_AD", bind field REPORT_AD next reference;
+        .string "HIDE_AD", bind field HIDE_AD next reference;
+        .string "SAVE", bind field SAVE next reference;
+    }
+}
+
 class OperaContextActions {
 
     [discard] static !OperaActionMenuOptionViewModel vm0;
@@ -602,6 +616,11 @@ class OperaContextActions {
     [discard] static !OperaActionMenuOptionViewModel vm2;
     [discard] static !OperaActionMenuOptionViewModel vm3;
     [discard] static !OperaActionMenuOptionViewModel vm4;
+
+    static void $<clinit>() {
+        .field !OperaContextAction->!IN_APP_REPORT;
+        .field !OperaContextAction->!SAVE;
+    }
 }
 
 
