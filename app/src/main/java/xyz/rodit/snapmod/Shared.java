@@ -11,8 +11,8 @@ public class Shared {
 
     public static final String SNAPMOD_FORCE_RESUME_ACTIVITY = SNAPMOD_PACKAGE_NAME + ".ForceResumeActivity";
 
-    public static final String CONTEXT_HOOK_CLASS = "com.snap.mushroom.MainActivity";
-    public static final String CONTEXT_HOOK_METHOD = "onCreate";
+    public static final String CONTEXT_HOOK_CLASS = "android.app.Application";
+    public static final String CONTEXT_HOOK_METHOD = "attach";
 
     public static final String SNAPMOD_MEDIA_PREFIX = "SnapMod_";
 

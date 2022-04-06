@@ -14,6 +14,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +51,7 @@ import xyz.rodit.snapmod.mappings.LiveSnapMedia;
 import xyz.rodit.snapmod.mappings.LocalMessageContent;
 import xyz.rodit.snapmod.mappings.LocationMessage;
 import xyz.rodit.snapmod.mappings.LocationMessageBuilder;
+import xyz.rodit.snapmod.mappings.MainActivity;
 import xyz.rodit.snapmod.mappings.MediaBaseBase;
 import xyz.rodit.snapmod.mappings.MediaContainer;
 import xyz.rodit.snapmod.mappings.MediaType;
@@ -75,6 +77,7 @@ import xyz.rodit.snapmod.mappings.TopicSnapInAppReportClient;
 import xyz.rodit.xposed.HooksBase;
 import xyz.rodit.xposed.client.http.StreamProvider;
 import xyz.rodit.xposed.client.http.streams.FileProxyStreamProvider;
+import xyz.rodit.xposed.mappings.LoadScheme;
 
 public class SnapHooks extends HooksBase {
 
@@ -88,6 +91,7 @@ public class SnapHooks extends HooksBase {
 
     public SnapHooks() {
         super(Collections.singletonList(Shared.SNAPCHAT_PACKAGE),
+                EnumSet.of(LoadScheme.CACHED_ON_CONTEXT, LoadScheme.SERVICE),
                 Shared.SNAPMOD_PACKAGE_NAME,
                 Shared.SNAPMOD_CONFIG_ACTION,
                 Shared.CONTEXT_HOOK_CLASS,
@@ -108,8 +112,6 @@ public class SnapHooks extends HooksBase {
 
     @Override
     protected void onContextHook(Context context) {
-        mainActivity = context;
-
         Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
             XposedBridge.log("Uncaught exception on thread " + thread + ".");
             XposedBridge.log(throwable);
@@ -118,15 +120,33 @@ public class SnapHooks extends HooksBase {
 
     @Override
     protected void onConfigLoaded(boolean first) {
-        Intent intent = new Intent();
-        intent.setClassName(Shared.SNAPMOD_PACKAGE_NAME, Shared.SNAPMOD_FORCE_RESUME_ACTIVITY);
-        mainActivity.startActivity(intent);
+        try {
+            if (mappingsLoaded) {
+                performStoryHooks();
+            }
+        } catch (Throwable t) {
+            XposedBridge.log("Error performing story (un)hooks.");
+            XposedBridge.log(t);
+        }
+
+        if (mainActivity != null) {
+            Intent intent = new Intent();
+            intent.setClassName(Shared.SNAPMOD_PACKAGE_NAME, Shared.SNAPMOD_FORCE_RESUME_ACTIVITY);
+            mainActivity.startActivity(intent);
+        }
     }
 
     @Override
     protected void performHooks() throws Throwable {
         requireFileService(Shared.SNAPMOD_FILES_ACTION);
         requireStreamServer(0);
+
+        MainActivity.attachBaseContext.hook(new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) {
+                mainActivity = (Context) param.thisObject;
+            }
+        });
 
         // Prevent screenshot/save to gallery notifications
         ConversationManager.sendMessageWithContent.hook(new XC_MethodHook() {
@@ -423,6 +443,7 @@ public class SnapHooks extends HooksBase {
             }
         });
 
+        // Allow public story downloads
         InAppReportManagerImpl.handle.hook(new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) {
@@ -442,6 +463,10 @@ public class SnapHooks extends HooksBase {
             }
         });
 
+        performStoryHooks();
+    }
+
+    private void performStoryHooks() throws Throwable {
         if (config.getBoolean("allow_download_stories")) {
             Class<?> clsOperaContextActions = OperaContextActions.getMappedClass();
             Field reportAction = null;
@@ -521,6 +546,14 @@ public class SnapHooks extends HooksBase {
             ChatMediaInAppReportClient.report.hook(downloadHook);
             TopicSnapInAppReportClient.report.hook(downloadHook);
             DirectSnapInAppReportClient.report.hook(downloadHook);
+        } else {
+            PublicUserStoryInAppReportClient.report.unhook();
+            FriendStoryInAppReportClient.report.unhook();
+            PublisherStoryInAppReportClient.report.unhook();
+            AdInAppReportClient.report.unhook();
+            ChatMediaInAppReportClient.report.unhook();
+            TopicSnapInAppReportClient.report.unhook();
+            DirectSnapInAppReportClient.report.unhook();
         }
     }
 
