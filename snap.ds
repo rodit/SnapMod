@@ -393,11 +393,10 @@ class SendToSponsorManagerImpl {
     }
 }
 
-class ChatModelAudioNote {
+class ChatModelAudioNote extends !ChatModelBase {
 
     [discard] java.lang.String s0;
     [discard] java.lang.String s1;
-    [discard] !SendToSponsorManagerImpl msp0;
     [discard] boolean b0;
 
     void $<init>(Context, !ChatLayouts, !MessageDataModel, *, java.lang.String, java.util.Map, boolean, ...)
