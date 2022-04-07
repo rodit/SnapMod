@@ -8,7 +8,6 @@ import android.os.Environment;
 
 import java.io.File;
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.lang.reflect.Proxy;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -60,8 +59,6 @@ import xyz.rodit.snapmod.mappings.MessageMetadata;
 import xyz.rodit.snapmod.mappings.MessageSenderCrossroad;
 import xyz.rodit.snapmod.mappings.MessageUpdate;
 import xyz.rodit.snapmod.mappings.NetworkApi;
-import xyz.rodit.snapmod.mappings.OperaActionMenuOptionViewModel;
-import xyz.rodit.snapmod.mappings.OperaContextActions;
 import xyz.rodit.snapmod.mappings.OperaMediaInfo;
 import xyz.rodit.snapmod.mappings.ParameterPackage;
 import xyz.rodit.snapmod.mappings.ParamsMap;
@@ -137,7 +134,7 @@ public class SnapHooks extends HooksBase {
     }
 
     @Override
-    protected void performHooks() throws Throwable {
+    protected void performHooks() {
         requireFileService(Shared.SNAPMOD_FILES_ACTION);
         requireStreamServer(0);
 
@@ -466,95 +463,59 @@ public class SnapHooks extends HooksBase {
         performStoryHooks();
     }
 
-    private void performStoryHooks() throws Throwable {
-        if (config.getBoolean("allow_download_stories")) {
-            Class<?> clsOperaContextActions = OperaContextActions.getMappedClass();
-            Field reportAction = null;
-            Field saveAction = null;
-            for (Field f : clsOperaContextActions.getDeclaredFields()) {
-                Object field = f.get(null);
-                if (OperaActionMenuOptionViewModel.isInstance(field)) {
-                    OperaActionMenuOptionViewModel model = OperaActionMenuOptionViewModel.wrap(field);
-                    String eventName = model.getEventName();
-                    if (eventName == null) {
-                        eventName = model.getActionMenuId().toString();
-                    }
-                    if (eventName.equals(StoryHelper.REPORT_EVENT_NAME)) {
-                        reportAction = f;
-                        XposedBridge.log("Found report action @ " + reportAction.getName());
-                    } else if (eventName.equals(StoryHelper.SAVE_EVENT_NAME)) {
-                        saveAction = f;
-                        XposedBridge.log("Found save action @ " + saveAction.getName());
-                    }
+    private void performStoryHooks() {
+        StoryHelper.swapReportAndSave();
+        XC_MethodHook downloadHook = new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) {
+                if (!config.getBoolean("allow_download_stories")) {
+                    return;
                 }
-            }
 
-            if (reportAction != null && saveAction != null) {
-                OperaActionMenuOptionViewModel saveActionModel = OperaActionMenuOptionViewModel.wrap(saveAction.get(null));
-                OperaActionMenuOptionViewModel reportActionModel = OperaActionMenuOptionViewModel.wrap(reportAction.get(null));
-                reportActionModel.setIconResource(saveActionModel.getIconResource());
-                reportActionModel.setTextResource(saveActionModel.getTextResource());
-                reportActionModel.setTextColorResource(saveActionModel.getTextColorResource());
-                reportActionModel.setIsLoading(false);
-                XposedBridge.log("Replaced report with save button.");
-            }
-
-            XC_MethodHook downloadHook = new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) {
-                    OperaMediaInfo info = StoryHelper.getMediaInfo(ParamsMap.wrap(param.args[0]));
-                    if (info != null && info.isNotNull()) {
-                        XposedBridge.log("Downloading story media from " + info.getUri());
-                        StreamProvider provider = new FileProxyStreamProvider(appContext, () -> {
-                            try {
-                                InputStream stream = new URL(info.getUri()).openStream();
-                                EncryptionAlgorithm enc = info.getEncryption();
-                                if (enc.isNotNull()) {
-                                    stream = enc.decryptStream(stream);
-                                    XposedBridge.log("Stream was encrypted.");
-                                }
-
-                                XposedBridge.log("Media stream opened.");
-                                return stream;
-                            } catch (Exception e) {
-                                XposedBridge.log("Error opening stream.");
-                                XposedBridge.log(e);
+                OperaMediaInfo info = StoryHelper.getMediaInfo(ParamsMap.wrap(param.args[0]));
+                if (info != null && info.isNotNull()) {
+                    XposedBridge.log("Downloading story media from " + info.getUri());
+                    StreamProvider provider = new FileProxyStreamProvider(appContext, () -> {
+                        try {
+                            InputStream stream = new URL(info.getUri()).openStream();
+                            EncryptionAlgorithm enc = info.getEncryption();
+                            if (enc.isNotNull()) {
+                                stream = enc.decryptStream(stream);
+                                XposedBridge.log("Stream was encrypted.");
                             }
 
-                            return null;
-                        });
+                            XposedBridge.log("Media stream opened.");
+                            return stream;
+                        } catch (Exception e) {
+                            XposedBridge.log("Error opening stream.");
+                            XposedBridge.log(e);
+                        }
 
-                        String uuid = UUID.randomUUID().toString();
-                        server.mapStream(uuid, provider);
+                        return null;
+                    });
 
-                        boolean video = info.getStreamingMethod().isNotNull() || (info.getUri() != null && info.getUri().endsWith("mp4"));
-                        String fileName = Shared.SNAPMOD_MEDIA_PREFIX + System.currentTimeMillis() + (video ? ".mp4" : ".jpg");
-                        String dest = Uri.fromFile(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES) + "/SnapMod/" + fileName)).toString();
-                        files.download(true, server.getRoot() + "/" + uuid, dest, fileName, null);
-                    } else {
-                        XposedBridge.log("Null media info for story download.");
-                    }
+                    String uuid = UUID.randomUUID().toString();
+                    server.mapStream(uuid, provider);
 
-                    param.setResult(null);
+                    boolean video = info.getStreamingMethod().isNotNull() || (info.getUri() != null && info.getUri().endsWith("mp4"));
+                    String fileName = Shared.SNAPMOD_MEDIA_PREFIX + System.currentTimeMillis() + (video ? ".mp4" : ".jpg");
+                    String dest = Uri.fromFile(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES) + "/SnapMod/" + fileName)).toString();
+                    files.download(true, server.getRoot() + "/" + uuid, dest, fileName, null);
+                } else {
+                    XposedBridge.log("Null media info for story download.");
                 }
-            };
 
-            PublicUserStoryInAppReportClient.report.hook(downloadHook);
-            FriendStoryInAppReportClient.report.hook(downloadHook);
-            PublisherStoryInAppReportClient.report.hook(downloadHook);
-            AdInAppReportClient.report.hook(downloadHook);
-            ChatMediaInAppReportClient.report.hook(downloadHook);
-            TopicSnapInAppReportClient.report.hook(downloadHook);
-            DirectSnapInAppReportClient.report.hook(downloadHook);
-        } else {
-            PublicUserStoryInAppReportClient.report.unhook();
-            FriendStoryInAppReportClient.report.unhook();
-            PublisherStoryInAppReportClient.report.unhook();
-            AdInAppReportClient.report.unhook();
-            ChatMediaInAppReportClient.report.unhook();
-            TopicSnapInAppReportClient.report.unhook();
-            DirectSnapInAppReportClient.report.unhook();
-        }
+                param.setResult(null);
+            }
+        };
+
+        PublicUserStoryInAppReportClient.report.hook(downloadHook);
+        FriendStoryInAppReportClient.report.hook(downloadHook);
+        PublisherStoryInAppReportClient.report.hook(downloadHook);
+        AdInAppReportClient.report.hook(downloadHook);
+        ChatMediaInAppReportClient.report.hook(downloadHook);
+        TopicSnapInAppReportClient.report.hook(downloadHook);
+        DirectSnapInAppReportClient.report.hook(downloadHook);
     }
 
     private void prevent(XC_MethodHook.MethodHookParam param, String pref, Object enumObj, Object... enumVals) {

@@ -618,8 +618,8 @@ class OperaContextActions {
     [discard] static !OperaActionMenuOptionViewModel vm4;
 
     static void $<clinit>() {
-        .field !OperaContextAction->!IN_APP_REPORT;
-        .field !OperaContextAction->!SAVE;
+        .field !OperaContextAction->!IN_APP_REPORT, bind field reportAction next reference;
+        .field !OperaContextAction->!SAVE, bind field saveAction next reference;
     }
 }
 
