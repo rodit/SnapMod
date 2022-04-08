@@ -1,5 +1,6 @@
 package xyz.rodit.snapmod;
 
+import android.os.Bundle;
 import android.text.InputType;
 
 import androidx.preference.EditTextPreference;
@@ -8,6 +9,13 @@ public class SettingsActivity extends xyz.rodit.xposed.SettingsActivity {
 
     public SettingsActivity() {
         super(R.xml.root_preferences);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        updates.checkForUpdates("rodit", "SnapMod");
     }
 
     @Override

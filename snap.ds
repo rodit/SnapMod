@@ -618,8 +618,8 @@ class OperaContextActions {
     [discard] static !OperaActionMenuOptionViewModel vm4;
 
     static void $<clinit>() {
-        .field !OperaContextAction->!IN_APP_REPORT;
-        .field !OperaContextAction->!SAVE;
+        .field !OperaContextAction->!IN_APP_REPORT, bind field reportAction next reference;
+        .field !OperaContextAction->!SAVE, bind field saveAction next reference;
     }
 }
 
@@ -761,107 +761,81 @@ class EmptyParamsMap extends #ParamsMap {
 class ParamsMap {
 
     ConcurrentHashMap map;
+
+    void put(#MapKey, Object) {
+        .field this->!map;
+        .method ConcurrentHashMap->put;
+    }
 }
 
 class StoryMetadata extends !ParamsMap {
 
+    [late] !MapKey overlayImageMediaInfo;
+    [late] !MapKey videoMediaInfo;
+    [late] !MapKey imageMediaInfo;
+    [late] !MapKey actionMenuOptions;
+    [late] !MapKey menuProperty;
+
     static void $<clinit>() {
+        [strict]
         .string "overlay_image_media_info", bind field overlayImageMediaInfo next reference;
+        [strict]
         .string "video_media_info", bind field videoMediaInfo next reference;
+        [strict]
         .string "image_media_info", bind field imageMediaInfo next reference;
+        [strict]
+        .string "action_menu_options", bind field actionMenuOptions next reference;
+        [strict]
+        .string "opera_context_menu_appearance", bind field menuProperty next reference;
     }
+}
+
+class UserStoryKeys {
+
+    [late] !MapKey displayName;
+
+    static void $<clinit>() {
+        [strict]
+        .string "DISPLAY_NAME", bind field displayName next reference;
+    }
+}
+
+class PublicStoryKeys {
+
+    [late] !MapKey username;
+
+    static void $<clinit>() {
+        [strict]
+        .string "USERNAME", bind field username next reference;
+    }
+}
+
+class ContextActionMenuModel {
+
+    [late] #ContextClickHandler onClick;
+    !OperaContextAction action;
+
+    String $toString() {
+        .string contains "ContextActionMenuModel";
+        [strict]
+        .string contains "onClick=", bind field onClick next reference;
+    }
+}
+
+[late]
+interface ContextClickHandler {
+
+    Object $invoke(Object)
 }
 
 [certain]
-class InAppReportManagerImpl {
+class OperaContextMenuProperty {
 
-    void $<init>(...) {
-        .string "InAppReportManagerImpl";
-    }
-
-    * handle(*, ...)
-}
-
-[certain]
-class PublicUserReportParams {
-
-    String userId;
-    String username;
+    [late] String friendUsername;
 
     String $toString() {
-        .string contains "PublicUserReportParams";
+        .string contains "OperaContextMenuProperty";
+        [strict]
+        .string contains "friendUsername=", bind field friendUsername next reference;
     }
-}
-
-class StoryReportParams {
-
-    String snapId;
-    !OperaMediaInfo mediaInfo;
-
-    String $toString() {
-        .string contains "StoryReportParams(";
-    }
-}
-
-class PublicUserStoryInAppReportClient {
-
-    void $<init>(...) {
-        .string "PublicUserStoryInAppReportClientImpl";
-    }
-
-    * report(#StoryMedia, ...)
-}
-
-class FriendStoryInAppReportClient {
-
-    void $<init>(...) {
-        .string "FriendStoryInAppReportClientImpl";
-    }
-
-    * report(#StoryMedia, ...)
-}
-
-class PublisherStoryInAppReportClient {
-
-    void $<init>(...) {
-        .string "PublisherStoryInAppReportClientImpl";
-    }
-
-    * report(#StoryMedia, ...)
-}
-
-class AdInAppReportClient {
-
-    void $<init>(...) {
-        .string "AdInAppReportClientImpl";
-    }
-
-    * report(#StoryMedia, ...)
-}
-
-class ChatMediaInAppReportClient {
-
-    void $<init>(...) {
-        .string "ChatMediaInAppReportClientImpl";
-    }
-
-    * report(#StoryMedia, ...)
-}
-
-class TopicSnapInAppReportClient {
-
-    void $<init>(...) {
-        .string "TopicSnapInAppReportClientImpl";
-    }
-
-    * report(#StoryMedia, ...)
-}
-
-class DirectSnapInAppReportClient {
-
-    void $<init>(...) {
-        .string "DirectSnapInAppReportClientImpl";
-    }
-
-    * report(#StoryMedia, ...)
 }

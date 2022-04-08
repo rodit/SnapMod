@@ -7,46 +7,38 @@ import android.net.Uri;
 import android.os.Environment;
 
 import java.io.File;
-import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.lang.reflect.Proxy;
-import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import xyz.rodit.dexsearch.client.xposed.MappedObject;
-import xyz.rodit.snapmod.mappings.AdInAppReportClient;
 import xyz.rodit.snapmod.mappings.BitmojiUriHandler;
 import xyz.rodit.snapmod.mappings.CalendarDate;
 import xyz.rodit.snapmod.mappings.ChatActionHelper;
 import xyz.rodit.snapmod.mappings.ChatMediaHandler;
-import xyz.rodit.snapmod.mappings.ChatMediaInAppReportClient;
 import xyz.rodit.snapmod.mappings.ChatModelAudioNote;
 import xyz.rodit.snapmod.mappings.ChatModelBase;
 import xyz.rodit.snapmod.mappings.ChatModelLiveSnap;
 import xyz.rodit.snapmod.mappings.ChatModelSavedSnap;
 import xyz.rodit.snapmod.mappings.ContentType;
+import xyz.rodit.snapmod.mappings.ContextActionMenuModel;
+import xyz.rodit.snapmod.mappings.ContextClickHandler;
 import xyz.rodit.snapmod.mappings.ConversationManager;
-import xyz.rodit.snapmod.mappings.DirectSnapInAppReportClient;
-import xyz.rodit.snapmod.mappings.EncryptionAlgorithm;
 import xyz.rodit.snapmod.mappings.FooterInfoItem;
 import xyz.rodit.snapmod.mappings.FriendActionClient;
 import xyz.rodit.snapmod.mappings.FriendActionRequest;
 import xyz.rodit.snapmod.mappings.FriendProfilePageData;
 import xyz.rodit.snapmod.mappings.FriendProfileTransformer;
-import xyz.rodit.snapmod.mappings.FriendPublicProfileTile;
-import xyz.rodit.snapmod.mappings.FriendStoryInAppReportClient;
 import xyz.rodit.snapmod.mappings.GallerySnapMedia;
-import xyz.rodit.snapmod.mappings.InAppReportManagerImpl;
 import xyz.rodit.snapmod.mappings.LiveSnapMedia;
 import xyz.rodit.snapmod.mappings.LocalMessageContent;
 import xyz.rodit.snapmod.mappings.LocationMessage;
@@ -60,23 +52,17 @@ import xyz.rodit.snapmod.mappings.MessageMetadata;
 import xyz.rodit.snapmod.mappings.MessageSenderCrossroad;
 import xyz.rodit.snapmod.mappings.MessageUpdate;
 import xyz.rodit.snapmod.mappings.NetworkApi;
-import xyz.rodit.snapmod.mappings.OperaActionMenuOptionViewModel;
+import xyz.rodit.snapmod.mappings.OperaContextAction;
 import xyz.rodit.snapmod.mappings.OperaContextActions;
-import xyz.rodit.snapmod.mappings.OperaMediaInfo;
 import xyz.rodit.snapmod.mappings.ParameterPackage;
 import xyz.rodit.snapmod.mappings.ParamsMap;
-import xyz.rodit.snapmod.mappings.PublicUserReportParams;
-import xyz.rodit.snapmod.mappings.PublicUserStoryInAppReportClient;
-import xyz.rodit.snapmod.mappings.PublisherStoryInAppReportClient;
 import xyz.rodit.snapmod.mappings.RxObserver;
 import xyz.rodit.snapmod.mappings.SavePolicy;
 import xyz.rodit.snapmod.mappings.SaveToCameraRollActionHandler;
 import xyz.rodit.snapmod.mappings.SaveType;
 import xyz.rodit.snapmod.mappings.SerializableContent;
-import xyz.rodit.snapmod.mappings.TopicSnapInAppReportClient;
+import xyz.rodit.snapmod.mappings.StoryMetadata;
 import xyz.rodit.xposed.HooksBase;
-import xyz.rodit.xposed.client.http.StreamProvider;
-import xyz.rodit.xposed.client.http.streams.FileProxyStreamProvider;
 import xyz.rodit.xposed.mappings.LoadScheme;
 
 public class SnapHooks extends HooksBase {
@@ -120,15 +106,6 @@ public class SnapHooks extends HooksBase {
 
     @Override
     protected void onConfigLoaded(boolean first) {
-        try {
-            if (mappingsLoaded) {
-                performStoryHooks();
-            }
-        } catch (Throwable t) {
-            XposedBridge.log("Error performing story (un)hooks.");
-            XposedBridge.log(t);
-        }
-
         if (mainActivity != null) {
             Intent intent = new Intent();
             intent.setClassName(Shared.SNAPMOD_PACKAGE_NAME, Shared.SNAPMOD_FORCE_RESUME_ACTIVITY);
@@ -137,7 +114,7 @@ public class SnapHooks extends HooksBase {
     }
 
     @Override
-    protected void performHooks() throws Throwable {
+    protected void performHooks() {
         requireFileService(Shared.SNAPMOD_FILES_ACTION);
         requireStreamServer(0);
 
@@ -435,6 +412,9 @@ public class SnapHooks extends HooksBase {
             }
         });
 
+
+        //TODO: FIND A MORE RELIABLE WAY OF DOING THIS
+        /*
         // Get last viewed public profile url for download
         FriendPublicProfileTile.constructors.hook(new XC_MethodHook() {
             @Override
@@ -443,7 +423,7 @@ public class SnapHooks extends HooksBase {
             }
         });
 
-        // Allow public story downloads
+        // Allow public profile picture downloads (doesn't work)
         InAppReportManagerImpl.handle.hook(new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) {
@@ -462,99 +442,38 @@ public class SnapHooks extends HooksBase {
                 }
             }
         });
+        */
 
-        performStoryHooks();
-    }
+        // Story menu creation (add save option).
+        ParamsMap.put.hook(new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) {
+                if (config.getBoolean("allow_download_stories")
+                        && param.args[0] == StoryMetadata.getActionMenuOptions().instance
+                        && param.args[1] instanceof List) {
+                    List newList = new ArrayList();
+                    for (Object i : ((List) param.args[1])) {
+                        newList.add(i);
+                    }
 
-    private void performStoryHooks() throws Throwable {
-        if (config.getBoolean("allow_download_stories")) {
-            Class<?> clsOperaContextActions = OperaContextActions.getMappedClass();
-            Field reportAction = null;
-            Field saveAction = null;
-            for (Field f : clsOperaContextActions.getDeclaredFields()) {
-                Object field = f.get(null);
-                if (OperaActionMenuOptionViewModel.isInstance(field)) {
-                    OperaActionMenuOptionViewModel model = OperaActionMenuOptionViewModel.wrap(field);
-                    String eventName = model.getEventName();
-                    if (eventName == null) {
-                        eventName = model.getActionMenuId().toString();
-                    }
-                    if (eventName.equals(StoryHelper.REPORT_EVENT_NAME)) {
-                        reportAction = f;
-                        XposedBridge.log("Found report action @ " + reportAction.getName());
-                    } else if (eventName.equals(StoryHelper.SAVE_EVENT_NAME)) {
-                        saveAction = f;
-                        XposedBridge.log("Found save action @ " + saveAction.getName());
-                    }
+                    newList.add(OperaContextActions.getSaveAction().instance);
+                    param.args[1] = newList;
                 }
             }
+        });
 
-            if (reportAction != null && saveAction != null) {
-                OperaActionMenuOptionViewModel saveActionModel = OperaActionMenuOptionViewModel.wrap(saveAction.get(null));
-                OperaActionMenuOptionViewModel reportActionModel = OperaActionMenuOptionViewModel.wrap(reportAction.get(null));
-                reportActionModel.setIconResource(saveActionModel.getIconResource());
-                reportActionModel.setTextResource(saveActionModel.getTextResource());
-                reportActionModel.setTextColorResource(saveActionModel.getTextColorResource());
-                reportActionModel.setIsLoading(false);
-                XposedBridge.log("Replaced report with save button.");
-            }
-
-            XC_MethodHook downloadHook = new XC_MethodHook() {
-                @Override
-                protected void beforeHookedMethod(MethodHookParam param) {
-                    OperaMediaInfo info = StoryHelper.getMediaInfo(ParamsMap.wrap(param.args[0]));
-                    if (info != null && info.isNotNull()) {
-                        XposedBridge.log("Downloading story media from " + info.getUri());
-                        StreamProvider provider = new FileProxyStreamProvider(appContext, () -> {
-                            try {
-                                InputStream stream = new URL(info.getUri()).openStream();
-                                EncryptionAlgorithm enc = info.getEncryption();
-                                if (enc.isNotNull()) {
-                                    stream = enc.decryptStream(stream);
-                                    XposedBridge.log("Stream was encrypted.");
-                                }
-
-                                XposedBridge.log("Media stream opened.");
-                                return stream;
-                            } catch (Exception e) {
-                                XposedBridge.log("Error opening stream.");
-                                XposedBridge.log(e);
-                            }
-
-                            return null;
-                        });
-
-                        String uuid = UUID.randomUUID().toString();
-                        server.mapStream(uuid, provider);
-
-                        boolean video = info.getStreamingMethod().isNotNull() || (info.getUri() != null && info.getUri().endsWith("mp4"));
-                        String fileName = Shared.SNAPMOD_MEDIA_PREFIX + System.currentTimeMillis() + (video ? ".mp4" : ".jpg");
-                        String dest = Uri.fromFile(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES) + "/SnapMod/" + fileName)).toString();
-                        files.download(true, server.getRoot() + "/" + uuid, dest, fileName, null);
-                    } else {
-                        XposedBridge.log("Null media info for story download.");
-                    }
-
-                    param.setResult(null);
+        // Override save story click.
+        ContextActionMenuModel.constructors.hook(new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) {
+                ContextActionMenuModel model = ContextActionMenuModel.wrap(param.thisObject);
+                if (config.getBoolean("allow_download_stories")
+                        && model.getAction().instance == OperaContextAction.SAVE().instance) {
+                    Object clickProxy = Proxy.newProxyInstance(lpparam.classLoader, new Class[]{ContextClickHandler.getMappedClass()}, new StoryDownloadProxy(appContext, server, files));
+                    model.setOnClick(ContextClickHandler.wrap(clickProxy));
                 }
-            };
-
-            PublicUserStoryInAppReportClient.report.hook(downloadHook);
-            FriendStoryInAppReportClient.report.hook(downloadHook);
-            PublisherStoryInAppReportClient.report.hook(downloadHook);
-            AdInAppReportClient.report.hook(downloadHook);
-            ChatMediaInAppReportClient.report.hook(downloadHook);
-            TopicSnapInAppReportClient.report.hook(downloadHook);
-            DirectSnapInAppReportClient.report.hook(downloadHook);
-        } else {
-            PublicUserStoryInAppReportClient.report.unhook();
-            FriendStoryInAppReportClient.report.unhook();
-            PublisherStoryInAppReportClient.report.unhook();
-            AdInAppReportClient.report.unhook();
-            ChatMediaInAppReportClient.report.unhook();
-            TopicSnapInAppReportClient.report.unhook();
-            DirectSnapInAppReportClient.report.unhook();
-        }
+            }
+        });
     }
 
     private void prevent(XC_MethodHook.MethodHookParam param, String pref, Object enumObj, Object... enumVals) {

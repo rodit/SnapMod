@@ -55,4 +55,5 @@ jobs:
           prerelease: false
           files: |
             app/build/outputs/apk/debug/app-debug.apk
+            app/build/version.json
             bindings.json
