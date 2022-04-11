@@ -136,6 +136,35 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="@string/downloads_header"
+        app:iconSpaceReserved="false">
+
+        <EditTextPreference
+            app:key="download_path_story"
+            app:title="@string/download_path_story_title"
+            app:defaultValue="$Movies/SnapMod/%u_story_%t"
+            app:iconSpaceReserved="false" />
+
+        <EditTextPreference
+            app:key="download_path_audio_note"
+            app:title="@string/download_path_audio_note_title"
+            app:defaultValue="$Movies/SnapMod/%id_audio_%t"
+            app:iconSpaceReserved="false" />
+
+        <EditTextPreference
+            app:key="download_path_profile"
+            app:title="@string/download_path_profile_title"
+            app:defaultValue="$Movies/SnapMod/%u_profile_%t"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="use_android_download_manager"
+            app:title="@string/use_android_download_manager_title"
+            app:defaultValue="true"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
     <PreferenceCategory app:title="@string/location_header"
         app:iconSpaceReserved="false">
 
@@ -172,5 +201,4 @@
             app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
-
 </PreferenceScreen>

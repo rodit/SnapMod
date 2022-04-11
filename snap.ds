@@ -7,6 +7,7 @@ import android.net.Uri;
 
 import com.google.gson.annotations.SerializedName;
 
+import com.snap.imageloading.view.SnapImageView;
 import com.snapchat.client.messaging.Conversation;
 
 import java.io.InputStream;
@@ -564,23 +565,6 @@ class MemoriesPickerVideoDurationConfig {
 }
 
 [certain]
-class FriendPublicProfileFinder {
-
-    void $<init>(...) {
-        .string "FRIEND_PROFILE_SNAP_PRO_PUBLIC_PROFILE";
-    }
-}
-
-class FriendPublicProfileTile {
-
-    String profilePictureUrl;
-
-    void $<init>(...) {
-        .field !FriendPublicProfileFinder->*;
-    }
-}
-
-[certain]
 class OperaActionMenuOptionViewModel {
 
     java.lang.String $toString() {
@@ -837,5 +821,55 @@ class OperaContextMenuProperty {
         .string contains "OperaContextMenuProperty";
         [strict]
         .string contains "friendUsername=", bind field friendUsername next reference;
+    }
+}
+
+[certain]
+enum PublicProfileTileType {
+
+    static * FRIEND_PROFILE_SNAP_PRO_PUBLIC_PROFILE;
+
+    void $<init>(...) {
+        .string "FRIEND_PROFILE_SNAP_PRO_PUBLIC_PROFILE";
+    }
+}
+
+[certain]
+interface PublicProfileMetadata {
+
+    [discard] String s0()
+    String getProfilePicture72()
+    String $getId()
+    String $getTitle()
+    [discard] String s1()
+    [discard] String s2()
+    String getProfilePicture90()
+    String getUsername()
+}
+
+[late]
+interface PublicProfileTileInfo {
+
+    !PublicProfileMetadata getMetadata()
+}
+
+[certain]
+class PublicProfileTile extends #PublicProfileTileBase {
+
+    #PublicProfileTileInfo info;
+    String profilePictureUrl;
+
+    void $<init>(...) {
+        .field !PublicProfileTileType->!FRIEND_PROFILE_SNAP_PRO_PUBLIC_PROFILE;
+    }
+}
+
+[certain]
+class PublicProfileTileTransformer {
+
+    SnapImageView profileImageView;
+
+    void transform(!PublicProfileTileBase, ...) {
+        .string "SUBCATEGORY_V3_GOVERNMENT_ORG";
     }
 }

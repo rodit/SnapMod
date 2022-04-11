@@ -1,10 +1,7 @@
 package xyz.rodit.snapmod;
 
 import android.content.Context;
-import android.net.Uri;
-import android.os.Environment;
 
-import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -15,6 +12,7 @@ import de.robv.android.xposed.XposedBridge;
 import xyz.rodit.snapmod.mappings.ContextClickHandler;
 import xyz.rodit.snapmod.mappings.EncryptionAlgorithm;
 import xyz.rodit.snapmod.mappings.ParamsMap;
+import xyz.rodit.xposed.client.ConfigurationClient;
 import xyz.rodit.xposed.client.FileClient;
 import xyz.rodit.xposed.client.http.StreamProvider;
 import xyz.rodit.xposed.client.http.StreamServer;
@@ -23,11 +21,13 @@ import xyz.rodit.xposed.client.http.streams.FileProxyStreamProvider;
 public class StoryDownloadProxy implements InvocationHandler {
 
     private final Context context;
+    private final ConfigurationClient config;
     private final StreamServer server;
     private final FileClient files;
 
-    public StoryDownloadProxy(Context context, StreamServer server, FileClient files) {
+    public StoryDownloadProxy(Context context, ConfigurationClient config, StreamServer server, FileClient files) {
         this.context = context;
+        this.config = config;
         this.server = server;
         this.files = files;
     }
@@ -61,9 +61,8 @@ public class StoryDownloadProxy implements InvocationHandler {
                 server.mapStream(uuid, provider);
 
                 String username = media.menuProperty.isNull() ? "unknown" : media.menuProperty.getFriendUsername();
-                String fileName = Shared.SNAPMOD_MEDIA_PREFIX + username + "_" + System.currentTimeMillis() + media.extension;
-                String dest = Uri.fromFile(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES) + "/SnapMod/" + fileName)).toString();
-                files.download(true, server.getRoot() + "/" + uuid, dest, fileName, null);
+                String dest = PathManager.getUri(config, PathManager.DOWNLOAD_STORY, PathManager.createParams("u", username), media.extension);
+                files.download(config.getBoolean("use_android_download_manager", true), server.getRoot() + "/" + uuid, dest, username + "'s Story", null);
             } else {
                 XposedBridge.log("Null media info for story download.");
             }
