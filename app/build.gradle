@@ -28,12 +28,14 @@ android {
 }
 
 task versionInfo {
-    def build = 84586
-    def infoFile = new File('app/build/version.json')
-    infoFile.getParentFile().mkdirs()
-    infoFile.delete()
-    infoFile.createNewFile()
-    infoFile.text = "{\"versionCode\":${android.defaultConfig.versionCode},\"build\":${build}}"
+    doLast {
+        def build = 84586
+        def infoFile = new File('app/build/version.json')
+        infoFile.getParentFile().mkdirs()
+        infoFile.delete()
+        infoFile.createNewFile()
+        infoFile.text = "{\"versionCode\":${android.defaultConfig.versionCode},\"build\":${build}}"
+    }
 }
 
 dependencies {
