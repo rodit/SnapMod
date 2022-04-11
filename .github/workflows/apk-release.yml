@@ -50,6 +50,8 @@ jobs:
 
       - name: Generate Version Info
         run: ./gradlew versionInfo
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish Release APK and Bindings
         uses: marvinpinto/action-automatic-releases@latest
