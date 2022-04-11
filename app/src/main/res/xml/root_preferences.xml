@@ -173,4 +173,14 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="@string/misc_header"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreferenceCompat
+            app:key="use_android_download_manager"
+            app:title="@string/use_android_download_manager_title"
+            app:defaultValue="true"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
 </PreferenceScreen>

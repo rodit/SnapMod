@@ -11,6 +11,7 @@ import java.util.UUID;
 import de.robv.android.xposed.XposedBridge;
 import xyz.rodit.snapmod.mappings.MediaStreamProvider;
 import xyz.rodit.snapmod.mappings.RxObserver;
+import xyz.rodit.xposed.client.ConfigurationClient;
 import xyz.rodit.xposed.client.FileClient;
 import xyz.rodit.xposed.client.http.StreamProvider;
 import xyz.rodit.xposed.client.http.StreamServer;
@@ -44,19 +45,21 @@ public class UriResolverSubscriber implements InvocationHandler {
 
     public static class MediaUriDownloader extends UriResolverSubscriber {
 
-        public MediaUriDownloader(Context context, FileClient files, StreamServer server, String dest) {
-            super(new UriListener(context, files, server, dest));
+        public MediaUriDownloader(Context context, ConfigurationClient config, FileClient files, StreamServer server, String dest) {
+            super(new UriListener(context, config, files, server, dest));
         }
 
         private static class UriListener implements ResolutionListener {
 
             private final Context context;
+            private final ConfigurationClient config;
             private final FileClient files;
             private final StreamServer server;
             private final String dest;
 
-            public UriListener(Context context, FileClient files, StreamServer server, String dest) {
+            public UriListener(Context context, ConfigurationClient config, FileClient files, StreamServer server, String dest) {
                 this.context = context;
+                this.config = config;
                 this.files = files;
                 this.server = server;
                 this.dest = dest;
@@ -75,7 +78,7 @@ public class UriResolverSubscriber implements InvocationHandler {
                 }
 
                 server.mapStream(uuid, provider);
-                files.download(true, server.getRoot() + "/" + uuid, dest, "Audio Note", null);
+                files.download(config.getBoolean("use_android_download_manager", true), server.getRoot() + "/" + uuid, dest, "Audio Note", null);
             }
         }
     }

@@ -1,10 +1,13 @@
 package xyz.rodit.snapmod;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
+import android.view.View;
 
 import java.io.File;
 import java.lang.reflect.Proxy;
@@ -56,6 +59,8 @@ import xyz.rodit.snapmod.mappings.OperaContextAction;
 import xyz.rodit.snapmod.mappings.OperaContextActions;
 import xyz.rodit.snapmod.mappings.ParameterPackage;
 import xyz.rodit.snapmod.mappings.ParamsMap;
+import xyz.rodit.snapmod.mappings.PublicProfileTile;
+import xyz.rodit.snapmod.mappings.PublicProfileTileTransformer;
 import xyz.rodit.snapmod.mappings.RxObserver;
 import xyz.rodit.snapmod.mappings.SavePolicy;
 import xyz.rodit.snapmod.mappings.SaveToCameraRollActionHandler;
@@ -71,9 +76,8 @@ public class SnapHooks extends HooksBase {
 
     private final Map<Integer, Object> chatMediaMap = new HashMap<>();
     private ChatMediaHandler chatMediaHandler;
-    private String lastPublicProfilePictureUrl;
 
-    private Context mainActivity;
+    private Activity mainActivity;
 
     public SnapHooks() {
         super(Collections.singletonList(Shared.SNAPCHAT_PACKAGE),
@@ -121,7 +125,7 @@ public class SnapHooks extends HooksBase {
         MainActivity.attachBaseContext.hook(new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) {
-                mainActivity = (Context) param.thisObject;
+                mainActivity = (Activity) param.thisObject;
             }
         });
 
@@ -356,7 +360,7 @@ public class SnapHooks extends HooksBase {
                         ChatModelAudioNote audio = ChatModelAudioNote.wrap(param.args[1]);
                         String dest = Uri.fromFile(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES) + "/SnapMod/" + Shared.SNAPMOD_MEDIA_PREFIX + base.getSenderId() + "_" + System.currentTimeMillis() + ".aac")).toString();
                         XposedBridge.log("Downloading audio note from " + audio.getUri() + " to " + dest + ".");
-                        Object observerProxy = Proxy.newProxyInstance(lpparam.classLoader, new Class[]{RxObserver.getMappedClass()}, new UriResolverSubscriber.MediaUriDownloader(appContext, files, server, dest));
+                        Object observerProxy = Proxy.newProxyInstance(lpparam.classLoader, new Class[]{RxObserver.getMappedClass()}, new UriResolverSubscriber.MediaUriDownloader(appContext, config, files, server, dest));
                         chatMediaHandler.resolve(audio.getUri(), Collections.emptySet(), true, Collections.emptySet()).subscribe(RxObserver.wrap(observerProxy));
                         param.setResult(null);
                     }
@@ -412,37 +416,40 @@ public class SnapHooks extends HooksBase {
             }
         });
 
-
-        //TODO: FIND A MORE RELIABLE WAY OF DOING THIS
-        /*
-        // Get last viewed public profile url for download
-        FriendPublicProfileTile.constructors.hook(new XC_MethodHook() {
+        // Public profile picture downloads for friends
+        PublicProfileTileTransformer.transform.hook(new XC_MethodHook() {
             @Override
-            protected void beforeHookedMethod(MethodHookParam param) {
-                lastPublicProfilePictureUrl = FriendPublicProfileTile.wrap(param.thisObject).getProfilePictureUrl();
-            }
-        });
-
-        // Allow public profile picture downloads (doesn't work)
-        InAppReportManagerImpl.handle.hook(new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) {
-                if (config.getBoolean("allow_download_public_dp") && lastPublicProfilePictureUrl != null && PublicUserReportParams.isInstance(param.args[0])) {
-                    String resolution = config.getString("public_dp_resolution", "500");
-                    double resDouble = Double.parseDouble(resolution);
-                    if (resDouble < 1 || resDouble > 5000) {
-                        resDouble = 500;
+            protected void afterHookedMethod(MethodHookParam param) {
+                View view = (View) PublicProfileTileTransformer.wrap(param.thisObject).getProfileImageView();
+                PublicProfileTile tile = PublicProfileTile.wrap(param.args[0]);
+                view.setOnLongClickListener(v -> {
+                    if (config.getBoolean("allow_download_public_dp")) {
+                        String url = tile.getProfilePictureUrl();
+                        mainActivity.runOnUiThread(() ->
+                                new AlertDialog.Builder(mainActivity)
+                                        .setTitle("Download Profile Picture?")
+                                        .setPositiveButton("Yes", (d, i) -> {
+                                            String resolution = config.getString("public_dp_resolution", "500");
+                                            double resDouble = Double.parseDouble(resolution);
+                                            if (resDouble < 1 || resDouble > 5000) {
+                                                resDouble = 500;
+                                            }
+                                            resolution = String.valueOf((int) resDouble);
+                                            String resizedUrl = url.replaceAll(PROFILE_PICTURE_RESOLUTION_PATTERN, "0," + resolution + "_");
+                                            String username = tile.getInfo().getMetadata().getUsername();
+                                            String dest = Uri.fromFile(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES) + "/SnapMod/" + username + "_profile_" + System.currentTimeMillis() + ".jpg")).toString();
+                                            files.download(config.getBoolean("use_android_download_manager"), resizedUrl, dest, username + "'s profile picture", null);
+                                        })
+                                        .setNegativeButton("No", (d, i) -> {
+                                        })
+                                        .show());
+                        return true;
                     }
-                    resolution = String.valueOf((int) resDouble);
-                    String url = lastPublicProfilePictureUrl.replaceAll(PROFILE_PICTURE_RESOLUTION_PATTERN, "0," + resolution + "_");
-                    PublicUserReportParams params = PublicUserReportParams.wrap(param.args[0]);
-                    String dest = Uri.fromFile(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/SnapMod/" + params.getUsername() + "_profile_" + System.currentTimeMillis())).toString();
-                    files.download(true, url, dest, params.getUsername() + "'s profile picture", null);
-                    param.setResult(null);
-                }
+
+                    return false;
+                });
             }
         });
-        */
 
         // Story menu creation (add save option).
         ParamsMap.put.hook(new XC_MethodHook() {
@@ -469,7 +476,7 @@ public class SnapHooks extends HooksBase {
                 ContextActionMenuModel model = ContextActionMenuModel.wrap(param.thisObject);
                 if (config.getBoolean("allow_download_stories")
                         && model.getAction().instance == OperaContextAction.SAVE().instance) {
-                    Object clickProxy = Proxy.newProxyInstance(lpparam.classLoader, new Class[]{ContextClickHandler.getMappedClass()}, new StoryDownloadProxy(appContext, server, files));
+                    Object clickProxy = Proxy.newProxyInstance(lpparam.classLoader, new Class[]{ContextClickHandler.getMappedClass()}, new StoryDownloadProxy(appContext, config, server, files));
                     model.setOnClick(ContextClickHandler.wrap(clickProxy));
                 }
             }

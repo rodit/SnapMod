@@ -15,6 +15,7 @@ import de.robv.android.xposed.XposedBridge;
 import xyz.rodit.snapmod.mappings.ContextClickHandler;
 import xyz.rodit.snapmod.mappings.EncryptionAlgorithm;
 import xyz.rodit.snapmod.mappings.ParamsMap;
+import xyz.rodit.xposed.client.ConfigurationClient;
 import xyz.rodit.xposed.client.FileClient;
 import xyz.rodit.xposed.client.http.StreamProvider;
 import xyz.rodit.xposed.client.http.StreamServer;
@@ -23,11 +24,13 @@ import xyz.rodit.xposed.client.http.streams.FileProxyStreamProvider;
 public class StoryDownloadProxy implements InvocationHandler {
 
     private final Context context;
+    private final ConfigurationClient config;
     private final StreamServer server;
     private final FileClient files;
 
-    public StoryDownloadProxy(Context context, StreamServer server, FileClient files) {
+    public StoryDownloadProxy(Context context, ConfigurationClient config, StreamServer server, FileClient files) {
         this.context = context;
+        this.config = config;
         this.server = server;
         this.files = files;
     }
@@ -63,7 +66,7 @@ public class StoryDownloadProxy implements InvocationHandler {
                 String username = media.menuProperty.isNull() ? "unknown" : media.menuProperty.getFriendUsername();
                 String fileName = Shared.SNAPMOD_MEDIA_PREFIX + username + "_" + System.currentTimeMillis() + media.extension;
                 String dest = Uri.fromFile(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES) + "/SnapMod/" + fileName)).toString();
-                files.download(true, server.getRoot() + "/" + uuid, dest, fileName, null);
+                files.download(config.getBoolean("use_android_download_manager", true), server.getRoot() + "/" + uuid, dest, fileName, null);
             } else {
                 XposedBridge.log("Null media info for story download.");
             }
