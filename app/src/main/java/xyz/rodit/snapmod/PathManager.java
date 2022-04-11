@@ -18,8 +18,8 @@ public class PathManager {
     public static final String DOWNLOAD_AUDIO_NOTE = "audio_note";
     public static final String DOWNLOAD_PROFILE = "profile";
 
-    private static final Pattern PATTERN_PUBLIC_DIR = Pattern.compile("\\$(\\w*)");
-    private static final Pattern PATTERN_PARAMETER = Pattern.compile("%(\\w)");
+    private static final Pattern PATTERN_PUBLIC_DIR = Pattern.compile("\\$(\\w+)");
+    private static final Pattern PATTERN_PARAMETER = Pattern.compile("%([A-Za-z]+)");
 
     private static final Map<String, String> publicDirs = new HashMap<>();
     private static final Map<String, String> defaultPaths = new HashMap<>();
