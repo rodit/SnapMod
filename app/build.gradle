@@ -45,9 +45,10 @@ dependencies {
 
     implementation files('libs/snapmod.jar')
     implementation 'androidx.preference:preference:1.2.0'
-    implementation 'xyz.rodit:xposed:1.4.1'
+    implementation 'xyz.rodit:xposed:1.4.2'
 
     implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+    implementation 'io.noties.markwon:core:4.6.2'
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
