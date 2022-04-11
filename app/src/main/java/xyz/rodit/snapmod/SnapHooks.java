@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.view.View;
 
 import java.lang.reflect.Proxy;
@@ -108,9 +109,11 @@ public class SnapHooks extends HooksBase {
     @Override
     protected void onConfigLoaded(boolean first) {
         if (mainActivity != null) {
-            Intent intent = new Intent();
-            intent.setClassName(Shared.SNAPMOD_PACKAGE_NAME, Shared.SNAPMOD_FORCE_RESUME_ACTIVITY);
-            mainActivity.startActivity(intent);
+            new Handler(mainActivity.getMainLooper()).postDelayed(() -> {
+                Intent intent = new Intent();
+                intent.setClassName(Shared.SNAPMOD_PACKAGE_NAME, Shared.SNAPMOD_FORCE_RESUME_ACTIVITY);
+                mainActivity.startActivity(intent);
+            }, 500);
         }
     }
 
