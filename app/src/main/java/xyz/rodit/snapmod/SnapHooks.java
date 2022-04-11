@@ -5,11 +5,8 @@ import android.app.AlertDialog;
 import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Environment;
 import android.view.View;
 
-import java.io.File;
 import java.lang.reflect.Proxy;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -358,7 +355,7 @@ public class SnapHooks extends HooksBase {
                         // Note: the content resolver provided by appContext cannot open a stream from the uri.
                         ChatModelBase base = ChatModelBase.wrap(param.args[1]);
                         ChatModelAudioNote audio = ChatModelAudioNote.wrap(param.args[1]);
-                        String dest = Uri.fromFile(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES) + "/SnapMod/" + Shared.SNAPMOD_MEDIA_PREFIX + base.getSenderId() + "_" + System.currentTimeMillis() + ".aac")).toString();
+                        String dest = PathManager.getUri(config, PathManager.DOWNLOAD_AUDIO_NOTE, PathManager.createParams("id", base.getSenderId()), ".aac");
                         XposedBridge.log("Downloading audio note from " + audio.getUri() + " to " + dest + ".");
                         Object observerProxy = Proxy.newProxyInstance(lpparam.classLoader, new Class[]{RxObserver.getMappedClass()}, new UriResolverSubscriber.MediaUriDownloader(appContext, config, files, server, dest));
                         chatMediaHandler.resolve(audio.getUri(), Collections.emptySet(), true, Collections.emptySet()).subscribe(RxObserver.wrap(observerProxy));
@@ -437,7 +434,7 @@ public class SnapHooks extends HooksBase {
                                             resolution = String.valueOf((int) resDouble);
                                             String resizedUrl = url.replaceAll(PROFILE_PICTURE_RESOLUTION_PATTERN, "0," + resolution + "_");
                                             String username = tile.getInfo().getMetadata().getUsername();
-                                            String dest = Uri.fromFile(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES) + "/SnapMod/" + username + "_profile_" + System.currentTimeMillis() + ".jpg")).toString();
+                                            String dest = PathManager.getUri(config, PathManager.DOWNLOAD_PROFILE, PathManager.createParams("u", username), ".jpg");
                                             files.download(config.getBoolean("use_android_download_manager"), resizedUrl, dest, username + "'s profile picture", null);
                                         })
                                         .setNegativeButton("No", (d, i) -> {

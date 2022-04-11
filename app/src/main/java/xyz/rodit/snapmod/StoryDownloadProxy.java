@@ -1,10 +1,7 @@
 package xyz.rodit.snapmod;
 
 import android.content.Context;
-import android.net.Uri;
-import android.os.Environment;
 
-import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -64,9 +61,8 @@ public class StoryDownloadProxy implements InvocationHandler {
                 server.mapStream(uuid, provider);
 
                 String username = media.menuProperty.isNull() ? "unknown" : media.menuProperty.getFriendUsername();
-                String fileName = Shared.SNAPMOD_MEDIA_PREFIX + username + "_" + System.currentTimeMillis() + media.extension;
-                String dest = Uri.fromFile(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES) + "/SnapMod/" + fileName)).toString();
-                files.download(config.getBoolean("use_android_download_manager", true), server.getRoot() + "/" + uuid, dest, fileName, null);
+                String dest = PathManager.getUri(config, PathManager.DOWNLOAD_STORY, PathManager.createParams("u", username), media.extension);
+                files.download(config.getBoolean("use_android_download_manager", true), server.getRoot() + "/" + uuid, dest, username + "'s Story", null);
             } else {
                 XposedBridge.log("Null media info for story download.");
             }
