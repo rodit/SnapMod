@@ -1,0 +1,53 @@
+<resources>
+    <string name="app_name">SnapMod</string>
+
+    <string name="title_activity_settings">إعدادات</string>
+    <string name="privacy_header">خصوصية</string>
+    <string name="snaps_header">Snaps</string>
+    <string name="downloads_header">التحميلات</string>
+    <string name="location_header">مشاركة الموقع</string>
+    <string name="debug_header">معلومة</string>
+
+    <string name="disable_camera_title">تعطيل الكاميرا</string>
+    <string name="hide_read_title">إخفاء إيصالات القراءة</string>
+    <string name="hide_save_title">إخفاء الدردشة المحفوظة/غير المحفوظة</string>
+    <string name="hide_screenshot_title">إخفاء لقطة الشاشة/تسجيل الإخطارات</string>
+    <string name="hide_save_gallery_title">إخفاء المحفوظة في ألبوم الكاميرا</string>
+    <string name="hide_replay_title">إخفاء الإخطارات الإعادة</string>
+    <string name="hide_enter_conversation_title">إخفاء إدخال المحادثة (Bitmoji)</string>
+    <string name="hide_exit_conversation_title">إخفاء الخروج من المحادثة (Bitmoji)</string>
+    <string name="hide_typing_title">إخفاء حالة الكتابة (Bitmoji)</string>
+    <string name="save_any_title">احفظ أي رسالة</string>
+    <string name="dont_release_messages_title">لا تحرر الرسائل</string>
+    <string name="disable_bitmojis_title">تعطيل Bitmojis</string>
+    <string name="allow_public_profile_title">السماح بالملف الشخصي العام</string>
+    <string name="enable_friend_override_title">تجاوز طريقة إضافة صديق</string>
+    <string name="friend_override_value_title">أضف قيمة التجاوز المقلية</string>
+
+    <string name="send_gallery_as_snaps_title">أرسل المعرض في شكل Snaps</string>
+    <string name="gallery_snap_time_title">معرض يستقر المهلة الزمنية</string>
+    <string name="allow_save_snaps_title">السماح بحفظ Snaps</string>
+    <string name="allow_download_stories_title">السماح للتحميل Stories</string>
+    <string name="allow_download_public_dp_title">السماح بتنزيل ملفات DP العامة</string>
+    <string name="public_dp_resolution_title">دقة تنزيل DP العامة</string>
+    <string name="enable_snap_type_override_title">تجاوز نوع لقطة المعرض</string>
+    <string name="snap_type_override_title">تجاوز نوع الانجذاب</string>
+    <string name="bypass_video_length_restrictions_title">تجاوز قيود طول الفيديو</string>
+
+    <string name="download_path_story_title">مسار تنزيل القصة</string>
+    <string name="download_path_audio_note_title">مسار تنزيل الملاحظة الصوتية</string>
+    <string name="download_path_profile_title">مسار تنزيل صورة الملف الشخصي العام</string>
+    <string name="use_android_download_manager_title">استخدم Android تحميل مدير</string>
+
+    <string name="location_share_override_title">تجاوز مشاركة الموقع</string>
+    <string name="location_share_lat_title">خط العرض</string>
+    <string name="location_share_long_title">خط الطول</string>
+
+    <string name="more_profile_info_title">إظهار المزيد من المعلومات حول الملف الشخصي</string>
+    <string name="log_network_requests_title">تسجيل طلبات الشبكة</string>
+    <string name="network_body">طلب سجل الهيئة</string>
+
+    <string name="generate_mappings">إنشاء التعيينات</string>
+    <string name="save_prefs">حـفـظ</string>
+    <string name="prefs_saved">تم حفظ التفضيلات.</string>
+</resources>
