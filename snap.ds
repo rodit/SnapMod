@@ -616,21 +616,6 @@ class StreamingMethod {
     }
 }
 
-[certain]
-interface LateInitialized {
-
-    * $getValue()
-    boolean $isInitialized()
-}
-
-[certain]
-class LateInitializedClass implements !LateInitialized {
-
-    String $toString() {
-        .string "Lazy value not initialized yet.";
-    }
-}
-
 class OperaMediaInfo {
 
     String uri;
@@ -640,7 +625,6 @@ class OperaMediaInfo {
     [discard] List l0;
     [discard] * a0;
     [discard] Matrix m0;
-    [discard] !LateInitializedClass li0;
 
     String $toString() {
         .string "OperaMediaInfo";
