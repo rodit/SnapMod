@@ -55,6 +55,7 @@
         </activity>
 
         <activity android:name=".ForceResumeActivity"
+            android:excludeFromRecents="true"
             android:exported="true">
         </activity>
     </application>
