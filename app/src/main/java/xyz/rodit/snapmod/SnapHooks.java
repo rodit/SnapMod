@@ -6,6 +6,7 @@ import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.View;
 
 import java.lang.reflect.Proxy;
@@ -15,8 +16,10 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
@@ -30,13 +33,17 @@ import xyz.rodit.snapmod.mappings.ChatModelAudioNote;
 import xyz.rodit.snapmod.mappings.ChatModelBase;
 import xyz.rodit.snapmod.mappings.ChatModelLiveSnap;
 import xyz.rodit.snapmod.mappings.ChatModelSavedSnap;
+import xyz.rodit.snapmod.mappings.ComposerFriend;
+import xyz.rodit.snapmod.mappings.ComposerUser;
 import xyz.rodit.snapmod.mappings.ContentType;
 import xyz.rodit.snapmod.mappings.ContextActionMenuModel;
 import xyz.rodit.snapmod.mappings.ContextClickHandler;
 import xyz.rodit.snapmod.mappings.ConversationManager;
+import xyz.rodit.snapmod.mappings.DisplayInfoContainer;
 import xyz.rodit.snapmod.mappings.FooterInfoItem;
 import xyz.rodit.snapmod.mappings.FriendActionClient;
 import xyz.rodit.snapmod.mappings.FriendActionRequest;
+import xyz.rodit.snapmod.mappings.FriendListener;
 import xyz.rodit.snapmod.mappings.FriendProfilePageData;
 import xyz.rodit.snapmod.mappings.FriendProfileTransformer;
 import xyz.rodit.snapmod.mappings.GallerySnapMedia;
@@ -57,6 +64,7 @@ import xyz.rodit.snapmod.mappings.OperaContextAction;
 import xyz.rodit.snapmod.mappings.OperaContextActions;
 import xyz.rodit.snapmod.mappings.ParameterPackage;
 import xyz.rodit.snapmod.mappings.ParamsMap;
+import xyz.rodit.snapmod.mappings.ProfileMyFriendsSection;
 import xyz.rodit.snapmod.mappings.PublicProfileTile;
 import xyz.rodit.snapmod.mappings.PublicProfileTileTransformer;
 import xyz.rodit.snapmod.mappings.RxObserver;
@@ -73,6 +81,7 @@ public class SnapHooks extends HooksBase {
     private static final String PROFILE_PICTURE_RESOLUTION_PATTERN = "0,\\d+_";
 
     private final Map<Integer, Object> chatMediaMap = new HashMap<>();
+    private final Set<String> hiddenFriends = new HashSet<>();
     private ChatMediaHandler chatMediaHandler;
 
     private Activity mainActivity;
@@ -115,6 +124,13 @@ public class SnapHooks extends HooksBase {
                 mainActivity.startActivity(intent);
             }, 500);
         }
+
+        hiddenFriends.clear();
+        for (String username : config.getString("hidden_friends", "").split("\n")) {
+            if (!TextUtils.isEmpty(username)) {
+                hiddenFriends.add(username.trim());
+            }
+        }
     }
 
     @Override
@@ -126,6 +142,46 @@ public class SnapHooks extends HooksBase {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) {
                 mainActivity = (Activity) param.thisObject;
+            }
+        });
+
+        ProfileMyFriendsSection.filter.hook(new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) {
+                if (config.getBoolean("hide_friends")) {
+                    List list = (List) param.args[0];
+                    List filtered = new ArrayList();
+                    for (Object o : list) {
+                        String term = DisplayInfoContainer.wrap(o).getTerm();
+                        if (!hiddenFriends.contains(term)) {
+                            filtered.add(o);
+                        }
+                    }
+
+                    param.args[0] = filtered;
+                }
+            }
+        });
+
+        FriendListener.handle.hook(new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) {
+                if (config.getBoolean("hide_friends") && param.args[0] instanceof List) {
+                    List list = (List) param.args[0];
+                    if (list.isEmpty() || !ComposerFriend.isInstance(list.get(0))) {
+                        return;
+                    }
+
+                    List filtered = new ArrayList();
+                    for (Object o : list) {
+                        ComposerUser user = ComposerFriend.wrap(o).getUser();
+                        if (!hiddenFriends.contains(user.getUsername())) {
+                            filtered.add(o);
+                        }
+                    }
+
+                    param.args[0] = filtered;
+                }
             }
         });
 

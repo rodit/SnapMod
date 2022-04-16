@@ -857,3 +857,54 @@ class PublicProfileTileTransformer {
         .string "SUBCATEGORY_V3_GOVERNMENT_ORG";
     }
 }
+
+[certain]
+class ComposerFriend expects com.snap.composer.people.Friend {
+
+    #ComposerUser $getUser()
+}
+
+[late]
+class ComposerUser {
+
+    String $getUsername()
+}
+
+[certain]
+class FriendStoringProxy {
+
+    boolean $perform(...) {
+        .method *->getFriends;
+        .method *->getBestFriends;
+        .new #FriendListener;
+    }
+}
+
+[late]
+class FriendListener {
+
+    * handle(Object, Object)
+}
+
+[certain]
+class ProfileMyFriendsSection {
+
+    [discard] * m0(...) {
+        .string "ProfileMyFriendsSection";
+    }
+
+    List filter(List, String) {
+        .string "Can\'t filter the friends list on the UI thread.";
+    }
+}
+
+[certain]
+class DisplayInfoContainer {
+
+    [late] String term;
+
+    String $toString() {
+        [strict]
+        .string "DisplayInfoContainer(term=", bind field term next reference;
+    }
+}
