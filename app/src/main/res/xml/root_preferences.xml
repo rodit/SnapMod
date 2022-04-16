@@ -67,6 +67,22 @@
             app:key="allow_public_profile"
             app:title="@string/allow_public_profile_title"
             app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="hide_friends"
+            app:title="@string/hide_friends_title"
+            app:iconSpaceReserved="false" />
+
+        <EditTextPreference
+            app:key="hidden_friends"
+            app:title="@string/hidden_friends_title"
+            app:dialogMessage="@string/hidden_friends_description"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="allow_pin_chats"
+            app:title="@string/allow_pin_chats_title"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/snaps_header"

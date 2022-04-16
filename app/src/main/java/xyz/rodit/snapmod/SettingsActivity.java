@@ -2,6 +2,7 @@ package xyz.rodit.snapmod;
 
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.inputmethod.EditorInfo;
 
 import androidx.preference.EditTextPreference;
 
@@ -24,5 +25,11 @@ public class SettingsActivity extends xyz.rodit.xposed.SettingsActivity {
         ((EditTextPreference) fragment.findPreference("public_dp_resolution")).setOnBindEditTextListener(t -> t.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL));
         ((EditTextPreference) fragment.findPreference("location_share_lat")).setOnBindEditTextListener(t -> t.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL));
         ((EditTextPreference) fragment.findPreference("location_share_long")).setOnBindEditTextListener(t -> t.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL));
+        ((EditTextPreference) fragment.findPreference("hidden_friends")).setOnBindEditTextListener(t -> {
+            t.setImeOptions(EditorInfo.IME_ACTION_NONE);
+            t.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+            t.setSingleLine(false);
+            t.setSelection(t.getText().length());
+        });
     }
 }
