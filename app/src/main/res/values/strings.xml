@@ -26,6 +26,7 @@
     <string name="hide_friends_title">Hide Friends</string>
     <string name="hidden_friends_title">Edit Hidden Friends</string>
     <string name="hidden_friends_description">Enter the username of each friend you would like to hide on a new line.</string>
+    <string name="allow_pin_chats_title">Allow Pinning Chats</string>
 
     <string name="send_gallery_as_snaps_title">Send Gallery as Snaps</string>
     <string name="gallery_snap_time_title">Gallery Snaps Time Limit</string>

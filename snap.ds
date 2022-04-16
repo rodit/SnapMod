@@ -14,10 +14,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.Boolean;
 import java.lang.Double;
+import java.lang.Integer;
+import java.lang.Iterable;
 import java.lang.Object;
 import java.lang.String;
 import java.lang.Throwable;
 import java.lang.UnsupportedOperationException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -906,5 +909,197 @@ class DisplayInfoContainer {
     String $toString() {
         [strict]
         .string "DisplayInfoContainer(term=", bind field term next reference;
+    }
+}
+
+[certain]
+class FriendsFeedRecordHolder {
+
+    [late] #SnapIterable records;
+    #EmojiMap emojis;
+
+    String $toString() {
+        .string contains "records=";
+        [strict]
+        .string contains "activeConversationState", bind field records previous reference;
+    }
+}
+
+[certain]
+class FriendsFeedView {
+
+    [late] String key;
+    [late] String friendmojiCategories;
+
+    String $toString() {
+        .string contains "FriendsFeedView";
+        [strict]
+        .string contains "key:", bind field key next reference;
+        [strict]
+        .string contains "friendmojiCategories:", bind field friendmojiCategories next reference;
+    }
+}
+
+[late, exact]
+class EmojiMap {
+
+    Map map;
+
+    void $<init>(Map)
+}
+
+[late]
+interface SnapIterable implements Iterable {
+
+    Object $get(int)
+    int size()
+}
+
+[certain]
+class BasicFeedInfo {
+
+    [late] String key;
+
+    String $toString() {
+        .string contains "GetBasicFeedInfoForConversation";
+        [strict]
+        .string contains "key:", bind field key next reference;
+    }
+}
+
+[late]
+class FeedInfoHolder extends #FeedInfoHolderBase {
+
+    !BasicFeedInfo info;
+}
+
+[certain, discard]
+class FriendInfo {
+
+    String $toString() {
+        .string contains "FriendInfo";
+        .string contains "friendUserId";
+        .string contains "friendDisplayName";
+    }
+}
+
+class FriendChatActionMenuBuilder {
+
+    #FeedInfoHolder feedInfoHolder;
+    [discard] !FriendInfo friendInfo;
+
+    #RxBase build() {
+        .method Collections->singletonList;
+        .new ArrayList;
+    }
+}
+
+[late]
+class RxBase {
+
+    static * singleton(Object) {
+        .string "item is null";
+        .method *->requireNonNull;
+        .new #RxSingleton;
+    }
+}
+
+[late]
+class RxSingleton {
+
+    Object value;
+}
+
+[certain]
+class ActionMenuOptionTextViewModel {
+
+    void $<init>(int, String, Integer, Integer, Integer, int)
+
+    String $toString() {
+        .string contains "ActionMenuOptionTextViewModel";
+        .string contains "textParam";
+    }
+}
+
+[certain]
+class ActionMenuActionModel {
+
+    String $toString() {
+        .string "ActionMenuActionModel(eventData=";
+    }
+}
+
+[certain]
+class ActionMenuOptionToggleItemViewModel {
+
+    void $<init>(!ActionMenuOptionTextViewModel, !ActionMenuActionModel, boolean)
+
+    String $toString() {
+        .string contains "ActionMenuOptionToggleItemViewModel";
+        .string contains "actionModel";
+    }
+}
+
+[certain, discard]
+enum ChatActionType {
+
+    [late] static this CHAT_BUTTON_CLICK;
+    [late] static this SNAP_BUTTON_CLICK;
+    [late] static this AUDIO_CALL_BUTTON_CLICK;
+    [late] static this VIDEO_CALL_BUTTON_CLICK;
+    [late] static this SETTINGS_CLICK;
+
+    static void $<clinit>() {
+        [strict]
+        .string "CHAT_BUTTON_CLICK", bind field CHAT_BUTTON_CLICK next reference;
+        [strict]
+        .string "SNAP_BUTTON_CLICK", bind field SNAP_BUTTON_CLICK next reference;
+        [strict]
+        .string "AUDIO_CALL_BUTTON_CLICK", bind field AUDIO_CALL_BUTTON_CLICK next reference;
+        [strict]
+        .string "VIDEO_CALL_BUTTON_CLICK", bind field VIDEO_CALL_BUTTON_CLICK next reference;
+        [strict]
+        .string "SETTINGS_CLICK", bind field SETTINGS_CLICK next reference;
+    }
+}
+
+[certain]
+class SendChatActionDataModel {
+
+    String key;
+
+    void $<init>(String, boolean, ...)
+
+    String $toString() {
+        .string contains "SendChatActionDataModel";
+        .string contains "isGroup";
+    }
+}
+
+[certain, exact]
+class SendChatAction extends #ActionBase {
+
+    !SendChatActionDataModel dataModel;
+
+    void $<init>(!SendChatActionDataModel) {
+        .field !ChatActionType->!CHAT_BUTTON_CLICK;
+    }
+}
+
+[certain, exact]
+class SettingsClickAction extends !ActionBase {
+
+    void $<init>() {
+        .field !ChatActionType->!SETTINGS_CLICK;
+    }
+}
+
+class FriendChatActionHandler {
+
+    [discard] !FeedInfoHolderBase info;
+
+    void handle(!ActionBase) {
+        .type !SettingsClickAction;
+        .type !SendChatAction;
     }
 }

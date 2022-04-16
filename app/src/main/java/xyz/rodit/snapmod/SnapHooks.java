@@ -25,6 +25,9 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import xyz.rodit.dexsearch.client.xposed.MappedObject;
+import xyz.rodit.snapmod.mappings.ActionMenuActionModel;
+import xyz.rodit.snapmod.mappings.ActionMenuOptionTextViewModel;
+import xyz.rodit.snapmod.mappings.ActionMenuOptionToggleItemViewModel;
 import xyz.rodit.snapmod.mappings.BitmojiUriHandler;
 import xyz.rodit.snapmod.mappings.CalendarDate;
 import xyz.rodit.snapmod.mappings.ChatActionHelper;
@@ -34,7 +37,6 @@ import xyz.rodit.snapmod.mappings.ChatModelBase;
 import xyz.rodit.snapmod.mappings.ChatModelLiveSnap;
 import xyz.rodit.snapmod.mappings.ChatModelSavedSnap;
 import xyz.rodit.snapmod.mappings.ComposerFriend;
-import xyz.rodit.snapmod.mappings.ComposerUser;
 import xyz.rodit.snapmod.mappings.ContentType;
 import xyz.rodit.snapmod.mappings.ContextActionMenuModel;
 import xyz.rodit.snapmod.mappings.ContextClickHandler;
@@ -43,9 +45,13 @@ import xyz.rodit.snapmod.mappings.DisplayInfoContainer;
 import xyz.rodit.snapmod.mappings.FooterInfoItem;
 import xyz.rodit.snapmod.mappings.FriendActionClient;
 import xyz.rodit.snapmod.mappings.FriendActionRequest;
+import xyz.rodit.snapmod.mappings.FriendChatActionHandler;
+import xyz.rodit.snapmod.mappings.FriendChatActionMenuBuilder;
 import xyz.rodit.snapmod.mappings.FriendListener;
 import xyz.rodit.snapmod.mappings.FriendProfilePageData;
 import xyz.rodit.snapmod.mappings.FriendProfileTransformer;
+import xyz.rodit.snapmod.mappings.FriendsFeedRecordHolder;
+import xyz.rodit.snapmod.mappings.FriendsFeedView;
 import xyz.rodit.snapmod.mappings.GallerySnapMedia;
 import xyz.rodit.snapmod.mappings.LiveSnapMedia;
 import xyz.rodit.snapmod.mappings.LocalMessageContent;
@@ -68,10 +74,14 @@ import xyz.rodit.snapmod.mappings.ProfileMyFriendsSection;
 import xyz.rodit.snapmod.mappings.PublicProfileTile;
 import xyz.rodit.snapmod.mappings.PublicProfileTileTransformer;
 import xyz.rodit.snapmod.mappings.RxObserver;
+import xyz.rodit.snapmod.mappings.RxSingleton;
 import xyz.rodit.snapmod.mappings.SavePolicy;
 import xyz.rodit.snapmod.mappings.SaveToCameraRollActionHandler;
 import xyz.rodit.snapmod.mappings.SaveType;
+import xyz.rodit.snapmod.mappings.SendChatAction;
+import xyz.rodit.snapmod.mappings.SendChatActionDataModel;
 import xyz.rodit.snapmod.mappings.SerializableContent;
+import xyz.rodit.snapmod.mappings.SnapIterable;
 import xyz.rodit.snapmod.mappings.StoryMetadata;
 import xyz.rodit.xposed.HooksBase;
 import xyz.rodit.xposed.mappings.LoadScheme;
@@ -82,9 +92,12 @@ public class SnapHooks extends HooksBase {
 
     private final Map<Integer, Object> chatMediaMap = new HashMap<>();
     private final Set<String> hiddenFriends = new HashSet<>();
-    private ChatMediaHandler chatMediaHandler;
+    private final List<String> pinnedConversations = new ArrayList<>();
 
+    private ChatMediaHandler chatMediaHandler;
     private Activity mainActivity;
+
+    private SendChatAction lastPinEventModel;
 
     public SnapHooks() {
         super(Collections.singletonList(Shared.SNAPCHAT_PACKAGE),
@@ -131,6 +144,13 @@ public class SnapHooks extends HooksBase {
                 hiddenFriends.add(username.trim());
             }
         }
+
+        pinnedConversations.clear();
+        for (String pinned : config.getString("pinned_keys", "").split(",")) {
+            if (!TextUtils.isEmpty(pinned)) {
+                pinnedConversations.add(pinned.trim());
+            }
+        }
     }
 
     @Override
@@ -142,46 +162,6 @@ public class SnapHooks extends HooksBase {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) {
                 mainActivity = (Activity) param.thisObject;
-            }
-        });
-
-        ProfileMyFriendsSection.filter.hook(new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) {
-                if (config.getBoolean("hide_friends")) {
-                    List list = (List) param.args[0];
-                    List filtered = new ArrayList();
-                    for (Object o : list) {
-                        String term = DisplayInfoContainer.wrap(o).getTerm();
-                        if (!hiddenFriends.contains(term)) {
-                            filtered.add(o);
-                        }
-                    }
-
-                    param.args[0] = filtered;
-                }
-            }
-        });
-
-        FriendListener.handle.hook(new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) {
-                if (config.getBoolean("hide_friends") && param.args[0] instanceof List) {
-                    List list = (List) param.args[0];
-                    if (list.isEmpty() || !ComposerFriend.isInstance(list.get(0))) {
-                        return;
-                    }
-
-                    List filtered = new ArrayList();
-                    for (Object o : list) {
-                        ComposerUser user = ComposerFriend.wrap(o).getUser();
-                        if (!hiddenFriends.contains(user.getUsername())) {
-                            filtered.add(o);
-                        }
-                    }
-
-                    param.args[0] = filtered;
-                }
             }
         });
 
@@ -507,7 +487,7 @@ public class SnapHooks extends HooksBase {
             }
         });
 
-        // Story menu creation (add save option).
+        // Story menu creation (add save option)
         ParamsMap.put.hook(new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) {
@@ -525,7 +505,7 @@ public class SnapHooks extends HooksBase {
             }
         });
 
-        // Override save story click.
+        // Override save story click
         ContextActionMenuModel.constructors.hook(new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) {
@@ -534,6 +514,119 @@ public class SnapHooks extends HooksBase {
                         && model.getAction().instance == OperaContextAction.SAVE().instance) {
                     Object clickProxy = Proxy.newProxyInstance(lpparam.classLoader, new Class[]{ContextClickHandler.getMappedClass()}, new StoryDownloadProxy(appContext, config, server, files));
                     model.setOnClick(ContextClickHandler.wrap(clickProxy));
+                }
+            }
+        });
+
+        // Move 'pinned' conversations to top of feed
+        FriendsFeedRecordHolder.constructors.hook(new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) {
+                FriendsFeedRecordHolder $this = FriendsFeedRecordHolder.wrap(param.thisObject);
+                $this.getEmojis().getMap().put(Shared.PINNED_FRIENDMOJI_NAME, Shared.PINNED_FRIENDMOJI_EMOJI);
+                List pinned = new ArrayList();
+                List normal = new ArrayList();
+                for (Object record : (Iterable) $this.getRecords().instance) {
+                    FriendsFeedView view = FriendsFeedView.wrap(record);
+                    if (pinnedConversations.contains(view.getKey())) {
+                        String friendmojis = view.getFriendmojiCategories();
+                        if (!friendmojis.contains("pinned")) {
+                            friendmojis = TextUtils.isEmpty(friendmojis) ? "pinned" : friendmojis + ",pinned";
+                            view.setFriendmojiCategories(friendmojis);
+                        }
+
+                        pinned.add(view.instance);
+                    } else {
+                        normal.add(view.instance);
+                    }
+                }
+
+                List all = new ArrayList();
+                all.addAll(pinned);
+                all.addAll(normal);
+                Object iterableProxy = Proxy.newProxyInstance(lpparam.classLoader, new Class[]{SnapIterable.getMappedClass()}, new ObjectProxy(all));
+                $this.setRecords(SnapIterable.wrap(iterableProxy));
+            }
+        });
+
+        // Add pin chat option to chat menu
+        FriendChatActionMenuBuilder.build.hook(new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) {
+                if (config.getBoolean("allow_pin_chats")) {
+                    FriendChatActionMenuBuilder $this = FriendChatActionMenuBuilder.wrap(param.thisObject);
+                    String key = $this.getFeedInfoHolder().getInfo().getKey();
+
+                    SendChatActionDataModel actionDataModel = new SendChatActionDataModel(key, false, null);
+                    SendChatAction action = new SendChatAction(actionDataModel);
+                    ActionMenuOptionTextViewModel textViewModel = new ActionMenuOptionTextViewModel(0x7f130074, null, null, null, null, 62);
+                    ActionMenuOptionToggleItemViewModel optionModel = new ActionMenuOptionToggleItemViewModel(textViewModel,
+                            new ActionMenuActionModel(new Object[]{action.instance}),
+                            pinnedConversations.contains(key));
+
+                    List options = (List) RxSingleton.wrap(param.getResult()).getValue();
+                    options.add(optionModel.instance);
+
+                    lastPinEventModel = action;
+                }
+            }
+        });
+
+        // Handle pin action
+        FriendChatActionHandler.handle.hook(new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) {
+                if (config.getBoolean("allow_pin_chats") && lastPinEventModel != null && param.args[0] == lastPinEventModel.instance) {
+                    String key = lastPinEventModel.getDataModel().getKey();
+                    if (pinnedConversations.contains(key)) {
+                        pinnedConversations.remove(key);
+                    } else {
+                        pinnedConversations.add(key);
+                    }
+
+                    param.setResult(null);
+                }
+            }
+        });
+
+        // Hide friends from 'My Friends' in profile
+        ProfileMyFriendsSection.filter.hook(new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) {
+                if (config.getBoolean("hide_friends")) {
+                    List list = (List) param.args[0];
+                    List filtered = new ArrayList();
+                    for (Object o : list) {
+                        String term = DisplayInfoContainer.wrap(o).getTerm();
+                        if (!hiddenFriends.contains(term)) {
+                            filtered.add(o);
+                        }
+                    }
+
+                    param.args[0] = filtered;
+                }
+            }
+        });
+
+        // Hide friends from best friends list
+        FriendListener.handle.hook(new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) {
+                if (config.getBoolean("hide_friends") && param.args[0] instanceof List) {
+                    List list = (List) param.args[0];
+                    if (list.isEmpty() || !ComposerFriend.isInstance(list.get(0))) {
+                        return;
+                    }
+
+                    List filtered = new ArrayList();
+                    for (Object o : list) {
+                        String username = ComposerFriend.wrap(o).getUser().getUsername();
+                        if (!hiddenFriends.contains(username)) {
+                            filtered.add(o);
+                        }
+                    }
+
+                    param.args[0] = filtered;
                 }
             }
         });
