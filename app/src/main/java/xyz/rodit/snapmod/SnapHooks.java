@@ -92,11 +92,11 @@ public class SnapHooks extends HooksBase {
 
     private final Map<Integer, Object> chatMediaMap = new HashMap<>();
     private final Set<String> hiddenFriends = new HashSet<>();
-    private final List<String> pinnedConversations = new ArrayList<>();
 
     private ChatMediaHandler chatMediaHandler;
     private Activity mainActivity;
 
+    private PinnedConversationManager pinnedConversations;
     private SendChatAction lastPinEventModel;
 
     public SnapHooks() {
@@ -122,6 +122,7 @@ public class SnapHooks extends HooksBase {
 
     @Override
     protected void onContextHook(Context context) {
+        pinnedConversations = new PinnedConversationManager(context.getFilesDir());
         Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
             XposedBridge.log("Uncaught exception on thread " + thread + ".");
             XposedBridge.log(throwable);
@@ -142,13 +143,6 @@ public class SnapHooks extends HooksBase {
         for (String username : config.getString("hidden_friends", "").split("\n")) {
             if (!TextUtils.isEmpty(username)) {
                 hiddenFriends.add(username.trim());
-            }
-        }
-
-        pinnedConversations.clear();
-        for (String pinned : config.getString("pinned_keys", "").split(",")) {
-            if (!TextUtils.isEmpty(pinned)) {
-                pinnedConversations.add(pinned.trim());
             }
         }
     }
@@ -522,13 +516,17 @@ public class SnapHooks extends HooksBase {
         FriendsFeedRecordHolder.constructors.hook(new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) {
+                if (!config.getBoolean("allow_pin_chats")) {
+                    return;
+                }
+
                 FriendsFeedRecordHolder $this = FriendsFeedRecordHolder.wrap(param.thisObject);
                 $this.getEmojis().getMap().put(Shared.PINNED_FRIENDMOJI_NAME, Shared.PINNED_FRIENDMOJI_EMOJI);
                 List pinned = new ArrayList();
                 List normal = new ArrayList();
                 for (Object record : (Iterable) $this.getRecords().instance) {
                     FriendsFeedView view = FriendsFeedView.wrap(record);
-                    if (pinnedConversations.contains(view.getKey())) {
+                    if (pinnedConversations.isPinned(view.getKey())) {
                         String friendmojis = view.getFriendmojiCategories();
                         if (!friendmojis.contains("pinned")) {
                             friendmojis = TextUtils.isEmpty(friendmojis) ? "pinned" : friendmojis + ",pinned";
@@ -562,7 +560,7 @@ public class SnapHooks extends HooksBase {
                     ActionMenuOptionTextViewModel textViewModel = new ActionMenuOptionTextViewModel(0x7f130074, null, null, null, null, 62);
                     ActionMenuOptionToggleItemViewModel optionModel = new ActionMenuOptionToggleItemViewModel(textViewModel,
                             new ActionMenuActionModel(new Object[]{action.instance}),
-                            pinnedConversations.contains(key));
+                            pinnedConversations.isPinned(key));
 
                     List options = (List) RxSingleton.wrap(param.getResult()).getValue();
                     options.add(optionModel.instance);
@@ -578,10 +576,10 @@ public class SnapHooks extends HooksBase {
             protected void beforeHookedMethod(MethodHookParam param) {
                 if (config.getBoolean("allow_pin_chats") && lastPinEventModel != null && param.args[0] == lastPinEventModel.instance) {
                     String key = lastPinEventModel.getDataModel().getKey();
-                    if (pinnedConversations.contains(key)) {
-                        pinnedConversations.remove(key);
+                    if (pinnedConversations.isPinned(key)) {
+                        pinnedConversations.unpin(key);
                     } else {
-                        pinnedConversations.add(key);
+                        pinnedConversations.pin(key);
                     }
 
                     param.setResult(null);
