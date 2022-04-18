@@ -555,9 +555,10 @@ public class SnapHooks extends HooksBase {
                     FriendChatActionMenuBuilder $this = FriendChatActionMenuBuilder.wrap(param.thisObject);
                     String key = $this.getFeedInfoHolder().getInfo().getKey();
 
+                    int pinStringId = appContext.getResources().getIdentifier("action_menu_pin_conversation", "string", Shared.SNAPCHAT_PACKAGE);
                     SendChatActionDataModel actionDataModel = new SendChatActionDataModel(key, false, null);
                     SendChatAction action = new SendChatAction(actionDataModel);
-                    ActionMenuOptionTextViewModel textViewModel = new ActionMenuOptionTextViewModel(0x7f130074, null, null, null, null, 62);
+                    ActionMenuOptionTextViewModel textViewModel = new ActionMenuOptionTextViewModel(pinStringId, null, null, null, null, 62);
                     ActionMenuOptionToggleItemViewModel optionModel = new ActionMenuOptionToggleItemViewModel(textViewModel,
                             new ActionMenuActionModel(new Object[]{action.instance}),
                             pinnedConversations.isPinned(key));
