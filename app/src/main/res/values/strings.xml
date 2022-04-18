@@ -54,4 +54,5 @@
     <string name="generate_mappings">Generate Mappings</string>
     <string name="save_prefs">Save</string>
     <string name="prefs_saved">Preferences saved.</string>
+    <string name="unlimited_snap_duration_title">Unlimited Snap Duration (Including Stories)</string>
 </resources>

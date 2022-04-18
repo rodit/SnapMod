@@ -82,6 +82,8 @@ import xyz.rodit.snapmod.mappings.SendChatAction;
 import xyz.rodit.snapmod.mappings.SendChatActionDataModel;
 import xyz.rodit.snapmod.mappings.SerializableContent;
 import xyz.rodit.snapmod.mappings.SnapIterable;
+import xyz.rodit.snapmod.mappings.StoryAutoAdvanceMode;
+import xyz.rodit.snapmod.mappings.StoryMediaPlaybackMode;
 import xyz.rodit.snapmod.mappings.StoryMetadata;
 import xyz.rodit.xposed.HooksBase;
 import xyz.rodit.xposed.mappings.LoadScheme;
@@ -482,6 +484,7 @@ public class SnapHooks extends HooksBase {
         });
 
         // Story menu creation (add save option)
+        // Override snap/story duration and play mode
         ParamsMap.put.hook(new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) {
@@ -495,6 +498,12 @@ public class SnapHooks extends HooksBase {
 
                     newList.add(OperaContextActions.getSaveAction().instance);
                     param.args[1] = newList;
+                } else if (config.getBoolean("unlimited_snap_duration")) {
+                    if (param.args[0] == StoryMetadata.getAutoAdvanceMode().instance) {
+                        param.args[1] = StoryAutoAdvanceMode.NO_AUTO_ADVANCE().instance;
+                    } else if (param.args[0] == StoryMetadata.getMediaPlaybackMode().instance) {
+                        param.args[1] = StoryMediaPlaybackMode.LOOPING().instance;
+                    }
                 }
             }
         });
@@ -555,9 +564,10 @@ public class SnapHooks extends HooksBase {
                     FriendChatActionMenuBuilder $this = FriendChatActionMenuBuilder.wrap(param.thisObject);
                     String key = $this.getFeedInfoHolder().getInfo().getKey();
 
+                    int pinStringId = appContext.getResources().getIdentifier("action_menu_pin_conversation", "string", Shared.SNAPCHAT_PACKAGE);
                     SendChatActionDataModel actionDataModel = new SendChatActionDataModel(key, false, null);
                     SendChatAction action = new SendChatAction(actionDataModel);
-                    ActionMenuOptionTextViewModel textViewModel = new ActionMenuOptionTextViewModel(0x7f130074, null, null, null, null, 62);
+                    ActionMenuOptionTextViewModel textViewModel = new ActionMenuOptionTextViewModel(pinStringId, null, null, null, null, 62);
                     ActionMenuOptionToggleItemViewModel optionModel = new ActionMenuOptionToggleItemViewModel(textViewModel,
                             new ActionMenuActionModel(new Object[]{action.instance}),
                             pinnedConversations.isPinned(key));

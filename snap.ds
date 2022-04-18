@@ -739,13 +739,58 @@ class ParamsMap {
     }
 }
 
+[late]
+class MapKey {
+    String name;
+    Object defaultValue;
+    boolean hasDefaultValue;
+}
+
+[certain]
+class StoryAutoAdvanceMode {
+
+    [late] static this NO_AUTO_ADVANCE;
+    [late] static this FIXED_DURATION;
+    [late] static this VIDEO_COMPLETION;
+
+    static void $<clinit>() {
+        [strict]
+        .string "NO_AUTO_ADVANCE", bind field NO_AUTO_ADVANCE next reference;
+        [strict]
+        .string "FIXED_DURATION", bind field FIXED_DURATION next reference;
+        [strict]
+        .string "VIDEO_COMPLETION", bind field VIDEO_COMPLETION next reference;
+    }
+}
+
+[certain]
+class StoryMediaPlaybackMode {
+
+    [late] static this LOOPING;
+    [late] static this ONCE;
+    [late] static this LOOPING_WHEN_LESS_THAN_TEN_SECONDS;
+    [late] static this PAUSED;
+
+    static void $<clinit>() {
+        [strict]
+        .string "LOOPING", bind field LOOPING next reference;
+        [strict]
+        .string "ONCE", bind field ONCE next reference;
+        [strict]
+        .string "LOOPING_WHEN_LESS_THAN_TEN_SECONDS", bind field LOOPING_WHEN_LESS_THAN_TEN_SECONDS next reference;
+        [strict]
+        .string "PAUSED", bind field PAUSED next reference;
+    }
+}
+
 class StoryMetadata extends !ParamsMap {
 
     [late] !MapKey overlayImageMediaInfo;
     [late] !MapKey videoMediaInfo;
     [late] !MapKey imageMediaInfo;
     [late] !MapKey actionMenuOptions;
-    [late] !MapKey menuProperty;
+    [late] !MapKey autoAdvanceMode;
+    [late] !MapKey mediaPlaybackMode;
 
     static void $<clinit>() {
         [strict]
@@ -755,30 +800,99 @@ class StoryMetadata extends !ParamsMap {
         [strict]
         .string "image_media_info", bind field imageMediaInfo next reference;
         [strict]
+        .string "auto_advance_mode", bind field autoAdvanceMode next reference;
+        [strict]
+        .string "media_playback_mode", bind field mediaPlaybackMode next reference;
+        [strict]
         .string "action_menu_options", bind field actionMenuOptions next reference;
-        [strict]
-        .string "opera_context_menu_appearance", bind field menuProperty next reference;
     }
 }
 
-class UserStoryKeys {
+class ContextStoryKeys {
 
-    [late] !MapKey displayName;
+    [late] !MapKey contextSession;
+    [late, discard] !MapKey hideContext;
 
     static void $<clinit>() {
         [strict]
-        .string "DISPLAY_NAME", bind field displayName next reference;
+        .string "context_session", bind field contextSession next reference;
+        [strict]
+        .string "HIDE_CONTEXT", bind field hideContext next reference;
     }
 }
 
-class PublicStoryKeys {
+class FriendStoryKeys {
 
-    [late] !MapKey username;
+    [late] !MapKey playableSnapStoryRecord;
 
     static void $<clinit>() {
         [strict]
-        .string "USERNAME", bind field username next reference;
+        .string "PLAYABLE_STORY_SNAP_RECORD", bind field playableSnapStoryRecord next reference;
     }
+}
+
+[certain]
+class PlayableStorySnap {
+
+    [late] String displayName;
+
+    String $toString() {
+        .string contains "PlayableStorySnap";
+        .string contains "displayName=", bind field displayName next reference;
+    }
+}
+
+[certain, discard]
+class ChatContextParams {
+
+    String $toString() {
+        .string contains "ChatContextParams";
+        .string contains "conversationId=";
+    }
+}
+
+[certain, discard]
+class StoryRemixParams {
+
+    String $toString() {
+        .string contains "StoryRemixParams";
+        .string contains "contentUri=";
+    }
+}
+
+[certain, discard]
+class SnapContextParams {
+
+    String $toString() {
+        .string contains "SnapContextParams";
+        .string contains "storyMediaKey=";
+    }
+}
+
+[certain]
+class SnapUsername {
+
+    String getDisplayString()
+
+    String $toString() {
+        .string "Username(originalUsername=";
+        .string contains "mutableUsername=";
+    }
+}
+
+[late]
+class SnapContextInfo {
+
+    [discard] !MediaType mediaType;
+    !SnapUsername username;
+}
+
+class ContextSession {
+
+    [discard] !ChatContextParams chatContextParams;
+    [discard] !StoryRemixParams storyRemixParams;
+    [discard] !SnapContextParams snapContextParams;
+    #SnapContextInfo info;
 }
 
 class ContextActionMenuModel {
