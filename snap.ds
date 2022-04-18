@@ -745,7 +745,6 @@ class StoryMetadata extends !ParamsMap {
     [late] !MapKey videoMediaInfo;
     [late] !MapKey imageMediaInfo;
     [late] !MapKey actionMenuOptions;
-    [late] !MapKey menuProperty;
 
     static void $<clinit>() {
         [strict]
@@ -756,30 +755,96 @@ class StoryMetadata extends !ParamsMap {
         .string "image_media_info", bind field imageMediaInfo next reference;
         [strict]
         .string "action_menu_options", bind field actionMenuOptions next reference;
-        [strict]
-        .string "opera_context_menu_appearance", bind field menuProperty next reference;
     }
 }
 
-class UserStoryKeys {
+class ContextStoryKeys {
 
-    [late] !MapKey displayName;
+    [late] !MapKey contextSession;
+    [late, discard] !MapKey hideContext;
 
     static void $<clinit>() {
         [strict]
-        .string "DISPLAY_NAME", bind field displayName next reference;
+        .string "context_session", bind field contextSession next reference;
+        [strict]
+        .string "HIDE_CONTEXT", bind field hideContext next reference;
     }
 }
 
-class PublicStoryKeys {
+class FriendStoryKeys {
 
-    [late] !MapKey username;
+    [late] !MapKey playableSnapStoryRecord;
 
     static void $<clinit>() {
         [strict]
-        .string "USERNAME", bind field username next reference;
+        .string "PLAYABLE_STORY_SNAP_RECORD", bind field playableSnapStoryRecord next reference;
     }
 }
+
+[certain]
+class PlayableStorySnap {
+
+    [late] String displayName;
+
+    String $toString() {
+        .string contains "PlayableStorySnap";
+        .string contains "displayName=", bind field displayName next reference;
+    }
+}
+
+[certain, discard]
+class ChatContextParams {
+
+    String $toString() {
+        .string contains "ChatContextParams";
+        .string contains "conversationId=";
+    }
+}
+
+[certain, discard]
+class StoryRemixParams {
+
+    String $toString() {
+        .string contains "StoryRemixParams";
+        .string contains "contentUri=";
+    }
+}
+
+[certain, discard]
+class SnapContextParams {
+
+    String $toString() {
+        .string contains "SnapContextParams";
+        .string contains "storyMediaKey=";
+    }
+}
+
+[certain]
+class SnapUsername {
+
+    String getDisplayString()
+
+    String $toString() {
+        .string "Username(originalUsername=";
+        .string contains "mutableUsername=";
+    }
+}
+
+[late]
+class SnapContextInfo {
+
+    [discard] !MediaType mediaType;
+    !SnapUsername username;
+}
+
+class ContextSession {
+
+    [discard] !ChatContextParams chatContextParams;
+    [discard] !StoryRemixParams storyRemixParams;
+    [discard] !SnapContextParams snapContextParams;
+    #SnapContextInfo info;
+}
+
 
 class ContextActionMenuModel {
 

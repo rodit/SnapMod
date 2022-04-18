@@ -60,9 +60,8 @@ public class StoryDownloadProxy implements InvocationHandler {
                 String uuid = UUID.randomUUID().toString();
                 server.mapStream(uuid, provider);
 
-                String username = media.menuProperty.isNull() ? "unknown" : media.menuProperty.getFriendUsername();
-                String dest = PathManager.getUri(config, PathManager.DOWNLOAD_STORY, PathManager.createParams("u", username), media.extension);
-                files.download(config.getBoolean("use_android_download_manager", true), server.getRoot() + "/" + uuid, dest, username + "'s Story", null);
+                String dest = PathManager.getUri(config, PathManager.DOWNLOAD_STORY, PathManager.createParams("u", media.username), media.extension);
+                files.download(config.getBoolean("use_android_download_manager", true), server.getRoot() + "/" + uuid, dest, media.username + "'s Story", null);
             } else {
                 XposedBridge.log("Null media info for story download.");
             }
