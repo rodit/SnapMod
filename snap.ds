@@ -739,12 +739,58 @@ class ParamsMap {
     }
 }
 
+[late]
+class MapKey {
+    String name;
+    Object defaultValue;
+    boolean hasDefaultValue;
+}
+
+[certain]
+class StoryAutoAdvanceMode {
+
+    [late] static this NO_AUTO_ADVANCE;
+    [late] static this FIXED_DURATION;
+    [late] static this VIDEO_COMPLETION;
+
+    static void $<clinit>() {
+        [strict]
+        .string "NO_AUTO_ADVANCE", bind field NO_AUTO_ADVANCE next reference;
+        [strict]
+        .string "FIXED_DURATION", bind field FIXED_DURATION next reference;
+        [strict]
+        .string "VIDEO_COMPLETION", bind field VIDEO_COMPLETION next reference;
+    }
+}
+
+[certain]
+class StoryMediaPlaybackMode {
+
+    [late] static this LOOPING;
+    [late] static this ONCE;
+    [late] static this LOOPING_WHEN_LESS_THAN_TEN_SECONDS;
+    [late] static this PAUSED;
+
+    static void $<clinit>() {
+        [strict]
+        .string "LOOPING", bind field LOOPING next reference;
+        [strict]
+        .string "ONCE", bind field ONCE next reference;
+        [strict]
+        .string "LOOPING_WHEN_LESS_THAN_TEN_SECONDS", bind field LOOPING_WHEN_LESS_THAN_TEN_SECONDS next reference;
+        [strict]
+        .string "PAUSED", bind field PAUSED next reference;
+    }
+}
+
 class StoryMetadata extends !ParamsMap {
 
     [late] !MapKey overlayImageMediaInfo;
     [late] !MapKey videoMediaInfo;
     [late] !MapKey imageMediaInfo;
     [late] !MapKey actionMenuOptions;
+    [late] !MapKey autoAdvanceMode;
+    [late] !MapKey mediaPlaybackMode;
 
     static void $<clinit>() {
         [strict]
@@ -753,6 +799,10 @@ class StoryMetadata extends !ParamsMap {
         .string "video_media_info", bind field videoMediaInfo next reference;
         [strict]
         .string "image_media_info", bind field imageMediaInfo next reference;
+        [strict]
+        .string "auto_advance_mode", bind field autoAdvanceMode next reference;
+        [strict]
+        .string "media_playback_mode", bind field mediaPlaybackMode next reference;
         [strict]
         .string "action_menu_options", bind field actionMenuOptions next reference;
     }
@@ -844,7 +894,6 @@ class ContextSession {
     [discard] !SnapContextParams snapContextParams;
     #SnapContextInfo info;
 }
-
 
 class ContextActionMenuModel {
 

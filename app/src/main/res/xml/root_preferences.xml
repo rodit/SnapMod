@@ -150,6 +150,11 @@
             app:title="@string/bypass_video_length_restrictions_title"
             app:iconSpaceReserved="false" />
 
+        <SwitchPreferenceCompat
+            app:key="unlimited_snap_duration"
+            app:title="@string/unlimited_snap_duration_title"
+            app:iconSpaceReserved="false" />
+
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/downloads_header"
