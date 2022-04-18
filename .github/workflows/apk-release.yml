@@ -43,8 +43,16 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Generate Debug APK
-        run: ./gradlew clean assembleDebug
+      - name: Load keystore
+      - shell: bash
+        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > ./signing.jks
+
+      - name: Generate Signed Release APK
+        run: ./gradlew clean assembleRelease
+          -Pandroid.injected.signing.store.file=./signing.jks
+          -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }}
+          -Pandroid.injected.signing.key.alias=${{ secrets.KEYSTORE_ALIAS }}
+          -Pandroid.injected.signing.key.password=${{ secrets.KEYSTORE_KEY_PASSWORD }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -59,6 +67,6 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
           files: |
-            app/build/outputs/apk/debug/app-debug.apk
+            app/build/outputs/apk/release/app-release.apk
             app/build/version.json
             bindings.json
