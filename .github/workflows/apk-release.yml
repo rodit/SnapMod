@@ -44,7 +44,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Load keystore
-      - run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > ./signing.jks
+        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > ./signing.jks
 
       - name: Generate Signed Release APK
         run: ./gradlew clean assembleRelease -Pandroid.injected.signing.store.file=./signing.jks -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.KEYSTORE_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEYSTORE_KEY_PASSWORD }}
