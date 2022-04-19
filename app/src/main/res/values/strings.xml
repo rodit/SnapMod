@@ -3,26 +3,26 @@
 
     <string name="title_activity_settings">Settings</string>
     <string name="privacy_header">Privacy</string>
+    <string name="tweaks_header">Tweaks</string>
     <string name="snaps_header">Snaps</string>
     <string name="downloads_header">Downloads</string>
     <string name="location_header">Location Sharing</string>
     <string name="debug_header">Information</string>
 
     <string name="disable_camera_title">Disable Camera</string>
-    <string name="hide_read_title">Hide Read Receipts</string>
-    <string name="hide_save_title">Hide Chat Saves/Unsaves</string>
+    <string name="hide_read_title">🧪 Hide Read Receipts</string>
+    <string name="hide_save_title">🧪 Hide Chat Saves/Unsaves</string>
     <string name="hide_screenshot_title">Hide Screenshot/Record Notifications</string>
     <string name="hide_save_gallery_title">Hide Saved to Camera Roll</string>
     <string name="hide_replay_title">Hide Replay Notifications</string>
-    <string name="hide_enter_conversation_title">Hide Enter Conversation (Bitmoji)</string>
-    <string name="hide_exit_conversation_title">Hide Exit Conversation (Bitmoji)</string>
+    <string name="hide_enter_conversation_title">🧪 Hide Enter Conversation (Bitmoji)</string>
+    <string name="hide_exit_conversation_title">🧪 Hide Exit Conversation (Bitmoji)</string>
     <string name="hide_typing_title">Hide Typing Status (Bitmoji)</string>
     <string name="save_any_title">Save Any Message</string>
-    <string name="dont_release_messages_title">Don\'t Release Messages</string>
+    <string name="dont_release_messages_title">🧪 Don\'t Release Messages</string>
     <string name="disable_bitmojis_title">Disable Bitmojis</string>
-    <string name="allow_public_profile_title">Allow public profile</string>
-    <string name="enable_friend_override_title">Override Add Friend Method</string>
-    <string name="friend_override_value_title">Add Fried Override Value</string>
+    <string name="enable_friend_override_title">🧪 Override Add Friend Method</string>
+    <string name="friend_override_value_title">🧪 Add Friend Override Value</string>
     <string name="hide_friends_title">Hide Friends</string>
     <string name="hidden_friends_title">Edit Hidden Friends</string>
     <string name="hidden_friends_description">Enter the username of each friend you would like to hide on a new line.</string>
@@ -38,8 +38,8 @@
     <string name="allow_download_stories_title">Allow Download Stories</string>
     <string name="allow_download_public_dp_title">Allow Download Public DPs</string>
     <string name="public_dp_resolution_title">Public DP Download Resolution</string>
-    <string name="enable_snap_type_override_title">Override Gallery Snap Type</string>
-    <string name="snap_type_override_title">Snap Type Override</string>
+    <string name="enable_snap_type_override_title">🧪 Override Gallery Snap Type</string>
+    <string name="snap_type_override_title">🧪 Snap Type Override</string>
     <string name="bypass_video_length_restrictions_title">Bypass Video Length Restrictions</string>
 
     <string name="download_path_story_title">Story Download Path</string>
@@ -47,16 +47,49 @@
     <string name="download_path_profile_title">Public Profile Picture Download Path</string>
     <string name="use_android_download_manager_title">Use Android Download Manager</string>
 
-    <string name="location_share_override_title">Location Sharing Override</string>
-    <string name="location_share_lat_title">Latitude</string>
-    <string name="location_share_long_title">Longitude</string>
+    <string name="location_share_override_title">🧪 Location Sharing Override</string>
+    <string name="location_share_lat_title">🧪 Latitude</string>
+    <string name="location_share_long_title">🧪 Longitude</string>
 
     <string name="more_profile_info_title">Show More Info on Profile</string>
     <string name="log_network_requests_title">Log Network Requests</string>
     <string name="network_body">Log Request Body</string>
 
-    <string name="generate_mappings">Generate Mappings</string>
-    <string name="save_prefs">Save</string>
-    <string name="prefs_saved">Preferences saved.</string>
-    <string name="unlimited_snap_duration_title">Unlimited Snap Duration (Including Stories)</string>
+    <string name="unlimited_snap_duration_title">Unlimited Snap/Story Duration</string>
+
+    <string name="disable_camera_description">Disables the camera in all parts of the app. This vastly improves performance and startup time.</string>
+    <string name="hide_read_description">Prevents read receipts from being sent.</string>
+    <string name="hide_save_description">Prevents chat save/unsave messages from being sent.</string>
+    <string name="hide_screenshot_description">Prevents screenshot notifications from being sent.</string>
+    <string name="hide_save_gallery_description">Prevents saved to camera roll messages from being sent.</string>
+    <string name="hide_replay_description">Prevents snap replay messages from being sent.</string>
+    <string name="hide_enter_conversation_description">Prevents other users from seeing your bitmoji enter a conversation.</string>
+    <string name="hide_exit_conversation_description">Prevents other users from seeing your bitmoji exit a conversation.</string>
+    <string name="hide_typing_description">Prevents other users from seeing if you are typing or not.</string>
+    <string name="save_any_description">Allows any message type to be saved. This is sometimes required for saving snaps and audio notes.</string>
+    <string name="dont_release_description">Prevents messages from being \'released\'. This should prevent them from being deleted, although I am unsure.</string>
+    <string name="disable_bitmojis_description">Disables all Bitmojis throughout the app.</string>
+    <string name="hide_friends_description">Hides the given list of friends from your friends and best friends lists.</string>
+    <string name="allow_pin_chats_description">Allows chats to be pinned like on iOS.</string>
+    <string name="block_ads_description">Removes all ads between stories/discover videos.</string>
+    <string name="disable_spotlight_description">Disables the Spotlight/Discover (5th) tab. This can improve performance.</string>
+    <string name="hide_story_views_description">Prevents users from knowing you have viewed their stories.</string>
+    <string name="disable_metrics_description">Disables some metrics (Graphene) and logging (Blizzard).</string>
+    <string name="override_snap_description">Forces all images/videos sent in chats to be sent as live snaps.</string>
+    <string name="override_snap_timer_description">Sets the gallery snaps\' timer (in seconds).</string>
+    <string name="allow_save_snaps_description">Allows snaps to be saved to gallery as if they were saved in chat.</string>
+    <string name="allow_download_stories_description">Allows stories (and any full screen snap) to be saved. A \'Save\' option is added to the context menu of stories.</string>
+    <string name="allow_download_public_dp_description">Allows profile pictures of friends with public profiles to be saved. Hold down on their profile picture on their friends page.</string>
+    <string name="public_dp_resolution_description">The resolution (width and height) to download public profile pictures at.</string>
+    <string name="enable_snap_type_override_description">Sets the type of snap being sent when sending gallery media as a snap.</string>
+    <string name="enable_friend_override_description">Overrides the add method other users see when you add them as a friend.</string>
+    <string name="bypass_video_length_restrictions_description">Removes the video time limit restrictions when sending snaps from the gallery drawer in chat.</string>
+    <string name="unlimited_snap_duration_description">Stories and snaps will loop and never auto-close or auto-advance.</string>
+    <string name="download_path_story_description">The path on the device to download stories to.</string>
+    <string name="download_path_audio_note_description">The path on the device to download audio notes to.</string>
+    <string name="download_path_profile_description">The path on the device to download profile pictures to.</string>
+    <string name="use_android_download_manager_description">Whether or not to use the Android system download manager. This is required when downloading to public directories on Android 11+. Try turning this off if you have issues downloading media.</string>
+    <string name="location_share_override_description">Overrides your shared location with the configured latitude and logitude below. I have no idea if this actually works.</string>
+    <string name="more_profile_info_description">Shows more information on friends\' profile pages such as their birthday (if available).</string>
+    <string name="log_network_requests_description">Logs some HTTP requests to LSPosed for debugging.</string>
 </resources>
