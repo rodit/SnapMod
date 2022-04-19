@@ -13,12 +13,19 @@ To set SnapMod up, download and install the latest apk from [here](https://githu
   - Save to camera roll notifications
   - Conversation presence (Bitmoji in bottom left)
   - Typing status
+  - Story views
+- Block ads
+- Pin conversations
 - Save any media (including snaps and audio notes) to camera roll
 - Disable Bitmojis
 - Send snaps from gallery
 - Download stories
 - Bypass video length restriction from drawer in chat
 - Show more info on profile (birthday, friendship status)
+- Disable some metrics/logging
 
 ## Issues
-If you have an issue please post a log from LSPosed (I have no interest in supporting other Xposed implementations, although SnapMod should work fine with them) and a description of the issue.
+If you have an issue please post a log from LSPosed (I have no interest in supporting other Xposed implementations, although SnapMod should work fine with them) and a description of the issue. It is **extremely** unhelpful to just say "something doesn't work" or "I can't download stories."
+
+## Troubleshooting
+If anything doesn't work, the first thing you should try is killing and relaunching Snapchat (through the system settings app, not recent app list) **TWICE** and then trying again. This will ensure any cached mappings are updated. This is especially important after updating SnapMod and its mappings.
