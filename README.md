@@ -29,3 +29,10 @@ If you have an issue please post a log from LSPosed (I have no interest in suppo
 
 ## Troubleshooting
 If anything doesn't work, the first thing you should try is killing and relaunching Snapchat (through the system settings app, not recent app list) **TWICE** and then trying again. This will ensure any cached mappings are updated. This is especially important after updating SnapMod and its mappings.
+
+## Donations
+Although this is a personal project I do entirely for fun (and it will most likely stay that way), if you would like to support the development of SnapMod, you can do so by donating:
+- PayPal: https://paypal.me/roditmod
+- BTC: bc1qr06chdv85jf9v7ldf7l24lrgp6ad7av8y7jwyc
+- ETH: 0x90659C0556b37107359FA32b40AA74c593590E04
+- XRP: rDgNCbi4eCeczpzGHGs3XHsR5C3SyUCr5r
