@@ -1217,3 +1217,60 @@ class FriendChatActionHandler {
         .type !SendChatAction;
     }
 }
+
+[late]
+enum ConfigValueType {
+
+    [late] static this BOOLEAN;
+    [late] static this INTEGER;
+    [late] static this LONG;
+    [late] static this FLOAT;
+    [late] static this DOUBLE;
+    [late] static this STRING;
+
+    static void $<clinit>() {
+        .string "BOOLEAN", bind field BOOLEAN next reference;
+        .string "INTEGER", bind field INTEGER next reference;
+        .string "LONG", bind field LONG next reference;
+        .string "FLOAT", bind field FLOAT next reference;
+        .string "DOUBLE", bind field DOUBLE next reference;
+        .string "STRING", bind field STRING next reference;
+    }
+}
+
+[late]
+class ConfigValue {
+
+    Object defaultValue;
+    #ConfigValueType valueType;
+}
+
+[late]
+interface ConfigKeyBase {
+
+    #ConfigValue value()
+    String getName()
+}
+
+enum AdConfigKey implements #ConfigKeyBase {
+
+    [late] static this GLOBAL_MIN_TIME_BETWEEN_ADS;
+    [late] static this GLOBAL_MIN_SNAPS_BETWEEN_ADS;
+
+    static void $<clinit>() {
+        .string "GLOBAL_MIN_TIME_BETWEEN_ADS", bind field GLOBAL_MIN_TIME_BETWEEN_ADS next reference;
+        .string "GLOBAL_MIN_SNAPS_BETWEEN_ADS", bind field GLOBAL_MIN_SNAPS_BETWEEN_ADS next reference;
+    }
+}
+
+class CompositeConfigurationProvider {
+
+    void $<init>(...) {
+        .string "CompositeConfigurationProvider";
+    }
+
+    Object get(!ConfigKeyBase, !ConfigValueType, ...) {
+        .string contains "for config";
+        .string contains "appStartExperimentReader";
+    }
+}
