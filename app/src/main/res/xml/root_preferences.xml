@@ -88,6 +88,21 @@
             app:key="block_ads"
             app:title="@string/block_ads_title"
             app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="disable_spotlight"
+            app:title="@string/disable_spotlight_title"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="hide_story_views"
+            app:title="@string/hide_story_views_title"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="disable_metrics"
+            app:title="@string/disable_metrics_title"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/snaps_header"

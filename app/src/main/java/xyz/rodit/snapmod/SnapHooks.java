@@ -641,13 +641,14 @@ public class SnapHooks extends HooksBase {
             }
         });
 
-        // Disable ads
+        // Apply tweak overrides.
         CompositeConfigurationProvider.get.hook(new XC_MethodHook() {
             @Override
-            protected void beforeHookedMethod(MethodHookParam param) {
+            protected void afterHookedMethod(MethodHookParam param) {
                 ConfigKeyBase key = ConfigKeyBase.wrap(param.args[0]);
-                if (config.getBoolean("block_ads") && AdHelper.isAddTweak(key.getName())) {
-                    param.setResult(false);
+                Object override = TweakHelper.applyOverride(config, key.getName());
+                if (override != null) {
+                    param.setResult(override);
                 }
             }
         });
