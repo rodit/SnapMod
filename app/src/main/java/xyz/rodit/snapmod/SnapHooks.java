@@ -346,7 +346,12 @@ public class SnapHooks extends HooksBase {
             @Override
             protected void afterHookedMethod(MethodHookParam param) {
                 if (config.getBoolean("more_profile_info") && FriendProfilePageData.isInstance(param.args[0]) && param.getResult() instanceof List) {
-                    Object viewModel = ((List<?>) param.getResult()).get(0);
+                    List viewModelList = (List) param.getResult();
+                    if (viewModelList.isEmpty()) {
+                        return;
+                    }
+
+                    Object viewModel = viewModelList.get(0);
                     if (FooterInfoItem.isInstance(viewModel)) {
                         FriendProfilePageData data = FriendProfilePageData.wrap(param.args[0]);
                         Date friendDate = new Date(Math.max(data.getAddedTimestamp(), data.getReverseAddedTimestamp()));
@@ -641,13 +646,14 @@ public class SnapHooks extends HooksBase {
             }
         });
 
-        // Disable ads
+        // Apply tweak overrides.
         CompositeConfigurationProvider.get.hook(new XC_MethodHook() {
             @Override
-            protected void beforeHookedMethod(MethodHookParam param) {
+            protected void afterHookedMethod(MethodHookParam param) {
                 ConfigKeyBase key = ConfigKeyBase.wrap(param.args[0]);
-                if (config.getBoolean("block_ads") && AdHelper.isAddTweak(key.getName())) {
-                    param.setResult(false);
+                Object override = TweakHelper.applyOverride(config, key.getName());
+                if (override != null) {
+                    param.setResult(override);
                 }
             }
         });
