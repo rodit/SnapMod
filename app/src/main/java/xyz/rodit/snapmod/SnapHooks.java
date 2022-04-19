@@ -37,6 +37,8 @@ import xyz.rodit.snapmod.mappings.ChatModelBase;
 import xyz.rodit.snapmod.mappings.ChatModelLiveSnap;
 import xyz.rodit.snapmod.mappings.ChatModelSavedSnap;
 import xyz.rodit.snapmod.mappings.ComposerFriend;
+import xyz.rodit.snapmod.mappings.CompositeConfigurationProvider;
+import xyz.rodit.snapmod.mappings.ConfigKeyBase;
 import xyz.rodit.snapmod.mappings.ContentType;
 import xyz.rodit.snapmod.mappings.ContextActionMenuModel;
 import xyz.rodit.snapmod.mappings.ContextClickHandler;
@@ -635,6 +637,17 @@ public class SnapHooks extends HooksBase {
                     }
 
                     param.args[0] = filtered;
+                }
+            }
+        });
+
+        // Disable ads
+        CompositeConfigurationProvider.get.hook(new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) {
+                ConfigKeyBase key = ConfigKeyBase.wrap(param.args[0]);
+                if (config.getBoolean("block_ads") && AdHelper.isAddTweak(key.getName())) {
+                    param.setResult(false);
                 }
             }
         });

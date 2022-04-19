@@ -83,6 +83,11 @@
             app:key="allow_pin_chats"
             app:title="@string/allow_pin_chats_title"
             app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="block_ads"
+            app:title="@string/block_ads_title"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/snaps_header"
