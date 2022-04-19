@@ -346,7 +346,12 @@ public class SnapHooks extends HooksBase {
             @Override
             protected void afterHookedMethod(MethodHookParam param) {
                 if (config.getBoolean("more_profile_info") && FriendProfilePageData.isInstance(param.args[0]) && param.getResult() instanceof List) {
-                    Object viewModel = ((List<?>) param.getResult()).get(0);
+                    List viewModelList = (List) param.getResult();
+                    if (viewModelList.isEmpty()) {
+                        return;
+                    }
+
+                    Object viewModel = viewModelList.get(0);
                     if (FooterInfoItem.isInstance(viewModel)) {
                         FriendProfilePageData data = FriendProfilePageData.wrap(param.args[0]);
                         Date friendDate = new Date(Math.max(data.getAddedTimestamp(), data.getReverseAddedTimestamp()));
