@@ -30,6 +30,8 @@ public class TweakHelper {
         override("FLUSH_EVENTS_TO_DISK_ON_PAUSE", "disable_metrics", false);
         override("V2_BLIZZARD_DISK_QUOTA", "disable_metrics", 0);
         override("ARE_BENCHMARKS_ENABLED", "disable_metrics", false);
+        override("CUSTOM_SPECTRUM_COLLECTOR_URL", "disable_metrics", "https://127.0.0.1:1");
+        override("CUSTOM_COLLECTOR_URL", "disable_metrics", "https://127.0.0.1:1");
     }
 
     public static Object applyOverride(ConfigurationClient config, String tweakName) {
