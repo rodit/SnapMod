@@ -29,7 +29,8 @@
     <string name="allow_pin_chats_title">Allow Pinning Chats</string>
     <string name="block_ads_title">Block Ads</string>
     <string name="disable_spotlight_title">Disable Spotlight Tab</string>
-    <string name="hide_story_views_title">Anonymous Story Viewing</string>
+    <string name="hide_story_views_title">🧪 Anonymous Story Viewing</string>
+    <string name="hide_story_views_local_title">Ignore Story Viewing (Local)</string>
     <string name="disable_metrics_title">Disable Some Metrics and Logging</string>
 
     <string name="send_gallery_as_snaps_title">Send Gallery as Snaps</string>
@@ -74,6 +75,7 @@
     <string name="block_ads_description">Removes all ads between stories/discover videos.</string>
     <string name="disable_spotlight_description">Disables the Spotlight/Discover (5th) tab. This can improve performance.</string>
     <string name="hide_story_views_description">Prevents users from knowing you have viewed their stories.</string>
+    <string name="hide_story_views_local_description">Prevents stories from being marked as viewed locally.</string>
     <string name="disable_metrics_description">Disables some metrics (Graphene) and logging (Blizzard).</string>
     <string name="override_snap_description">Forces all images/videos sent in chats to be sent as live snaps.</string>
     <string name="override_snap_timer_description">Sets the gallery snaps\' timer (in seconds).</string>

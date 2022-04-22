@@ -77,6 +77,7 @@ import xyz.rodit.snapmod.mappings.PublicProfileTile;
 import xyz.rodit.snapmod.mappings.PublicProfileTileTransformer;
 import xyz.rodit.snapmod.mappings.RxObserver;
 import xyz.rodit.snapmod.mappings.RxSingleton;
+import xyz.rodit.snapmod.mappings.RxSupplier;
 import xyz.rodit.snapmod.mappings.SavePolicy;
 import xyz.rodit.snapmod.mappings.SaveToCameraRollActionHandler;
 import xyz.rodit.snapmod.mappings.SaveType;
@@ -87,6 +88,7 @@ import xyz.rodit.snapmod.mappings.SnapIterable;
 import xyz.rodit.snapmod.mappings.StoryAutoAdvanceMode;
 import xyz.rodit.snapmod.mappings.StoryMediaPlaybackMode;
 import xyz.rodit.snapmod.mappings.StoryMetadata;
+import xyz.rodit.snapmod.mappings.UploadSnapReadReceiptDurableJobProcessor;
 import xyz.rodit.xposed.HooksBase;
 import xyz.rodit.xposed.mappings.LoadScheme;
 
@@ -646,7 +648,7 @@ public class SnapHooks extends HooksBase {
             }
         });
 
-        // Apply tweak overrides.
+        // Apply tweak overrides
         CompositeConfigurationProvider.get.hook(new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) {
@@ -654,6 +656,16 @@ public class SnapHooks extends HooksBase {
                 Object override = TweakHelper.applyOverride(config, key.getName());
                 if (override != null) {
                     param.setResult(override);
+                }
+            }
+        });
+
+        // Prevent story read receipt uploads
+        UploadSnapReadReceiptDurableJobProcessor.uploadReadReceipts.hook(new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                if (config.getBoolean("hide_story_views")) {
+                    param.setResult(RxSupplier.supplyNothing().instance);
                 }
             }
         });

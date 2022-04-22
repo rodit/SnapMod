@@ -59,6 +59,12 @@
             app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
+            app:key="hide_story_views_local"
+            app:title="@string/hide_story_views_local_title"
+            app:summary="@string/hide_story_views_description"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
             app:key="disable_metrics"
             app:title="@string/disable_metrics_title"
             app:summary="@string/disable_metrics_description"

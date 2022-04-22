@@ -224,6 +224,8 @@ interface RxObserver {
 [certain]
 class RxSupplier {
 
+    static this supplyNothing()
+
     void subscribe(#RxObserver) {
         .string "observer is null";
         .string contains "RxJavaPlugins.setOnSingleSubscribe";
@@ -1272,5 +1274,13 @@ class CompositeConfigurationProvider {
     Object get(!ConfigKeyBase, !ConfigValueType, ...) {
         .string contains "for config";
         .string contains "appStartExperimentReader";
+    }
+}
+
+class UploadSnapReadReceiptDurableJobProcessor {
+
+    !RxSupplier uploadReadReceipts(...) {
+        .string "UploadSnapReadReceiptDurableJobProcessor";
+        .string "storyType";
     }
 }

@@ -22,7 +22,7 @@ public class TweakHelper {
 
         override("SPOTLIGHT_5TH_TAB_ENABLED", "disable_spotlight", false);
 
-        override("PREVENT_STORIES_FROM_BEING_MARKED_AS_VIEWED", "hide_story_views", true);
+        override("PREVENT_STORIES_FROM_BEING_MARKED_AS_VIEWED", "hide_story_views_local", true);
 
         override("GRAPHENE_HOST", "disable_metrics", "https://127.0.0.1:1");
         override("MAX_RETRY_QUEUE_SIZE", "disable_metrics", 0);
