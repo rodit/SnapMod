@@ -92,4 +92,6 @@
     <string name="location_share_override_description">Overrides your shared location with the configured latitude and logitude below. I have no idea if this actually works.</string>
     <string name="more_profile_info_description">Shows more information on friends\' profile pages such as their birthday (if available).</string>
     <string name="log_network_requests_description">Logs some HTTP requests to LSPosed for debugging.</string>
+    <string name="installation_status_title">Installation Status</string>
+    <string name="installation_status_summary">Checking…</string>
 </resources>

@@ -1,5 +1,12 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <Preference app:key="installation_status"
+        app:title="@string/installation_status_title"
+        app:summary="@string/installation_status_summary"
+        app:iconSpaceReserved="false">
+
+    </Preference>
+
     <PreferenceCategory app:title="@string/privacy_header"
         app:iconSpaceReserved="false">
 
