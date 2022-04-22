@@ -1,5 +1,12 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <Preference app:key="installation_status"
+        app:title="@string/installation_status_title"
+        app:summary="@string/installation_status_summary"
+        app:iconSpaceReserved="false">
+
+    </Preference>
+
     <PreferenceCategory app:title="@string/privacy_header"
         app:iconSpaceReserved="false">
 
@@ -48,6 +55,12 @@
         <SwitchPreferenceCompat
             app:key="hide_story_views"
             app:title="@string/hide_story_views_title"
+            app:summary="@string/hide_story_views_description"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="hide_story_views_local"
+            app:title="@string/hide_story_views_local_title"
             app:summary="@string/hide_story_views_description"
             app:iconSpaceReserved="false" />
 
@@ -113,6 +126,14 @@
             app:key="disable_spotlight"
             app:title="@string/disable_spotlight_title"
             app:summary="@string/disable_spotlight_description"
+            app:iconSpaceReserved="false" />
+
+        <MultiSelectListPreference
+            app:key="disable_story_sections"
+            app:title="@string/disable_story_sections_title"
+            app:summary="@string/disable_story_sections_summary"
+            app:entries="@array/story_sections"
+            app:entryValues="@array/story_sections_values"
             app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat

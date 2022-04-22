@@ -43,6 +43,8 @@ import xyz.rodit.snapmod.mappings.ContentType;
 import xyz.rodit.snapmod.mappings.ContextActionMenuModel;
 import xyz.rodit.snapmod.mappings.ContextClickHandler;
 import xyz.rodit.snapmod.mappings.ConversationManager;
+import xyz.rodit.snapmod.mappings.DiscoverFeedObservableSection;
+import xyz.rodit.snapmod.mappings.DiscoverViewBinder;
 import xyz.rodit.snapmod.mappings.DisplayInfoContainer;
 import xyz.rodit.snapmod.mappings.FooterInfoItem;
 import xyz.rodit.snapmod.mappings.FriendActionClient;
@@ -77,6 +79,7 @@ import xyz.rodit.snapmod.mappings.PublicProfileTile;
 import xyz.rodit.snapmod.mappings.PublicProfileTileTransformer;
 import xyz.rodit.snapmod.mappings.RxObserver;
 import xyz.rodit.snapmod.mappings.RxSingleton;
+import xyz.rodit.snapmod.mappings.RxSupplier;
 import xyz.rodit.snapmod.mappings.SavePolicy;
 import xyz.rodit.snapmod.mappings.SaveToCameraRollActionHandler;
 import xyz.rodit.snapmod.mappings.SaveType;
@@ -87,6 +90,7 @@ import xyz.rodit.snapmod.mappings.SnapIterable;
 import xyz.rodit.snapmod.mappings.StoryAutoAdvanceMode;
 import xyz.rodit.snapmod.mappings.StoryMediaPlaybackMode;
 import xyz.rodit.snapmod.mappings.StoryMetadata;
+import xyz.rodit.snapmod.mappings.UploadSnapReadReceiptDurableJobProcessor;
 import xyz.rodit.xposed.HooksBase;
 import xyz.rodit.xposed.mappings.LoadScheme;
 
@@ -96,6 +100,7 @@ public class SnapHooks extends HooksBase {
 
     private final Map<Integer, Object> chatMediaMap = new HashMap<>();
     private final Set<String> hiddenFriends = new HashSet<>();
+    private final Set<String> hiddenStorySections = new HashSet<>();
 
     private ChatMediaHandler chatMediaHandler;
     private Activity mainActivity;
@@ -147,6 +152,15 @@ public class SnapHooks extends HooksBase {
         for (String username : config.getString("hidden_friends", "").split("\n")) {
             if (!TextUtils.isEmpty(username)) {
                 hiddenFriends.add(username.trim());
+            }
+        }
+
+        hiddenStorySections.clear();
+        String sectionList = config.getString("disable_story_sections", "[]");
+        sectionList = sectionList.substring(1, sectionList.length() - 1);
+        for (String section : sectionList.split(",")) {
+            if (!TextUtils.isEmpty(section)) {
+                hiddenStorySections.add(section.trim());
             }
         }
     }
@@ -646,7 +660,7 @@ public class SnapHooks extends HooksBase {
             }
         });
 
-        // Apply tweak overrides.
+        // Apply tweak overrides
         CompositeConfigurationProvider.get.hook(new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) {
@@ -654,6 +668,35 @@ public class SnapHooks extends HooksBase {
                 Object override = TweakHelper.applyOverride(config, key.getName());
                 if (override != null) {
                     param.setResult(override);
+                }
+            }
+        });
+
+        // Prevent story read receipt uploads
+        UploadSnapReadReceiptDurableJobProcessor.uploadReadReceipts.hook(new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                if (config.getBoolean("hide_story_views")) {
+                    param.setResult(RxSupplier.supplyNothing().instance);
+                }
+            }
+        });
+
+        // Hide story sections
+        DiscoverViewBinder.setSections.hook(new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) {
+                if (hiddenStorySections.size() > 0) {
+                    List sections = (List) param.args[0];
+                    List filtered = new ArrayList();
+                    for (Object section : sections) {
+                        String name = DiscoverFeedObservableSection.wrap(section).getModel().getName();
+                        if (name == null || !hiddenStorySections.contains(name)) {
+                            filtered.add(section);
+                        }
+                    }
+
+                    param.args[0] = filtered;
                 }
             }
         });

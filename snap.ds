@@ -224,6 +224,8 @@ interface RxObserver {
 [certain]
 class RxSupplier {
 
+    static this supplyNothing()
+
     void subscribe(#RxObserver) {
         .string "observer is null";
         .string contains "RxJavaPlugins.setOnSingleSubscribe";
@@ -1272,5 +1274,52 @@ class CompositeConfigurationProvider {
     Object get(!ConfigKeyBase, !ConfigValueType, ...) {
         .string contains "for config";
         .string contains "appStartExperimentReader";
+    }
+}
+
+class UploadSnapReadReceiptDurableJobProcessor {
+
+    !RxSupplier uploadReadReceipts(...) {
+        .string "UploadSnapReadReceiptDurableJobProcessor";
+        .string "storyType";
+    }
+}
+
+class DiscoverViewBinder {
+
+    void setSections(List) {
+        .string "dfosc:setSections";
+    }
+}
+
+class DiscoverFeedObservableSection {
+
+    !DiscoverFeedSection model;
+
+    boolean $equals(...) {
+        .string contains "DiscoverFeedObservableSection";
+    }
+}
+
+[certain]
+class DiscoverFeedSectionLayout {
+
+    int verticalSectionLayout;
+    int horizontalSectionLayout;
+
+    String $toString() {
+        .string contains "DiscoverFeedSectionLayout";
+        .string contains "horizontalSectionLayout";
+    }
+}
+
+[certain]
+class DiscoverFeedSection {
+
+    String name;
+    !DiscoverFeedSectionLayout layout;
+
+    boolean $equals(...) {
+        .string contains "DiscoverFeedSection";
     }
 }
