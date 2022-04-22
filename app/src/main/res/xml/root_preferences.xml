@@ -128,6 +128,14 @@
             app:summary="@string/disable_spotlight_description"
             app:iconSpaceReserved="false" />
 
+        <MultiSelectListPreference
+            app:key="disable_story_sections"
+            app:title="@string/disable_story_sections_title"
+            app:summary="@string/disable_story_sections_summary"
+            app:entries="@array/story_sections"
+            app:entryValues="@array/story_sections_values"
+            app:iconSpaceReserved="false" />
+
         <SwitchPreferenceCompat
             app:key="disable_bitmojis"
             app:title="@string/disable_bitmojis_title"

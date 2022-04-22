@@ -4,13 +4,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 import xyz.rodit.xposed.client.ConfigurationClient;
+import xyz.rodit.xposed.utils.Predicate;
 
 public class TweakHelper {
 
     private static final Map<String, TweakConfiguration> TWEAK_OVERRIDES = new HashMap<>();
 
     private static void override(String name, String optionName, Object overrideValue) {
-        TWEAK_OVERRIDES.put(name, new TweakConfiguration(optionName, overrideValue));
+        override(name, c -> c.getBoolean(optionName), overrideValue);
+    }
+
+    private static void override(String name, Predicate<ConfigurationClient> optionRequirement, Object overrideValue) {
+        TWEAK_OVERRIDES.put(name, new TweakConfiguration(optionRequirement, overrideValue));
     }
 
     static {
@@ -32,11 +37,13 @@ public class TweakHelper {
         override("ARE_BENCHMARKS_ENABLED", "disable_metrics", false);
         override("CUSTOM_SPECTRUM_COLLECTOR_URL", "disable_metrics", "https://127.0.0.1:1");
         override("CUSTOM_COLLECTOR_URL", "disable_metrics", "https://127.0.0.1:1");
+
+        override("DF_ADAPTER_REFACTOR_ENABLED", c -> c.getString("disable_story_sections", "[]").length() > 2, true);
     }
 
     public static Object applyOverride(ConfigurationClient config, String tweakName) {
         TweakConfiguration tweak = TWEAK_OVERRIDES.get(tweakName);
-        if (tweak != null && config.getBoolean(tweak.optionName)) {
+        if (tweak != null && tweak.optionRequirement.test(config)) {
             return tweak.overrideValue;
         }
 
@@ -45,11 +52,11 @@ public class TweakHelper {
 
     private static class TweakConfiguration {
 
-        public String optionName;
+        public Predicate<ConfigurationClient> optionRequirement;
         public Object overrideValue;
 
-        public TweakConfiguration(String optionName, Object overrideValue) {
-            this.optionName = optionName;
+        public TweakConfiguration(Predicate<ConfigurationClient> optionName, Object overrideValue) {
+            this.optionRequirement = optionName;
             this.overrideValue = overrideValue;
         }
     }

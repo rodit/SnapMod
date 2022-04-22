@@ -1284,3 +1284,42 @@ class UploadSnapReadReceiptDurableJobProcessor {
         .string "storyType";
     }
 }
+
+class DiscoverViewBinder {
+
+    void setSections(List) {
+        .string "dfosc:setSections";
+    }
+}
+
+class DiscoverFeedObservableSection {
+
+    !DiscoverFeedSection model;
+
+    boolean $equals(...) {
+        .string contains "DiscoverFeedObservableSection";
+    }
+}
+
+[certain]
+class DiscoverFeedSectionLayout {
+
+    int verticalSectionLayout;
+    int horizontalSectionLayout;
+
+    String $toString() {
+        .string contains "DiscoverFeedSectionLayout";
+        .string contains "horizontalSectionLayout";
+    }
+}
+
+[certain]
+class DiscoverFeedSection {
+
+    String name;
+    !DiscoverFeedSectionLayout layout;
+
+    boolean $equals(...) {
+        .string contains "DiscoverFeedSection";
+    }
+}

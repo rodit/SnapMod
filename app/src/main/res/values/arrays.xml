@@ -28,6 +28,19 @@
         <item>ADDED_BY_SHARED_STORY</item>
         <item>ADDED_BY_GROUP_CHAT</item>
     </string-array>
+
+    <string-array name="story_sections">
+        <item>Friends</item>
+        <item>Subscriptions</item>
+        <item>For You</item>
+    </string-array>
+
+    <string-array name="story_sections_values">
+        <item>friends</item>
+        <item>subs</item>
+        <item>for_you</item>
+    </string-array>
+
     <string-array name="sc_scope">
         <item>com.snapchat.android</item>
     </string-array>
