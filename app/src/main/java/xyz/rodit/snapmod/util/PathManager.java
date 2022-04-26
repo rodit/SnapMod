@@ -1,4 +1,4 @@
-package xyz.rodit.snapmod;
+package xyz.rodit.snapmod.util;
 
 import android.net.Uri;
 import android.os.Build;

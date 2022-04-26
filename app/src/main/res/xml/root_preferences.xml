@@ -29,12 +29,6 @@
             app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
-            app:key="hide_replay"
-            app:title="@string/hide_replay_title"
-            app:summary="@string/hide_replay_description"
-            app:iconSpaceReserved="false" />
-
-        <SwitchPreferenceCompat
             app:key="hide_typing"
             app:title="@string/hide_typing_title"
             app:summary="@string/hide_typing_description"
@@ -50,6 +44,12 @@
             app:key="hidden_friends"
             app:title="@string/hidden_friends_title"
             app:dialogMessage="@string/hidden_friends_description"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="hide_snap_views"
+            app:title="@string/hide_snap_views_title"
+            app:summary="@string/hide_snap_views_description"
             app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
@@ -141,20 +141,6 @@
             app:title="@string/disable_bitmojis_title"
             app:summary="@string/disable_bitmojis_description"
             app:iconSpaceReserved="false" />
-
-        <SwitchPreferenceCompat
-            app:key="enable_friend_override"
-            app:title="@string/enable_friend_override_title"
-            app:summary="@string/enable_friend_override_description"
-            app:iconSpaceReserved="false" />
-
-        <ListPreference
-            app:key="friend_override"
-            app:title="@string/friend_override_value_title"
-            app:entries="@array/friend_add_modes"
-            app:entryValues="@array/friend_add_modes_values"
-            app:defaultValue="ADDED_BY_USERNAME"
-            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/snaps_header"
@@ -177,19 +163,6 @@
             app:key="allow_save_snaps"
             app:title="@string/allow_save_snaps_title"
             app:summary="@string/allow_save_snaps_description"
-            app:iconSpaceReserved="false" />
-
-        <SwitchPreferenceCompat
-            app:key="enable_snap_type_override"
-            app:title="@string/enable_snap_type_override_title"
-            app:summary="@string/enable_snap_type_override_description"
-            app:iconSpaceReserved="false" />
-
-        <ListPreference
-            app:key="snap_type_override"
-            app:title="@string/snap_type_override_title"
-            app:entries="@array/snap_media_types"
-            app:entryValues="@array/snap_media_types_values"
             app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat

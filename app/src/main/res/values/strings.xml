@@ -10,7 +10,7 @@
     <string name="debug_header">Information</string>
 
     <string name="disable_camera_title">Disable Camera</string>
-    <string name="hide_read_title">🧪 Hide Read Receipts</string>
+    <string name="hide_read_title">Hide Read Receipts</string>
     <string name="hide_save_title">🧪 Hide Chat Saves/Unsaves</string>
     <string name="hide_screenshot_title">Hide Screenshot/Record Notifications</string>
     <string name="hide_save_gallery_title">Hide Saved to Camera Roll</string>
@@ -30,7 +30,8 @@
     <string name="block_ads_title">Block Ads</string>
     <string name="disable_spotlight_title">Disable Spotlight Tab</string>
     <string name="disable_story_sections_title">Hide Story Sections</string>
-    <string name="hide_story_views_title">🧪 Anonymous Story Viewing</string>
+    <string name="hide_snap_views_title">Hide Snap Views</string>
+    <string name="hide_story_views_title">Anonymous Story Viewing</string>
     <string name="hide_story_views_local_title">Ignore Story Viewing (Local)</string>
     <string name="disable_metrics_title">Disable Some Metrics and Logging</string>
 
@@ -76,6 +77,7 @@
     <string name="block_ads_description">Removes all ads between stories/discover videos.</string>
     <string name="disable_spotlight_description">Disables the Spotlight/Discover (5th) tab. This can improve performance.</string>
     <string name="disable_story_sections_summary">Hides the selected sections from the stories tab. You can use this to hide the \'For You\' section. Requires Snapchat restart.</string>
+    <string name="hide_snap_views_description">Prevents other users from seeing you have opened their snaps. Snaps cannot be saved in chat while this option is enabled.</string>
     <string name="hide_story_views_description">Prevents users from knowing you have viewed their stories.</string>
     <string name="hide_story_views_local_description">Prevents stories from being marked as viewed locally.</string>
     <string name="disable_metrics_description">Disables some metrics (Graphene) and logging (Blizzard).</string>
