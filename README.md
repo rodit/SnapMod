@@ -33,6 +33,7 @@ If anything doesn't work, the first thing you should try is killing and relaunch
 ## Donations
 Although this is a personal project I do entirely for fun (and it will most likely stay that way), if you would like to support the development of SnapMod, you can do so by donating:
 - PayPal: https://paypal.me/roditmod
+- Cashapp: https://cash.app/rodit9
 - BTC: bc1qr06chdv85jf9v7ldf7l24lrgp6ad7av8y7jwyc
 - ETH: 0x90659C0556b37107359FA32b40AA74c593590E04
 - XRP: rDgNCbi4eCeczpzGHGs3XHsR5C3SyUCr5r

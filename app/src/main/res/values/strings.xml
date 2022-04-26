@@ -101,4 +101,8 @@
 
     <string name="installation_status_title">Installation Status</string>
     <string name="installation_status_summary">Checking…</string>
+
+    <string name="donations_title">Donations</string>
+    <string name="donations_summary">If you would like to support SnapMod, you can donate by tapping here.</string>
+    <string name="donations_link">https://github.com/rodit/SnapMod#donations</string>
 </resources>

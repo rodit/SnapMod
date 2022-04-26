@@ -1,8 +1,10 @@
 package xyz.rodit.snapmod;
 
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.Spannable;
@@ -40,6 +42,11 @@ public class SettingsActivity extends xyz.rodit.xposed.SettingsActivity {
         statusPreference.setSummary(getInstallationSummary(false));
         statusPreference.setOnPreferenceClickListener(p -> {
             showInfoDialog();
+            return true;
+        });
+
+        fragment.findPreference("donations").setOnPreferenceClickListener(p -> {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.donations_link))));
             return true;
         });
 

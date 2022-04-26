@@ -7,6 +7,13 @@
 
     </Preference>
 
+    <Preference app:key="donations"
+        app:title="@string/donations_title"
+        app:summary="@string/donations_summary"
+        app:iconSpaceReserved="false">
+
+    </Preference>
+
     <PreferenceCategory app:title="@string/privacy_header"
         app:iconSpaceReserved="false">
 
