@@ -14,6 +14,7 @@ To set SnapMod up, download and install the latest apk from [here](https://githu
   - Conversation presence (Bitmoji in bottom left)
   - Typing status
   - Story views
+  - Snap views
 - Block ads
 - Pin conversations
 - Save any media (including snaps and audio notes) to camera roll
@@ -23,6 +24,7 @@ To set SnapMod up, download and install the latest apk from [here](https://githu
 - Bypass video length restriction from drawer in chat
 - Show more info on profile (birthday, friendship status)
 - Disable some metrics/logging
+- Per-conversation stealth mode (hide read receipts, snap views etc for individual conversations)
 
 ## Issues
 If you have an issue please post a log from LSPosed (I have no interest in supporting other Xposed implementations, although SnapMod should work fine with them) and a description of the issue. It is **extremely** unhelpful to just say "something doesn't work" or "I can't download stories."
