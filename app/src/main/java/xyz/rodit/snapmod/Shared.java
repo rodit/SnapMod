@@ -13,7 +13,6 @@ public class Shared {
     public static final String CONTEXT_HOOK_CLASS = "android.app.Application";
     public static final String CONTEXT_HOOK_METHOD = "attach";
 
-    public static final String PINNED_FILE_NAME = "pinned.list";
     public static final String PINNED_FRIENDMOJI_NAME = "pinned";
     public static final String PINNED_FRIENDMOJI_EMOJI = "\uD83D\uDCCC";
 

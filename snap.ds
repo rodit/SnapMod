@@ -35,6 +35,12 @@ class MainActivity expects com.snap.mushroom.MainActivity {
 }
 
 [certain]
+class UUID expects com.snapchat.client.messaging.UUID {
+
+   byte[] $getId()
+}
+
+[certain]
 class ConversationManager expects com.snapchat.client.messaging.ConversationManager$CppProxy {
 
     void $sendMessageWithContent(...)
@@ -46,9 +52,16 @@ class ConversationManager expects com.snapchat.client.messaging.ConversationMana
 }
 
 [certain]
-class LocalMessageContent expects com.snapchat.client.messaging.LocalMessageContent {
+class SnapManager expects com.snapchat.client.messaging.SnapManager$CppProxy {
 
-    * $getSavePolicy()
+    void $onSnapInteraction(...)
+}
+
+[certain]
+class Callback expects com.snapchat.client.messaging.Callback {
+
+    void $onError(...)
+    void $onSuccess()
 }
 
 [certain]
@@ -57,13 +70,6 @@ enum SavePolicy expects com.snapchat.client.messaging.SavePolicy {
     static this PROHIBITED;
     static this LIFETIME;
     static this VIEW_SESSION;
-}
-
-[certain]
-class NetworkApi expects com.snapchat.client.network_api.NetworkApi$CppProxy {
-
-    void $submit(...)
-    void $submitToNetworkManagerDirectly(...)
 }
 
 [certain]
@@ -79,6 +85,21 @@ enum ContentType expects com.snapchat.client.messaging.ContentType {
 }
 
 [certain]
+class MessageDestinations expects com.snapchat.client.messaging.MessageDestinations {
+
+    ArrayList $getConversations()
+}
+
+[certain]
+enum SnapInteractionType expects com.snapchat.client.messaging.SnapInteractionType {
+
+    static this $VIEWING_INITIATED;
+    static this $VIEWING_FINISHED;
+    static this $REPLAY_GESTURE_PERFORMED;
+    static this $MARK_AS_INVALID;
+}
+
+[certain]
 enum MessageUpdate expects com.snapchat.client.messaging.MessageUpdate {
 
     static this $UNKNOWN;
@@ -90,6 +111,20 @@ enum MessageUpdate expects com.snapchat.client.messaging.MessageUpdate {
     static this $SCREENSHOT;
     static this $SCREEN_RECORD;
     static this $REPLAY;
+}
+
+[certain]
+class LocalMessageContent expects com.snapchat.client.messaging.LocalMessageContent {
+
+    !SavePolicy $getSavePolicy()
+    !ContentType $getContentType()
+}
+
+[certain]
+class NetworkApi expects com.snapchat.client.network_api.NetworkApi$CppProxy {
+
+    void $submit(...)
+    void $submitToNetworkManagerDirectly(...)
 }
 
 [certain]

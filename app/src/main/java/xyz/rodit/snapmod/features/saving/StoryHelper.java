@@ -1,4 +1,4 @@
-package xyz.rodit.snapmod;
+package xyz.rodit.snapmod.features.saving;
 
 import java.util.Map;
 

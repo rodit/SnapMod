@@ -1,4 +1,4 @@
-package xyz.rodit.snapmod;
+package xyz.rodit.snapmod.util;
 
 import android.text.TextUtils;
 
@@ -10,57 +10,65 @@ import java.util.Set;
 import de.robv.android.xposed.XposedBridge;
 import xyz.rodit.xposed.utils.StreamUtils;
 
-public class PinnedConversationManager {
+public class ConversationManager {
 
-    private final Set<String> pinned = new HashSet<>();
+    private final Set<String> conversations = new HashSet<>();
     private final File file;
 
     private long lastLoaded;
 
-    public PinnedConversationManager(File rootDir) {
-        file = new File(rootDir, Shared.PINNED_FILE_NAME);
+    public ConversationManager(File rootDir, String fileName) {
+        file = new File(rootDir, fileName);
     }
 
-    public Set<String> getPinned() {
+    public Set<String> getEnabled() {
         if (file.lastModified() > lastLoaded) {
             load();
         }
 
-        return pinned;
+        return conversations;
     }
 
-    public void pin(String key) {
-        if (!pinned.contains(key)) {
-            pinned.add(key);
+    public void enable(String key) {
+        if (!conversations.contains(key)) {
+            conversations.add(key);
             save();
         }
     }
 
-    public void unpin(String key) {
-        if (pinned.remove(key)) {
+    public void disable(String key) {
+        if (conversations.remove(key)) {
             save();
         }
     }
 
-    public boolean isPinned(String key) {
-        return getPinned().contains(key);
+    public void toggle(String key) {
+        if (isEnabled(key)) {
+            disable(key);
+        } else {
+            enable(key);
+        }
+    }
+
+    public boolean isEnabled(String key) {
+        return getEnabled().contains(key);
     }
 
     private void load() {
         try {
-            pinned.clear();
+            conversations.clear();
             if (file.exists()) {
                 String[] keys = StreamUtils.readFile(file).split("\n");
                 for (String key : keys) {
                     if (!TextUtils.isEmpty(key)) {
-                        pinned.add(key);
+                        conversations.add(key);
                     }
                 }
             }
 
             lastLoaded = System.currentTimeMillis();
         } catch (IOException e) {
-            XposedBridge.log("Error loading pinned conversations.");
+            XposedBridge.log("Error loading conversation data.");
             XposedBridge.log(e);
         }
     }
@@ -68,14 +76,14 @@ public class PinnedConversationManager {
     private void save() {
         try {
             StringBuilder keys = new StringBuilder();
-            for (String key : pinned) {
+            for (String key : conversations) {
                 keys.append(key)
                         .append('\n');
             }
             StreamUtils.writeFile(file, keys.toString());
             lastLoaded = System.currentTimeMillis();
         } catch (IOException e) {
-            XposedBridge.log("Error saving pinned conversations.");
+            XposedBridge.log("Error saving conversation data.");
             XposedBridge.log(e);
         }
     }
