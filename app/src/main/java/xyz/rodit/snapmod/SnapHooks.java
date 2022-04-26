@@ -11,6 +11,7 @@ import java.util.EnumSet;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
+import de.robv.android.xposed.XposedHelpers;
 import xyz.rodit.snapmod.features.FeatureContext;
 import xyz.rodit.snapmod.features.FeatureManager;
 import xyz.rodit.snapmod.mappings.MainActivity;
@@ -22,6 +23,8 @@ public class SnapHooks extends HooksBase {
     private Activity mainActivity;
     private FeatureContext featureContext;
     private FeatureManager features;
+
+    private boolean queueFeatureConfig;
 
     public SnapHooks() {
         super(Collections.singletonList(Shared.SNAPCHAT_PACKAGE),
@@ -64,7 +67,11 @@ public class SnapHooks extends HooksBase {
             }, 500);
         }
 
-        features.onConfigLoaded(first);
+        if (features != null) {
+            features.onConfigLoaded(first);
+        } else {
+            queueFeatureConfig = true;
+        }
     }
 
     @Override
@@ -84,5 +91,18 @@ public class SnapHooks extends HooksBase {
         features.load();
         features.init();
         features.performHooks();
+
+        if (queueFeatureConfig) {
+            features.onConfigLoaded(true);
+        }
+
+        Class<?> ComposerModuleFactory = XposedHelpers.findClass("com.snapchat.client.composer.ModuleFactory$CppProxy", lpparam.classLoader);
+        XposedBridge.hookAllMethods(ComposerModuleFactory, "loadModule", new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) {
+                Object result = param.getResult();
+                XposedBridge.log("loadModule: " + result);
+            }
+        });
     }
 }
