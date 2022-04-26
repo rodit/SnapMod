@@ -95,14 +95,5 @@ public class SnapHooks extends HooksBase {
         if (queueFeatureConfig) {
             features.onConfigLoaded(true);
         }
-
-        Class<?> ComposerModuleFactory = XposedHelpers.findClass("com.snapchat.client.composer.ModuleFactory$CppProxy", lpparam.classLoader);
-        XposedBridge.hookAllMethods(ComposerModuleFactory, "loadModule", new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) {
-                Object result = param.getResult();
-                XposedBridge.log("loadModule: " + result);
-            }
-        });
     }
 }
