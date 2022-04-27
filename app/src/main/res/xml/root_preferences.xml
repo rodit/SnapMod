@@ -36,6 +36,12 @@
             app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
+            app:key="hide_bitmoji_presence"
+            app:title="@string/hide_bitmoji_presence_title"
+            app:summary="@string/hide_bitmoji_presence_description"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
             app:key="hide_typing"
             app:title="@string/hide_typing_title"
             app:summary="@string/hide_typing_description"
@@ -87,18 +93,6 @@
             app:key="hide_save"
             app:title="@string/hide_save_title"
             app:summary="@string/hide_save_description"
-            app:iconSpaceReserved="false" />
-
-        <SwitchPreferenceCompat
-            app:key="hide_enter_conversation"
-            app:title="@string/hide_enter_conversation_title"
-            app:summary="@string/hide_enter_conversation_description"
-            app:iconSpaceReserved="false" />
-
-        <SwitchPreferenceCompat
-            app:key="hide_exit_conversation"
-            app:title="@string/hide_exit_conversation_title"
-            app:summary="@string/hide_exit_conversation_description"
             app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat

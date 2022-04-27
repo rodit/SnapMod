@@ -15,9 +15,8 @@
     <string name="hide_screenshot_title">Hide Screenshot/Record Notifications</string>
     <string name="hide_save_gallery_title">Hide Saved to Camera Roll</string>
     <string name="hide_replay_title">Hide Replay Notifications</string>
-    <string name="hide_enter_conversation_title">🧪 Hide Enter Conversation (Bitmoji)</string>
-    <string name="hide_exit_conversation_title">🧪 Hide Exit Conversation (Bitmoji)</string>
-    <string name="hide_typing_title">Hide Typing Status (Bitmoji)</string>
+    <string name="hide_bitmoji_presence_title">Hide Bitmoji Presence</string>
+    <string name="hide_typing_title">Hide Typing Notifications</string>
     <string name="save_any_title">Save Any Message</string>
     <string name="dont_release_messages_title">🧪 Don\'t Release Messages</string>
     <string name="disable_bitmojis_title">Disable Bitmojis</string>
@@ -66,9 +65,8 @@
     <string name="hide_screenshot_description">Prevents screenshot notifications from being sent.</string>
     <string name="hide_save_gallery_description">Prevents saved to camera roll messages from being sent.</string>
     <string name="hide_replay_description">Prevents snap replay messages from being sent.</string>
-    <string name="hide_enter_conversation_description">Prevents other users from seeing your bitmoji enter a conversation.</string>
-    <string name="hide_exit_conversation_description">Prevents other users from seeing your bitmoji exit a conversation.</string>
-    <string name="hide_typing_description">Prevents other users from seeing if you are typing or not.</string>
+    <string name="hide_bitmoji_presence_description">Prevents other users from seeing your bitmoji on the chat screen.</string>
+    <string name="hide_typing_description">Prevents typing push notifications from being sent to other users.</string>
     <string name="save_any_description">Allows any message type to be saved. This is sometimes required for saving snaps and audio notes.</string>
     <string name="dont_release_description">Prevents messages from being \'released\'. This should prevent them from being deleted, although I am unsure.</string>
     <string name="disable_bitmojis_description">Disables all Bitmojis throughout the app.</string>
