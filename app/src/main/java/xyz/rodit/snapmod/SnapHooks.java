@@ -11,7 +11,6 @@ import java.util.EnumSet;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.XposedHelpers;
 import xyz.rodit.snapmod.features.FeatureContext;
 import xyz.rodit.snapmod.features.FeatureManager;
 import xyz.rodit.snapmod.mappings.MainActivity;

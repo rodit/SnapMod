@@ -121,6 +121,14 @@ class LocalMessageContent expects com.snapchat.client.messaging.LocalMessageCont
 }
 
 [certain]
+class PresenceSession expects com.snapchat.talkcorev3.PresenceSession$CppProxy {
+
+    void $activate()
+    void $deactivate()
+    void $processTypingActivity(...)
+}
+
+[certain]
 class NetworkApi expects com.snapchat.client.network_api.NetworkApi$CppProxy {
 
     void $submit(...)
@@ -1356,5 +1364,29 @@ class DiscoverFeedSection {
 
     boolean $equals(...) {
         .string contains "DiscoverFeedSection";
+    }
+}
+
+[certain]
+class ChatContext {
+
+    [discard] long feedId;
+    String conversationId;
+
+    String $toString() {
+        .string "ChatContext(feedId=";
+        .string contains "conversationId=";
+    }
+}
+
+[certain]
+class ArroyoMessageListDataProvider {
+
+    void $<init>(...) {
+        .string "ArroyoMessageListDataProvider";
+    }
+
+    * enterConversation(!ChatContext, ...) {
+        .string "NativeSessionWrapper:enterConversation";
     }
 }

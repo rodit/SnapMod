@@ -7,6 +7,7 @@ import xyz.rodit.snapmod.features.chatmenu.ChatMenuModifier;
 import xyz.rodit.snapmod.features.conversations.MessageInterceptor;
 import xyz.rodit.snapmod.features.conversations.PreventBitmojiPresence;
 import xyz.rodit.snapmod.features.conversations.PreventReadReceipts;
+import xyz.rodit.snapmod.features.conversations.PreventTypingNotifications;
 import xyz.rodit.snapmod.features.conversations.SnapInteractionFilter;
 import xyz.rodit.snapmod.features.conversations.SnapOverrides;
 import xyz.rodit.snapmod.features.friendsfeed.FeedModifier;
@@ -43,6 +44,7 @@ public class FeatureManager extends Contextual {
         add(MessageInterceptor::new);
         add(PreventBitmojiPresence::new);
         add(PreventReadReceipts::new);
+        add(PreventTypingNotifications::new);
         add(SnapInteractionFilter::new);
         add(SnapOverrides::new);
 

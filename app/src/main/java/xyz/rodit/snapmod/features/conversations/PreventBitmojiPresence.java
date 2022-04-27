@@ -2,11 +2,13 @@ package xyz.rodit.snapmod.features.conversations;
 
 import de.robv.android.xposed.XC_MethodHook;
 import xyz.rodit.snapmod.features.FeatureContext;
-import xyz.rodit.snapmod.mappings.Callback;
-import xyz.rodit.snapmod.mappings.ConversationManager;
-import xyz.rodit.snapmod.util.UUIDUtil;
+import xyz.rodit.snapmod.mappings.ArroyoMessageListDataProvider;
+import xyz.rodit.snapmod.mappings.ChatContext;
+import xyz.rodit.snapmod.mappings.PresenceSession;
 
 public class PreventBitmojiPresence extends StealthFeature {
+
+    private String currentConversationId;
 
     public PreventBitmojiPresence(FeatureContext context) {
         super(context);
@@ -14,30 +16,33 @@ public class PreventBitmojiPresence extends StealthFeature {
 
     @Override
     protected void init() {
-        setClass(ConversationManager.getMapping());
+        setClass(PresenceSession.getMapping());
 
-        putFilters(ConversationManager.enterConversation,
+        putFilters(PresenceSession.activate,
                 p -> null,
-                p -> UUIDUtil.fromSnap(p.args[0]),
-                new NullFilter(context, "hide_enter_conversation"));
+                p -> currentConversationId,
+                new NullFilter(context, "hide_bitmoji_presence"));
 
-        putFilters(ConversationManager.exitConversation,
+        putFilters(PresenceSession.deactivate,
                 p -> null,
-                p -> UUIDUtil.fromSnap(p.args[0]),
-                new NullFilter(context, "hide_exit_conversation"));
+                p -> currentConversationId,
+                new NullFilter(context, "hide_bitmoji_presence"));
 
-        putFilters(ConversationManager.sendTypingNotification,
+        putFilters(PresenceSession.processTypingActivity,
                 p -> null,
-                p -> UUIDUtil.fromSnap(p.args[0]),
-                new NullFilter(context, "hide_typing"));
+                p -> currentConversationId,
+                new NullFilter(context, "hide_bitmoji_presence"));
     }
 
     @Override
-    protected void onPostHook(XC_MethodHook.MethodHookParam param) {
-        for (Object o : param.args) {
-            if (Callback.isInstance(o)) {
-                Callback.wrap(o).onSuccess();
+    protected void performHooks() {
+        super.performHooks();
+
+        ArroyoMessageListDataProvider.enterConversation.hook(new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) {
+                currentConversationId = ChatContext.wrap(param.args[0]).getConversationId();
             }
-        }
+        });
     }
 }
