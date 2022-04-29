@@ -13,5 +13,5 @@ abstract class MenuPlugin(context: FeatureContext, val name: String) : Contextua
 }
 
 fun createEventData(pluginName: String, key: String): String {
-    return ChatMenuModifier.EVENT_PREFIX + ChatMenuModifier.EVENT_DELIMITER + pluginName + ChatMenuModifier.EVENT_DELIMITER + key
+    return EVENT_PREFIX + EVENT_DELIMITER + pluginName + EVENT_DELIMITER + key
 }
