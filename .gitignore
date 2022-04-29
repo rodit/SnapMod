@@ -16,3 +16,5 @@ local.properties
 gradle.properties
 /keys.txt
 /keystore.jks
+/.idea/codeStyles/codeStyleConfig.xml
+/.idea/codeStyles/Project.xml
