@@ -8,6 +8,8 @@ import xyz.rodit.snapmod.mappings.ConfigKeyBase
 import xyz.rodit.xposed.client.ConfigurationClient
 import xyz.rodit.xposed.utils.Predicate
 
+private const val DUMMY_URL = "https://127.0.0.1:1"
+
 class ConfigurationTweaks(context: FeatureContext) : Feature(context) {
 
     private val tweaks: MutableMap<String, Tweak> = HashMap()
@@ -68,8 +70,4 @@ class ConfigurationTweaks(context: FeatureContext) : Feature(context) {
         val optionRequirement: Predicate<ConfigurationClient>,
         val overrideValue: Any
     )
-
-    companion object {
-        private const val DUMMY_URL = "https://127.0.0.1:1"
-    }
 }

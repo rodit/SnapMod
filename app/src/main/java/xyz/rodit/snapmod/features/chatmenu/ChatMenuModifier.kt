@@ -8,6 +8,9 @@ import xyz.rodit.snapmod.mappings.FriendChatActionMenuBuilder
 import xyz.rodit.snapmod.mappings.RxSingleton
 import xyz.rodit.snapmod.mappings.SendChatAction
 
+private const val EVENT_PREFIX = "CUSTOM_ACTION"
+private const val EVENT_DELIMITER = "\u0000:\u0000"
+
 class ChatMenuModifier(context: FeatureContext) : Feature(context) {
 
     private val plugins: MutableMap<String, MenuPlugin> = HashMap()
@@ -51,10 +54,5 @@ class ChatMenuModifier(context: FeatureContext) : Feature(context) {
                 }
             }
         })
-    }
-
-    companion object {
-        const val EVENT_PREFIX = "CUSTOM_ACTION"
-        const val EVENT_DELIMITER = "\u0000:\u0000"
     }
 }
