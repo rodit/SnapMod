@@ -12,6 +12,6 @@ abstract class MenuPlugin(context: FeatureContext, val name: String) : Contextua
     abstract fun handleEvent(data: String?)
 }
 
-fun createEventData(pluginName: String, key: String): String {
-    return EVENT_PREFIX + EVENT_DELIMITER + pluginName + EVENT_DELIMITER + key
+fun MenuPlugin.createEventData(key: String): String {
+    return EVENT_PREFIX + EVENT_DELIMITER + name + EVENT_DELIMITER + key
 }

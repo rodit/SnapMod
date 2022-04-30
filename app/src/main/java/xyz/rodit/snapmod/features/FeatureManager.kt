@@ -47,6 +47,7 @@ class FeatureManager(context: FeatureContext) : Contextual(context) {
         add(::BypassVideoLength)
         add(::ConfigurationTweaks)
         add(::ConfigurationTweaks)
+        add(::DisableBitmojis)
         // add(::FriendAddOverride);
         add(::HideFriends)
         add(::HideStoryReadReceipts)

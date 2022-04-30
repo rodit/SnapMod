@@ -10,6 +10,7 @@ class PreventTypingNotifications(context: FeatureContext?) : StealthFeature(cont
 
     override fun init() {
         setClass(ConversationManager.getMapping())
+
         putFilters(
             ConversationManager.sendTypingNotification,
             { null },
@@ -19,6 +20,6 @@ class PreventTypingNotifications(context: FeatureContext?) : StealthFeature(cont
     }
 
     override fun onPostHook(param: MethodHookParam) {
-        param.args.filter { Callback.isInstance(it) }.map { Callback.wrap(it) }.first()?.onSuccess()
+        param.args.filter(Callback::isInstance).map(Callback::wrap).first()?.onSuccess()
     }
 }

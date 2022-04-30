@@ -1,10 +1,10 @@
 package xyz.rodit.snapmod.features.tweaks
 
-import de.robv.android.xposed.XC_MethodHook
 import xyz.rodit.snapmod.features.Feature
 import xyz.rodit.snapmod.features.FeatureContext
 import xyz.rodit.snapmod.mappings.CompositeConfigurationProvider
 import xyz.rodit.snapmod.mappings.ConfigKeyBase
+import xyz.rodit.snapmod.util.after
 import xyz.rodit.xposed.client.ConfigurationClient
 import xyz.rodit.xposed.utils.Predicate
 
@@ -55,15 +55,13 @@ class ConfigurationTweaks(context: FeatureContext) : Feature(context) {
 
     override fun performHooks() {
         // Apply tweak overrides based on configuration.
-        CompositeConfigurationProvider.get.hook(object : XC_MethodHook() {
-            override fun afterHookedMethod(param: MethodHookParam) {
-                val key = ConfigKeyBase.wrap(param.args[0])
-                val tweak = tweaks[key.name]
-                if (tweak != null && tweak.optionRequirement.test(context.config)) {
-                    param.result = tweak.overrideValue
-                }
+        CompositeConfigurationProvider.get.after {
+            val key = ConfigKeyBase.wrap(it.args[0])
+            val tweak = tweaks[key.name]
+            if (tweak != null && tweak.optionRequirement.test(context.config)) {
+                it.result = tweak.overrideValue
             }
-        })
+        }
     }
 
     private class Tweak(
