@@ -510,9 +510,8 @@ class FriendProfileTransformer {
     void $<init>(Object, int)
 
     * $apply(...) {
-        .string "pageSessionModel";
         .string "Required value was null.";
-        .string "sectionPerformanceLogger";
+        .string "performanceLogger";
         .method Collections->singletonList;
         .field this->!target;
         .new !FooterInfoItem;
