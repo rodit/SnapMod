@@ -1,10 +1,10 @@
 package xyz.rodit.snapmod.features.conversations
 
-import de.robv.android.xposed.XC_MethodHook
 import xyz.rodit.snapmod.features.FeatureContext
 import xyz.rodit.snapmod.mappings.ArroyoMessageListDataProvider
 import xyz.rodit.snapmod.mappings.ChatContext
 import xyz.rodit.snapmod.mappings.PresenceSession
+import xyz.rodit.snapmod.util.before
 
 class PreventBitmojiPresence(context: FeatureContext) : StealthFeature(context) {
 
@@ -37,10 +37,9 @@ class PreventBitmojiPresence(context: FeatureContext) : StealthFeature(context) 
 
     override fun performHooks() {
         super.performHooks()
-        ArroyoMessageListDataProvider.enterConversation.hook(object : XC_MethodHook() {
-            override fun beforeHookedMethod(param: MethodHookParam) {
-                currentConversationId = ChatContext.wrap(param.args[0]).conversationId.orEmpty()
-            }
-        })
+
+        ArroyoMessageListDataProvider.enterConversation.before {
+            currentConversationId = ChatContext.wrap(it.args[0]).conversationId.orEmpty()
+        }
     }
 }

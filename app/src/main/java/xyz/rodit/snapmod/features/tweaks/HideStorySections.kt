@@ -1,10 +1,10 @@
 package xyz.rodit.snapmod.features.tweaks
 
-import de.robv.android.xposed.XC_MethodHook
 import xyz.rodit.snapmod.features.Feature
 import xyz.rodit.snapmod.features.FeatureContext
 import xyz.rodit.snapmod.mappings.DiscoverFeedObservableSection
 import xyz.rodit.snapmod.mappings.DiscoverViewBinder
+import xyz.rodit.snapmod.util.before
 
 class HideStorySections(context: FeatureContext) : Feature(context) {
 
@@ -22,15 +22,15 @@ class HideStorySections(context: FeatureContext) : Feature(context) {
 
     override fun performHooks() {
         // Hide story sections.
-        DiscoverViewBinder.setSections.hook(object : XC_MethodHook() {
-            override fun beforeHookedMethod(param: MethodHookParam) {
-                if (hiddenStorySections.size > 0) {
-                    val sections = param.args[0] as List<*>
-                    param.args[0] = sections.filter {
-                        !hiddenStorySections.contains(DiscoverFeedObservableSection.wrap(it).model.name)
-                    }
+        DiscoverViewBinder.setSections.before {
+            if (hiddenStorySections.size > 0) {
+                val sections = it.args[0] as List<*>
+                it.args[0] = sections.filter { section ->
+                    !hiddenStorySections.contains(
+                        DiscoverFeedObservableSection.wrap(section).model.name
+                    )
                 }
             }
-        })
+        }
     }
 }

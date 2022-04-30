@@ -1,6 +1,5 @@
 package xyz.rodit.snapmod.features.saving
 
-import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedBridge
 import xyz.rodit.snapmod.features.Feature
 import xyz.rodit.snapmod.features.FeatureContext
@@ -9,6 +8,7 @@ import xyz.rodit.snapmod.mappings.ContextClickHandler
 import xyz.rodit.snapmod.mappings.OperaContextAction
 import xyz.rodit.snapmod.mappings.ParamsMap
 import xyz.rodit.snapmod.util.PathManager
+import xyz.rodit.snapmod.util.after
 import xyz.rodit.xposed.client.http.StreamProvider
 import xyz.rodit.xposed.client.http.streams.FileProxyStreamProvider
 import java.lang.reflect.InvocationHandler
@@ -21,22 +21,17 @@ class StoriesSaving(context: FeatureContext) : Feature(context) {
 
     override fun performHooks() {
         // Override save story click.
-        ContextActionMenuModel.constructors.hook(object : XC_MethodHook() {
-            override fun afterHookedMethod(param: MethodHookParam) {
-                val model = ContextActionMenuModel.wrap(param.thisObject)
-                if (!context.config.getBoolean("allow_download_stories")
-                    || model.action.instance !== OperaContextAction.SAVE().instance
-                ) return
+        ContextActionMenuModel.constructors.after(context, "allow_download_stories") {
+            val model = ContextActionMenuModel.wrap(it.thisObject)
+            if (model.action.instance !== OperaContextAction.SAVE().instance) return@after
 
-                val clickProxy = Proxy.newProxyInstance(
-                    context.classLoader,
-                    arrayOf(ContextClickHandler.getMappedClass()),
-                    StoryDownloadProxy(context)
-                )
-                model.onClick = ContextClickHandler.wrap(clickProxy)
-
-            }
-        })
+            val clickProxy = Proxy.newProxyInstance(
+                context.classLoader,
+                arrayOf(ContextClickHandler.getMappedClass()),
+                StoryDownloadProxy(context)
+            )
+            model.onClick = ContextClickHandler.wrap(clickProxy)
+        }
     }
 
     private class StoryDownloadProxy(private val context: FeatureContext) : InvocationHandler {
