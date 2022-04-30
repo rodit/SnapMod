@@ -284,10 +284,12 @@ class ChatMediaHandler {
 
 interface MessageDataModel {
 
-    [discard] String str0()
-    [discard] String str1()
-    [discard] String str2()
-    [discard] String str3()
+    String getArroyoMessageId()
+    String getSenderDisplayName()
+    String getConversationId()
+    String getSenderId()
+    String $getType()
+    String getSenderUsername()
 
     !MessageState getMessageState()
     !SnapPlaybackStatus getPlaybackStatus()
@@ -1387,5 +1389,31 @@ class ArroyoMessageListDataProvider {
 
     * enterConversation(!ChatContext, ...) {
         .string "NativeSessionWrapper:enterConversation";
+    }
+}
+
+[certain]
+class ExportItem {
+
+    String fileName;
+    Uri uri;
+
+    String $toString() {
+        .string "ExportItem(actualFileName=";
+        .string ", uri=";
+    }
+}
+
+[certain]
+class MediaExportControllerImpl {
+
+    void $<init>(...) {
+        .string "MediaExportControllerImpl";
+    }
+
+    Uri exportMedia(*, *, !ExportItem, ...) {
+        .string "mime_type";
+        .string "_display_name";
+        .string "_size";
     }
 }
