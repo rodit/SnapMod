@@ -11,6 +11,7 @@ object PathManager {
     const val DOWNLOAD_STORY = "story"
     const val DOWNLOAD_AUDIO_NOTE = "audio_note"
     const val DOWNLOAD_PROFILE = "profile"
+    const val DOWNLOAD_SNAP = "snap"
 
     private val PATTERN_PUBLIC_DIR = Pattern.compile("""\$(\w+)""")
     private val PATTERN_PARAMETER = Pattern.compile("%([A-Za-z]+)")
@@ -25,7 +26,8 @@ object PathManager {
     private val defaultPaths: MutableMap<String, String> = mutableMapOf(
         DOWNLOAD_STORY to "\$Movies/SnapMod/%u_story_%t",
         DOWNLOAD_AUDIO_NOTE to "\$Movies/SnapMod/%id_audio_%t",
-        DOWNLOAD_PROFILE to "\$Movies/SnapMod/%u_profile_%t"
+        DOWNLOAD_PROFILE to "\$Movies/SnapMod/%u_profile_%t",
+        DOWNLOAD_SNAP to "\$Movies/SnapMod/%u_snap_%t"
     )
 
     private fun appendDefaultParamsMap(paramsMap: Map<String, String>): Map<String, String> {
@@ -81,7 +83,7 @@ object PathManager {
         }
 
         defaultPaths[DOWNLOAD_STORY] = "\$Movies/SnapMod/%u_story_%t"
-        defaultPaths[DOWNLOAD_AUDIO_NOTE] = "\$Movies/SnapMod/%id_audio_%t"
+        defaultPaths[DOWNLOAD_AUDIO_NOTE] = "\$Movies/SnapMod/%u_audio_%t"
         defaultPaths[DOWNLOAD_PROFILE] = "\$Movies/SnapMod/%u_profile_%t"
     }
 }

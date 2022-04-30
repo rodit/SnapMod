@@ -47,6 +47,10 @@
     <string name="download_path_story_title">Story Download Path</string>
     <string name="download_path_audio_note_title">Audio Note Download Path</string>
     <string name="download_path_profile_title">Public Profile Picture Download Path</string>
+    <string name="enable_custom_snap_download_path_title">Enable Custom Snap Download Path</string>
+    <string name="enable_custom_snap_download_path_description">Snaps will be downloaded to the custom path defined below instead of the default \'Internal Storage/Snapchat\' path.</string>
+    <string name="download_path_snap_title">Set Snap Download Path</string>
+    <string name="download_path_snap_description">Tap to set the override snap download path.</string>
     <string name="use_android_download_manager_title">Use Android Download Manager</string>
 
     <string name="location_share_override_title">🧪 Location Sharing Override</string>

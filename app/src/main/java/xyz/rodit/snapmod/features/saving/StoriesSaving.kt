@@ -9,13 +9,13 @@ import xyz.rodit.snapmod.mappings.OperaContextAction
 import xyz.rodit.snapmod.mappings.ParamsMap
 import xyz.rodit.snapmod.util.PathManager
 import xyz.rodit.snapmod.util.after
+import xyz.rodit.snapmod.util.download
 import xyz.rodit.xposed.client.http.StreamProvider
 import xyz.rodit.xposed.client.http.streams.FileProxyStreamProvider
 import java.lang.reflect.InvocationHandler
 import java.lang.reflect.Method
 import java.lang.reflect.Proxy
 import java.net.URL
-import java.util.*
 
 class StoriesSaving(context: FeatureContext) : Feature(context) {
 
@@ -52,10 +52,8 @@ class StoriesSaving(context: FeatureContext) : Feature(context) {
                     val enc = media.info.encryption
                     if (enc.isNotNull) {
                         stream = enc.decryptStream(stream)
-                        XposedBridge.log("Stream was encrypted.")
                     }
 
-                    XposedBridge.log("Media stream opened.")
                     return@FileProxyStreamProvider stream
                 } catch (e: Exception) {
                     XposedBridge.log("Error opening stream.")
@@ -63,22 +61,14 @@ class StoriesSaving(context: FeatureContext) : Feature(context) {
                 }
                 return@FileProxyStreamProvider null
             }
-            val uuid = UUID.randomUUID().toString()
-            context.server.mapStream(uuid, provider)
-            val dest = PathManager.getUri(
-                context.config,
+
+            context.download(
                 PathManager.DOWNLOAD_STORY,
                 mapOf("u" to media.username),
-                media.extension
+                media.extension,
+                provider,
+                media.username + "'s Story"
             )
-            context.files.download(
-                context.config.getBoolean("use_android_download_manager", true),
-                context.server.root + "/" + uuid,
-                dest,
-                media.username + "'s Story",
-                null
-            )
-
             return null
         }
     }

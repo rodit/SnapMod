@@ -224,6 +224,19 @@
             app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
+            app:key="enable_custom_snap_download_path"
+            app:title="@string/enable_custom_snap_download_path_title"
+            app:summary="@string/enable_custom_snap_download_path_description"
+            app:iconSpaceReserved="false" />
+
+        <EditTextPreference
+            app:key="download_path_snap"
+            app:title="@string/download_path_snap_title"
+            app:summary="@string/download_path_snap_description"
+            app:defaultValue="$Movies/SnapMod/%u_snap_%t"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
             app:key="use_android_download_manager"
             app:title="@string/use_android_download_manager_title"
             app:summary="@string/use_android_download_manager_description"
