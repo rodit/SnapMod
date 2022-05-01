@@ -74,16 +74,11 @@ object PathManager {
     }
 
     init {
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             publicDirs["Recordings"] =
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_RECORDINGS).path
             publicDirs["Screenshots"] =
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_SCREENSHOTS).path
         }
-
-        defaultPaths[DOWNLOAD_STORY] = "\$Movies/SnapMod/%u_story_%t"
-        defaultPaths[DOWNLOAD_AUDIO_NOTE] = "\$Movies/SnapMod/%u_audio_%t"
-        defaultPaths[DOWNLOAD_PROFILE] = "\$Movies/SnapMod/%u_profile_%t"
     }
 }
