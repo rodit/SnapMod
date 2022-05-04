@@ -6,9 +6,12 @@ import android.graphics.Matrix;
 import android.net.Uri;
 
 import com.google.gson.annotations.SerializedName;
+import com.google.protobuf.nano.MessageNano;
 
+import com.snap.chat_reactions.ChatReactionsBelowMessageViewModel;
 import com.snap.imageloading.view.SnapImageView;
 import com.snapchat.client.messaging.Conversation;
+import com.snapchat.client.messaging.FetchConversationWithMessagesCallback;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -49,6 +52,7 @@ class ConversationManager expects com.snapchat.client.messaging.ConversationMana
     void $enterConversation(...)
     void $exitConversation(...)
     void $sendTypingNotification(...)
+    void $fetchConversationWithMessages(...)
 }
 
 [certain]
@@ -136,8 +140,24 @@ class NetworkApi expects com.snapchat.client.network_api.NetworkApi$CppProxy {
 }
 
 [certain]
-class ChatReactionsBelowMessageViewModel expects com.snap.chat_reactions.ChatReactionsBelowMessageViewModel {
+class MessageContent expects com.snapchat.client.messaging.MessageContent {
 
+    byte[] $getContent()
+    !ContentType $getContentType()
+}
+
+[certain]
+class Message expects com.snapchat.client.messaging.Message {
+
+    !MessageContent $getMessageContent()
+    !UUID $getSenderId()
+}
+
+[certain]
+class Conversation expects com.snapchat.client.messaging.Conversation {
+
+    !UUID $getConversationId()
+    String $getTitle()
 }
 
 [certain]
@@ -305,7 +325,7 @@ class ChatModelBase {
     boolean boolField;
     [discard] boolean b0;
     #MediaDownloadStatus status;
-    !ChatReactionsBelowMessageViewModel reactionsViewModel;
+    ChatReactionsBelowMessageViewModel reactionsViewModel;
 
     String $toString() {
         .string contains "ChatViewModelV1";
@@ -415,7 +435,7 @@ class ChatModelSavedSnap {
     [discard] Uri u1;
     !LiveSnapMedia media;
 
-    void $<init>(Context, !MessageDataModel, String, Map, boolean, !ChatReactionsBelowMessageViewModel, boolean, int, int, !LiveSnapMedia, String, ...) {
+    void $<init>(Context, !MessageDataModel, String, Map, boolean, ChatReactionsBelowMessageViewModel, boolean, int, int, !LiveSnapMedia, String, ...) {
         .field !ChatLayouts->!SAVED_SNAP;
         .method TimeUnit->toMillis;
         .method Double->isNaN;
@@ -1169,6 +1189,43 @@ class ActionMenuActionModel {
 }
 
 [certain]
+enum ActionMenuOptionItemType {
+
+    [late] static this OPTION_ITEM;
+    [late] static this OPTION_ITEM_TOGGLE;
+    [late] static this SIMPLE_OPTION_ITEM;
+    [late] static this SPINNER_OPTION_ITEM;
+    [late] static this SUBTITLE_OPTION_ITEM;
+    [late] static this FEED_OPTION_ITEM;
+
+    static void $<clinit>() {
+        [strict]
+        .string "OPTION_ITEM", bind field OPTION_ITEM next reference;
+        [strict]
+        .string "OPTION_ITEM_TOGGLE", bind field OPTION_ITEM_TOGGLE next reference;
+        [strict]
+        .string "SIMPLE_OPTION_ITEM", bind field SIMPLE_OPTION_ITEM next reference;
+        [strict]
+        .string "SPINNER_OPTION_ITEM", bind field SPINNER_OPTION_ITEM next reference;
+        [strict]
+        .string "SUBTITLE_OPTION_ITEM", bind field SUBTITLE_OPTION_ITEM next reference;
+        [strict]
+        .string "FEED_OPTION_ITEM", bind field FEED_OPTION_ITEM next reference;
+    }
+}
+
+[certain]
+class ActionMenuOptionItemViewModel {
+
+    void $<init>(!ActionMenuOptionTextViewModel, !ActionMenuActionModel, ...)
+
+    String $toString() {
+        .string contains "ActionMenuOptionItemViewModel";
+        .string contains "actionModel";
+    }
+}
+
+[certain]
 class ActionMenuOptionToggleItemViewModel {
 
     void $<init>(!ActionMenuOptionTextViewModel, !ActionMenuActionModel, boolean)
@@ -1395,4 +1452,50 @@ class MediaExportControllerImpl {
         .string "_display_name";
         .string "_size";
     }
+}
+
+[certain]
+class MessageNanoBase extends MessageNano {
+
+    [discard] * m0(...) {
+        .string "Tried to getExtension with a differernt Extension.";
+    }
+}
+
+[certain]
+class NanoMessageContent extends !MessageNanoBase {
+
+    static this parse(byte[])
+
+    #NanoChatMessageContent getChatMessageContent() {
+        .type !NanoChatMessageContent;
+    }
+}
+
+[late, exact]
+class NanoChatMessageContent extends !MessageNanoBase {
+
+    [discard] * a0;
+    int typeNum;
+    String content;
+
+    void $<init>(...)
+
+    [discard] int $computeSerializedSize()
+    [discard] MessageNano $mergeFrom(*)
+    [discard] void $writeTo(*)
+}
+
+[certain]
+class DefaultFetchConversationCallback extends FetchConversationWithMessagesCallback {
+
+    #ConversationDummyInterface dummy;
+    !UUID conversationId;
+    [discard] boolean b0;
+
+    void $<init>(...) {
+        .string "NativeSessionWrapper:FetchConversationWithMessages";
+    }
+
+    void $onFetchConversationWithMessagesComplete(...)
 }

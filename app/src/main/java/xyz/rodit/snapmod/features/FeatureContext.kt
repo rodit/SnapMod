@@ -15,7 +15,8 @@ class FeatureContext(
     val classLoader: ClassLoader,
     val config: ConfigurationClient,
     val files: FileClient,
-    val server: StreamServer
+    val server: StreamServer,
+    val instances: InstanceManager
 ) {
     val pinned: ConversationManager = ConversationManager(appContext.filesDir, PINNED_CONVERSATIONS_FILE)
     val stealth: ConversationManager = ConversationManager(appContext.filesDir, STEALTH_CONVERSATIONS_FILE)

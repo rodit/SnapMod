@@ -20,6 +20,7 @@
     <string name="save_any_title">Save Any Message</string>
     <string name="dont_release_messages_title">🧪 Don\'t Release Messages</string>
     <string name="disable_bitmojis_title">Disable Bitmojis</string>
+    <string name="preview_messages_count_title">Message Preview Limit</string>
     <string name="enable_friend_override_title">🧪 Override Add Friend Method</string>
     <string name="friend_override_value_title">🧪 Add Friend Override Value</string>
     <string name="hide_friends_title">Hide Friends</string>
@@ -74,6 +75,7 @@
     <string name="save_any_description">Allows any message type to be saved. This is sometimes required for saving snaps and audio notes.</string>
     <string name="dont_release_description">Prevents messages from being \'released\'. This should prevent them from being deleted, although I am unsure.</string>
     <string name="disable_bitmojis_description">Disables all Bitmojis throughout the app.</string>
+    <string name="preview_messages_count_description">The maximum number of messages to show in the conversation preview.</string>
     <string name="hide_friends_description">Hides the given list of friends from your friends and best friends lists.</string>
     <string name="allow_pin_chats_description">Allows chats to be pinned like on iOS.</string>
     <string name="block_ads_description">Removes all ads between stories/discover videos.</string>

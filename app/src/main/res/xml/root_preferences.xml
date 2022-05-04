@@ -142,6 +142,13 @@
             app:title="@string/disable_bitmojis_title"
             app:summary="@string/disable_bitmojis_description"
             app:iconSpaceReserved="false" />
+
+        <EditTextPreference
+            app:key="preview_messages_count"
+            app:title="@string/preview_messages_count_title"
+            app:summary="@string/preview_messages_count_description"
+            app:iconSpaceReserved="false"
+            app:defaultValue="5" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/snaps_header"

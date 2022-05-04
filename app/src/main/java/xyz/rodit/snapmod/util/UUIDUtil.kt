@@ -15,4 +15,16 @@ object UUIDUtil {
         val low = bb.long
         return java.util.UUID(high, low).toString()
     }
+
+    fun toSnap(uuid: String): UUID {
+        return UUID(arrayOf(toByteArray(uuid)))
+    }
+
+    fun toByteArray(uuidStr: String): ByteArray {
+        val uuid = java.util.UUID.fromString(uuidStr)
+        val bb = ByteBuffer.wrap(ByteArray(16))
+        bb.putLong(uuid.mostSignificantBits)
+        bb.putLong(uuid.leastSignificantBits)
+        return bb.array()
+    }
 }

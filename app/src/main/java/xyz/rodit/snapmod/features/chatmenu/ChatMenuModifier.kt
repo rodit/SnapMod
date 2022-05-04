@@ -19,6 +19,7 @@ class ChatMenuModifier(context: FeatureContext) : Feature(context) {
     override fun init() {
         registerPlugin(PinOption(context))
         registerPlugin(StealthOption(context))
+        registerPlugin(PreviewOption(context))
     }
 
     private fun registerPlugin(plugin: MenuPlugin) {
@@ -51,5 +52,7 @@ class ChatMenuModifier(context: FeatureContext) : Feature(context) {
                 }
             }
         }
+
+        plugins.values.forEach(MenuPlugin::performHooks)
     }
 }

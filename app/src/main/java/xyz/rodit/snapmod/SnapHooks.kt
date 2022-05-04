@@ -1,6 +1,7 @@
 package xyz.rodit.snapmod
 
 import android.app.Activity
+import android.app.Application
 import android.app.admin.DevicePolicyManager
 import android.content.Context
 import android.content.Intent
@@ -9,6 +10,7 @@ import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedBridge
 import xyz.rodit.snapmod.features.FeatureContext
 import xyz.rodit.snapmod.features.FeatureManager
+import xyz.rodit.snapmod.features.InstanceManager
 import xyz.rodit.snapmod.mappings.MainActivity
 import xyz.rodit.xposed.HooksBase
 import xyz.rodit.xposed.mappings.LoadScheme
@@ -81,7 +83,20 @@ class SnapHooks : HooksBase(
             }
         })
 
-        featureContext = FeatureContext(appContext, lpparam.classLoader, config, files, server)
+        featureContext =
+            FeatureContext(
+                appContext,
+                lpparam.classLoader,
+                config,
+                files,
+                server,
+                InstanceManager()
+            )
+
+        (appContext as Application).registerActivityLifecycleCallbacks(
+            FeatureContextUpdater(featureContext!!)
+        )
+
         features = FeatureManager(featureContext!!).apply {
             load()
             init()

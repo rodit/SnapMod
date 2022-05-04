@@ -10,8 +10,6 @@ class SnapOverrides(context: FeatureContext) : Feature(context) {
     override fun performHooks() {
         // Hook message sending to convert gallery to live snap.
         MessageSenderCrossroad.apply.before(context, "override_snap") {
-            if (!context.config.getBoolean("override_snap")) return@before
-
             val self = MessageSenderCrossroad.wrap(it.thisObject)
             val container = self.payload.media
 
