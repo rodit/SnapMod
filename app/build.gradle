@@ -30,7 +30,7 @@ android {
 
 task versionInfo {
     doLast {
-        def build = 84600
+        def build = 84602
         def infoFile = new File('app/build/version.json')
         infoFile.getParentFile().mkdirs()
         infoFile.delete()

@@ -423,27 +423,6 @@ class ChatModelSavedSnap {
     }
 }
 
-
-[certain, discard]
-class MixedServiceProvider {
-
-    void $<init>(...) {
-        .string "MushroomSerengetiUserData";
-    }
-
-    void $<init>(...) {
-        .string "AutoCaptionMultiSegmentUpdateHandler";
-    }
-}
-
-[certain, discard]
-class SendToSponsorManagerImpl {
-
-    void $<init>(...) {
-        .string "SendToSponsorManagerImpl";
-    }
-}
-
 class ChatModelAudioNote extends !ChatModelBase {
 
     [discard] java.lang.String s0;
@@ -1050,18 +1029,6 @@ class FriendListener {
 }
 
 [certain]
-class ProfileMyFriendsSection {
-
-    [discard] * m0(...) {
-        .string "ProfileMyFriendsSection";
-    }
-
-    List filter(List, String) {
-        .string "Can\'t filter the friends list on the UI thread.";
-    }
-}
-
-[certain]
 class DisplayInfoContainer {
 
     [late] String term;
@@ -1069,6 +1036,18 @@ class DisplayInfoContainer {
     String $toString() {
         [strict]
         .string "DisplayInfoContainer(term=", bind field term next reference;
+    }
+}
+
+[certain]
+class ProfileMyFriendsSection {
+
+    [discard] * m0(...) {
+        .string "ProfileMyFriendsSection";
+    }
+
+    List filter(List, String) {
+        .type !DisplayInfoContainer;
     }
 }
 
