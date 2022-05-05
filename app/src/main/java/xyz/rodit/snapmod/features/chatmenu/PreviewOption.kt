@@ -6,8 +6,9 @@ import xyz.rodit.snapmod.createDummyProxy
 import xyz.rodit.snapmod.features.FeatureContext
 import xyz.rodit.snapmod.isDummyProxy
 import xyz.rodit.snapmod.mappings.*
-import xyz.rodit.snapmod.util.UUIDUtil
 import xyz.rodit.snapmod.util.before
+import xyz.rodit.snapmod.util.toSnapUUID
+import xyz.rodit.snapmod.util.toUUIDString
 import java.lang.Integer.min
 
 class PreviewOption(context: FeatureContext) :
@@ -20,7 +21,7 @@ class PreviewOption(context: FeatureContext) :
     override fun handleEvent(data: String?) {
         if (data == null) return
 
-        val uuid = UUIDUtil.toSnap(data)
+        val uuid = data.toSnapUUID()
         val proxy =
             ConversationDummyInterface.wrap(
                 ConversationDummyInterface.getMappedClass().createDummyProxy(context.classLoader)
@@ -37,26 +38,43 @@ class PreviewOption(context: FeatureContext) :
             if (!DefaultFetchConversationCallback.wrap(it.thisObject).dummy.isDummyProxy) return@before
 
             val conversation = Conversation.wrap(it.args[0])
+
+            val userIds = conversation.participants.map(Participant::wrap)
+                .map { p -> (p.participantId.id as ByteArray).toUUIDString() }
+            val friendData = context.instances.friendsRepository.selectFriendsByUserIds(userIds)
+            val userMap = friendData.map(SelectFriendsByUserIds::wrap).associateBy { u -> u.userId }
+
             val messageList = it.args[1] as List<*>
-            val senderToNumberMap = mutableMapOf<String, Int>()
-            val numMessages =
-                min(context.config.getInt("preview_messages_count", 5), messageList.size)
-            val previewText = StringBuilder("Last ").append(numMessages).append(" messages:")
-            messageList.takeLast(numMessages)
-                .map(Message::wrap).forEach { m ->
-                    run {
-                        val uuidString = UUIDUtil.fromSnap(m.senderId)
-                        senderToNumberMap.putIfAbsent(uuidString, senderToNumberMap.size)
-                        previewText.append('\n').append(senderToNumberMap[uuidString]).append(": ")
-                        if (m.messageContent.contentType.instance == ContentType.CHAT().instance) {
-                            val chatMessage =
-                                NanoMessageContent.parse(m.messageContent.content).chatMessageContent.content
-                            previewText.append(chatMessage)
-                        } else {
-                            previewText.append(m.messageContent.contentType.instance)
+            val previewText = StringBuilder()
+            if (messageList.isEmpty()) previewText.append("No messages available.")
+            else {
+                val numMessages =
+                    min(context.config.getInt("preview_messages_count", 5), messageList.size)
+                previewText.append("Last ").append(numMessages).append(" messages:")
+                messageList.takeLast(numMessages)
+                    .map(Message::wrap).forEach { m ->
+                        run {
+                            val uuidString = m.senderId.toUUIDString()
+                            val displayName = userMap[uuidString]?.displayName ?: "Unknown"
+                            previewText.append('\n').append(displayName).append(": ")
+                            if (m.messageContent.contentType.instance == ContentType.CHAT().instance) {
+                                val chatMessage =
+                                    NanoMessageContent.parse(m.messageContent.content).chatMessageContent.content
+                                previewText.append(chatMessage)
+                            } else {
+                                previewText.append(m.messageContent.contentType.instance)
+                            }
                         }
                     }
-                }
+            }
+
+            userMap.values.find { f -> f.streakExpiration ?: 0L > 0L }?.let { f ->
+                val hourDiff =
+                    (f.streakExpiration - System.currentTimeMillis()).toDouble() / 3600000.0
+                previewText.append("\n\nStreak Expires in ")
+                    .append(String.format("%.1f", hourDiff))
+                    .append(" hours")
+            }
 
             context.activity?.runOnUiThread {
                 AlertDialog.Builder(context.activity)

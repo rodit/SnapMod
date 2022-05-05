@@ -154,10 +154,18 @@ class Message expects com.snapchat.client.messaging.Message {
 }
 
 [certain]
+class Participant expects com.snapchat.client.messaging.Participant {
+
+    int $getColor()
+    !UUID $getParticipantId()
+}
+
+[certain]
 class Conversation expects com.snapchat.client.messaging.Conversation {
 
     !UUID $getConversationId()
     String $getTitle()
+    ArrayList $getParticipants()
 }
 
 [certain]
@@ -1498,4 +1506,42 @@ class DefaultFetchConversationCallback extends FetchConversationWithMessagesCall
     }
 
     void $onFetchConversationWithMessagesComplete(...)
+}
+
+[certain, discard]
+class FriendRepositoryAction {
+
+    String $toString() {
+        .string "Friend.sq:selectFriendsByUserIds";
+    }
+}
+
+[certain]
+class FriendsRepository {
+
+    void $<init>(...) {
+        .string "FriendRepository";
+    }
+
+    List selectFriendsByUserIds(List) {
+        .new !FriendRepositoryAction;
+    }
+}
+
+[certain]
+class SelectFriendsByUserIds {
+
+    [late] String userId;
+    [late] String displayName;
+    [late] Integer streakLength;
+    [late] Long streakExpiration;
+
+    String $toString() {
+        .string contains "SelectFriendsByUserIds";
+        [strict]
+        .string contains " userId:", bind field userId next reference;
+        .string contains " displayName:", bind field displayName next reference;
+        .string contains " streakLength:", bind field streakLength next reference;
+        .string contains " streakExpiration:", bind field streakExpiration next reference;
+    }
 }

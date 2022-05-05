@@ -4,7 +4,7 @@ import de.robv.android.xposed.XC_MethodHook.MethodHookParam
 import xyz.rodit.snapmod.features.FeatureContext
 import xyz.rodit.snapmod.mappings.Callback
 import xyz.rodit.snapmod.mappings.ConversationManager
-import xyz.rodit.snapmod.util.UUIDUtil
+import xyz.rodit.snapmod.util.toUUIDString
 
 class PreventTypingNotifications(context: FeatureContext?) : StealthFeature(context!!) {
 
@@ -14,7 +14,7 @@ class PreventTypingNotifications(context: FeatureContext?) : StealthFeature(cont
         putFilters(
             ConversationManager.sendTypingNotification,
             { null },
-            { UUIDUtil.fromSnap(it.args[0]) },
+            { it.args[0].toUUIDString() },
             NullFilter(context, "hide_typing")
         )
     }

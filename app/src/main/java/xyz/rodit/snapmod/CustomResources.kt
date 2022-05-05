@@ -30,6 +30,6 @@ object CustomResources {
 
     init {
         putString(string.menu_option_stealth_mode, "Stealth Mode")
-        putString(string.menu_option_preview, "Preview Messages")
+        putString(string.menu_option_preview, "More Information")
     }
 }

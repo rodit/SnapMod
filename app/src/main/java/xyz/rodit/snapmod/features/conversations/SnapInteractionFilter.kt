@@ -3,7 +3,7 @@ package xyz.rodit.snapmod.features.conversations
 import xyz.rodit.snapmod.features.FeatureContext
 import xyz.rodit.snapmod.mappings.SnapInteractionType
 import xyz.rodit.snapmod.mappings.SnapManager
-import xyz.rodit.snapmod.util.UUIDUtil
+import xyz.rodit.snapmod.util.toUUIDString
 
 class SnapInteractionFilter(context: FeatureContext) : StealthFeature(context) {
 
@@ -13,7 +13,7 @@ class SnapInteractionFilter(context: FeatureContext) : StealthFeature(context) {
         putFilters(
             SnapManager.onSnapInteraction,
             { SnapInteractionType.wrap(it.args[0]) },
-            { UUIDUtil.fromSnap(it.args[1]) },
+            { it.args[1].toUUIDString() },
             ObjectFilter(
                 context,
                 "hide_snap_views",
