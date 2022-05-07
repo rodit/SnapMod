@@ -12,6 +12,7 @@ import com.snap.chat_reactions.ChatReactionsBelowMessageViewModel;
 import com.snap.imageloading.view.SnapImageView;
 import com.snapchat.client.messaging.Conversation;
 import com.snapchat.client.messaging.FetchConversationWithMessagesCallback;
+import com.snapchat.client.messaging.FetchMessageCallback;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -53,6 +54,7 @@ class ConversationManager expects com.snapchat.client.messaging.ConversationMana
     void $exitConversation(...)
     void $sendTypingNotification(...)
     void $fetchConversationWithMessages(...)
+    void $fetchMessage(...)
 }
 
 [certain]
@@ -884,6 +886,16 @@ class FriendStoryKeys {
     }
 }
 
+class MessageStoryKeys {
+
+    [late] !MapKey messageId;
+
+    static void $<clinit>() {
+        [strict]
+        .string "MESSAGE_ID", bind field messageId next reference;
+    }
+}
+
 [certain]
 class PlayableStorySnap {
 
@@ -1508,6 +1520,17 @@ class DefaultFetchConversationCallback extends FetchConversationWithMessagesCall
     void $onFetchConversationWithMessagesComplete(...)
 }
 
+[certain]
+class DefaultFetchMessageCallback extends FetchMessageCallback {
+
+    [discard] int i0;
+    #MessageDummyInterface dummy;
+
+    void $<init>(...)
+
+    void $onFetchMessageComplete(...)
+}
+
 [certain, discard]
 class FriendRepositoryAction {
 
@@ -1528,9 +1551,9 @@ class FriendsRepository {
     }
 }
 
-[certain]
 class SelectFriendsByUserIds {
 
+    !SnapUsername username;
     [late] String userId;
     [late] String displayName;
     [late] Integer streakLength;

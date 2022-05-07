@@ -2,6 +2,7 @@ package xyz.rodit.snapmod.features
 
 import android.app.Activity
 import android.content.Context
+import xyz.rodit.snapmod.features.callbacks.CallbackManager
 import xyz.rodit.snapmod.util.ConversationManager
 import xyz.rodit.xposed.client.ConfigurationClient
 import xyz.rodit.xposed.client.FileClient
@@ -18,6 +19,7 @@ class FeatureContext(
     val server: StreamServer,
     val instances: InstanceManager
 ) {
+    val callbacks: CallbackManager = CallbackManager()
     val pinned: ConversationManager = ConversationManager(appContext.filesDir, PINNED_CONVERSATIONS_FILE)
     val stealth: ConversationManager = ConversationManager(appContext.filesDir, STEALTH_CONVERSATIONS_FILE)
 

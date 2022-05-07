@@ -3,10 +3,7 @@ package xyz.rodit.snapmod.features.saving
 import de.robv.android.xposed.XposedBridge
 import xyz.rodit.snapmod.features.Feature
 import xyz.rodit.snapmod.features.FeatureContext
-import xyz.rodit.snapmod.mappings.ContextActionMenuModel
-import xyz.rodit.snapmod.mappings.ContextClickHandler
-import xyz.rodit.snapmod.mappings.OperaContextAction
-import xyz.rodit.snapmod.mappings.ParamsMap
+import xyz.rodit.snapmod.mappings.*
 import xyz.rodit.snapmod.util.PathManager
 import xyz.rodit.snapmod.util.after
 import xyz.rodit.snapmod.util.download
@@ -32,6 +29,11 @@ class StoriesSaving(context: FeatureContext) : Feature(context) {
             )
             model.onClick = ContextClickHandler.wrap(clickProxy)
         }
+
+        context.callbacks.hook(
+            ConversationManager::class,
+            DefaultFetchMessageCallback.onFetchMessageComplete
+        ) { DefaultFetchMessageCallback.wrap(it).dummy }
     }
 
     private class StoryDownloadProxy(private val context: FeatureContext) : InvocationHandler {
@@ -40,10 +42,15 @@ class StoriesSaving(context: FeatureContext) : Feature(context) {
             if (method.name != ContextClickHandler.invoke.dexName) return null
 
             val map = ParamsMap.wrap(args!![0])
-            val media = StoryHelper.getMediaInfo(map)
+            StoryHelper.getMediaInfo(context, map, this::downloadStoryMedia)
+
+            return null
+        }
+
+        private fun downloadStoryMedia(media: StoryHelper.StoryMedia?) {
             if (media == null || media.info.isNull) {
                 XposedBridge.log("Null media info for story download.")
-                return null
+                return
             }
 
             val provider: StreamProvider = FileProxyStreamProvider(context.appContext) {
@@ -69,7 +76,6 @@ class StoriesSaving(context: FeatureContext) : Feature(context) {
                 provider,
                 media.username + "'s Story"
             )
-            return null
         }
     }
 }

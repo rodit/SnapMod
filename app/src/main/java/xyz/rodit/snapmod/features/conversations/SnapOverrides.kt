@@ -17,36 +17,36 @@ class SnapOverrides(context: FeatureContext) : Feature(context) {
 
             val content = SerializableContent.wrap(container.instance)
             val message = content.message
-            if (GallerySnapMedia.isInstance(message.instance)) {
-                val id = GallerySnapMedia.wrap(message.instance).media.id
-                val snap = LiveSnapMedia()
-                val timer = context.config.getString("override_snap_timer", "0").toDouble()
-                snap.mediaId = id
-                if (context.config.getBoolean("enable_snap_type_override")) {
-                    val overrideType = context.config.getString("snap_type_override", "IMAGE")
-                    snap.mediaType = MediaType.valueOf(overrideType)
-                } else {
-                    snap.mediaType = MediaType.IMAGE()
-                }
+            if (!GallerySnapMedia.isInstance(message.instance)) return@before
 
-                val paramPackage = ParameterPackage(
-                    timer == 0.0,
-                    timer,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    false
-                )
-                snap.parameterPackage = paramPackage
-                content.message = MediaBaseBase.wrap(snap.instance)
+            val id = GallerySnapMedia.wrap(message.instance).media.id
+            val snap = LiveSnapMedia()
+            val timer = context.config.getString("override_snap_timer", "0").toDouble()
+            snap.mediaId = id
+            if (context.config.getBoolean("enable_snap_type_override")) {
+                val overrideType = context.config.getString("snap_type_override", "IMAGE")
+                snap.mediaType = MediaType.valueOf(overrideType)
+            } else {
+                snap.mediaType = MediaType.IMAGE()
             }
+
+            val paramPackage = ParameterPackage(
+                timer == 0.0,
+                timer,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                false
+            )
+            snap.parameterPackage = paramPackage
+            content.message = MediaBaseBase.wrap(snap.instance)
         }
     }
 }
