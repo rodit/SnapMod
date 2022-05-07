@@ -42,12 +42,12 @@ class StoriesSaving(context: FeatureContext) : Feature(context) {
             if (method.name != ContextClickHandler.invoke.dexName) return null
 
             val map = ParamsMap.wrap(args!![0])
-            StoryHelper.getMediaInfo(context, map, this::downloadStoryMedia)
+            getMediaInfo(context, map, this::downloadStoryMedia)
 
             return null
         }
 
-        private fun downloadStoryMedia(media: StoryHelper.StoryMedia?) {
+        private fun downloadStoryMedia(media: StoryMedia?) {
             if (media == null || media.info.isNull) {
                 XposedBridge.log("Null media info for story download.")
                 return
