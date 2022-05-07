@@ -2,7 +2,7 @@ package xyz.rodit.snapmod.features.conversations
 
 import xyz.rodit.snapmod.features.FeatureContext
 import xyz.rodit.snapmod.mappings.ConversationManager
-import xyz.rodit.snapmod.util.UUIDUtil
+import xyz.rodit.snapmod.util.toUUIDString
 
 class PreventReadReceipts(context: FeatureContext) : StealthFeature(context) {
 
@@ -12,7 +12,7 @@ class PreventReadReceipts(context: FeatureContext) : StealthFeature(context) {
         putFilters(
             ConversationManager.displayedMessages,
             { null },
-            { UUIDUtil.fromSnap(it.args[0]) },
+            { it.args[0].toUUIDString() },
             NullFilter(context, "hide_read")
         )
     }

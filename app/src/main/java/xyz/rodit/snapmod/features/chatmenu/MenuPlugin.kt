@@ -10,6 +10,10 @@ abstract class MenuPlugin(context: FeatureContext, val name: String) : Contextua
     abstract fun createModel(key: String?): Any
 
     abstract fun handleEvent(data: String?)
+
+    open fun performHooks() {
+
+    }
 }
 
 fun MenuPlugin.createEventData(key: String): String {

@@ -2,7 +2,7 @@ package xyz.rodit.snapmod.features.conversations
 
 import xyz.rodit.snapmod.features.FeatureContext
 import xyz.rodit.snapmod.mappings.*
-import xyz.rodit.snapmod.util.UUIDUtil
+import xyz.rodit.snapmod.util.toUUIDString
 
 class MessageInterceptor(context: FeatureContext) : StealthFeature(context) {
 
@@ -12,7 +12,7 @@ class MessageInterceptor(context: FeatureContext) : StealthFeature(context) {
         putFilters(
             ConversationManager.sendMessageWithContent,
             { LocalMessageContent.wrap(it.args[1]).contentType },
-            { UUIDUtil.fromSnap(MessageDestinations.wrap(it.args[0]).conversations[0]) },
+            { MessageDestinations.wrap(it.args[0]).conversations[0].toUUIDString() },
             ObjectFilter(
                 context,
                 "hide_screenshot",
@@ -25,7 +25,7 @@ class MessageInterceptor(context: FeatureContext) : StealthFeature(context) {
         putFilters(
             ConversationManager.updateMessage,
             { MessageUpdate.wrap(it.args[2]) },
-            { UUIDUtil.fromSnap(it.args[0]) },
+            { it.args[0].toUUIDString() },
             ObjectFilter(context, "hide_read", MessageUpdate.READ()),
             ObjectFilter(context, "hide_save", MessageUpdate.SAVE(), MessageUpdate.UNSAVE()),
             ObjectFilter(
