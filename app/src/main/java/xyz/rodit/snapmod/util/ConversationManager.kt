@@ -1,6 +1,6 @@
 package xyz.rodit.snapmod.util
 
-import de.robv.android.xposed.XposedBridge
+import xyz.rodit.snapmod.logging.log
 import java.io.File
 import java.io.IOException
 
@@ -55,8 +55,7 @@ class ConversationManager(rootDir: File, fileName: String) {
 
             lastLoaded = System.currentTimeMillis()
         } catch (e: IOException) {
-            XposedBridge.log("Error loading conversation data.")
-            XposedBridge.log(e)
+            log.error("Error loading conversation data.", e)
         }
     }
 
@@ -65,8 +64,7 @@ class ConversationManager(rootDir: File, fileName: String) {
             file.writeText(conversations.joinToString("\n"))
             lastLoaded = System.currentTimeMillis()
         } catch (e: IOException) {
-            XposedBridge.log("Error saving conversation data.")
-            XposedBridge.log(e)
+            log.error("Error saving conversation data.", e)
         }
     }
 }

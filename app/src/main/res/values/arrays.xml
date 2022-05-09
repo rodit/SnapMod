@@ -41,6 +41,18 @@
         <item>for_you</item>
     </string-array>
 
+    <string-array name="log_levels">
+        <item>Warnings</item>
+        <item>Errors</item>
+        <item>Debug</item>
+    </string-array>
+
+    <string-array name="log_levels_values">
+        <item>1</item>
+        <item>2</item>
+        <item>4</item>
+    </string-array>
+
     <string-array name="sc_scope">
         <item>com.snapchat.android</item>
     </string-array>

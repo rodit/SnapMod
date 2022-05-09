@@ -109,4 +109,6 @@
     <string name="donations_title">Donations</string>
     <string name="donations_summary">If you would like to support SnapMod, you can donate by tapping here.</string>
     <string name="donations_link">https://github.com/rodit/SnapMod#donations</string>
+    <string name="global_log_level_title">Log Level</string>
+    <string name="global_log_level_description">Enable all log levels if you are experiencing problems. Include LSPosed logs in any issues on Github.</string>
 </resources>

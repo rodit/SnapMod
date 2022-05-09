@@ -1,8 +1,8 @@
 package xyz.rodit.snapmod.features.saving
 
-import de.robv.android.xposed.XposedBridge
 import xyz.rodit.snapmod.features.Feature
 import xyz.rodit.snapmod.features.FeatureContext
+import xyz.rodit.snapmod.logging.log
 import xyz.rodit.snapmod.mappings.*
 import xyz.rodit.snapmod.util.PathManager
 import xyz.rodit.snapmod.util.after
@@ -31,7 +31,7 @@ class StoriesSaving(context: FeatureContext) : Feature(context) {
         }
 
         context.callbacks.hook(
-            ConversationManager::class,
+            DefaultFetchMessageCallback::class,
             DefaultFetchMessageCallback.onFetchMessageComplete
         ) { DefaultFetchMessageCallback.wrap(it).dummy }
     }
@@ -48,10 +48,7 @@ class StoriesSaving(context: FeatureContext) : Feature(context) {
         }
 
         private fun downloadStoryMedia(media: StoryMedia?) {
-            if (media == null || media.info.isNull) {
-                XposedBridge.log("Null media info for story download.")
-                return
-            }
+            if (media == null || media.info.isNull) return
 
             val provider: StreamProvider = FileProxyStreamProvider(context.appContext) {
                 try {
@@ -63,8 +60,7 @@ class StoriesSaving(context: FeatureContext) : Feature(context) {
 
                     return@FileProxyStreamProvider stream
                 } catch (e: Exception) {
-                    XposedBridge.log("Error opening stream.")
-                    XposedBridge.log(e)
+                    log.error("Error opening story media stream.", e)
                 }
                 return@FileProxyStreamProvider null
             }

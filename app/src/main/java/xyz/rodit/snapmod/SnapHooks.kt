@@ -11,6 +11,8 @@ import de.robv.android.xposed.XposedBridge
 import xyz.rodit.snapmod.features.FeatureContext
 import xyz.rodit.snapmod.features.FeatureManager
 import xyz.rodit.snapmod.features.InstanceManager
+import xyz.rodit.snapmod.logging.XLog
+import xyz.rodit.snapmod.logging.log
 import xyz.rodit.snapmod.mappings.MainActivity
 import xyz.rodit.xposed.HooksBase
 import xyz.rodit.xposed.mappings.LoadScheme
@@ -47,8 +49,7 @@ class SnapHooks : HooksBase(
 
     override fun onContextHook(context: Context) {
         Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
-            XposedBridge.log("Uncaught exception on thread $thread.")
-            XposedBridge.log(throwable)
+            log.error("Uncaught exception on thread $thread.", throwable)
         }
     }
 
@@ -64,6 +65,12 @@ class SnapHooks : HooksBase(
                 it.startActivity(intent)
             }, 500)
         }
+
+        XLog.globalLevel = config.getString("global_log_level", "[]").drop(1).dropLast(1).split(',')
+            .filter(String::isNotBlank)
+            .map(String::trim)
+            .map(String::toInt)
+            .fold(0) { a, b -> a or b }
 
         if (features != null) {
             features!!.onConfigLoaded(first)

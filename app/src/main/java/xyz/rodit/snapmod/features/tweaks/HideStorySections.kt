@@ -16,8 +16,8 @@ class HideStorySections(context: FeatureContext) : Feature(context) {
         hiddenStorySections.addAll(context.config.getString("disable_story_sections", "[]")
             .drop(1).dropLast(1)
             .split(',')
-            .filter { it.isNotBlank() }
-            .map { it.trim() })
+            .filter(String::isNotBlank)
+            .map(String::trim))
     }
 
     override fun performHooks() {
