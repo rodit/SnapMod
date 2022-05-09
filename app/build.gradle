@@ -10,8 +10,8 @@ android {
         applicationId "xyz.rodit.snapmod"
         minSdk 24
         targetSdk 32
-        versionCode 16
-        versionName "1.5.6"
+        versionCode 17
+        versionName "1.5.7"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
