@@ -53,6 +53,7 @@ class SettingsActivity : SettingsActivity(R.xml.root_preferences) {
         setNumericInput(fragment, "public_dp_resolution")
         setNumericInput(fragment, "location_share_lat")
         setNumericInput(fragment, "location_share_long")
+        setNumericInput(fragment, "audio_playback_speed")
 
         (fragment.findPreference<Preference>("hidden_friends") as EditTextPreference?)?.apply {
             setOnBindEditTextListener {

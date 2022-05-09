@@ -149,6 +149,13 @@
             app:summary="@string/preview_messages_count_description"
             app:iconSpaceReserved="false"
             app:defaultValue="5" />
+
+        <EditTextPreference
+            app:key="audio_playback_speed"
+            app:title="@string/audio_playback_speed_title"
+            app:summary="@string/audio_playback_speed_description"
+            app:iconSpaceReserved="false"
+            app:defaultValue="1.0" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/snaps_header"

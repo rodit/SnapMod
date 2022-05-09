@@ -4,11 +4,11 @@ import android.util.Log
 import de.robv.android.xposed.XC_MethodHook
 import java.util.*
 
-private val logMap = WeakHashMap<Int, XLog>()
+private val logMap = WeakHashMap<Any, XLog>()
 
 val Any.log: XLog
     get() {
-        return logMap.computeIfAbsent(this.hashCode()) { XLog(this.javaClass.simpleName) }!!
+        return logMap.computeIfAbsent(this) { XLog(this.javaClass.simpleName) }!!
     }
 
 fun XLog.dumpMap(map: Map<*, *>) {
@@ -21,14 +21,15 @@ fun XLog.dump(o: Any?) {
         return
     }
 
-    this.debug("${o}\n" +
-            o.javaClass.fields.map {
+    this.debug("Object dump type=${o.javaClass}\n" +
+            "${o}\n" +
+            o.javaClass.fields.joinToString("\n") {
                 try {
                     "${it.name}: ${it.get(o)}"
                 } catch (e: Exception) {
                     "Error getting field value for ${it.name}: ${e.message}"
                 }
-            }.joinToString("\n")
+            }
     )
 }
 
@@ -37,7 +38,7 @@ fun XLog.dumpStackTrace() {
 }
 
 fun XLog.dumpMethodCall(param: XC_MethodHook.MethodHookParam) {
-    log.debug(
+    this.debug(
         "Called ${param.method.declaringClass.name}#${param.method.name}\n" +
                 "this: ${param.thisObject}\n" +
                 "Arguments:\n" +

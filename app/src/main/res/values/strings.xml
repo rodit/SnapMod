@@ -34,6 +34,7 @@
     <string name="hide_story_views_title">Anonymous Story Viewing</string>
     <string name="hide_story_views_local_title">Ignore Story Viewing (Local)</string>
     <string name="disable_metrics_title">Disable Some Metrics and Logging</string>
+    <string name="audio_playback_speed_title">Audio Note Playback Speed</string>
 
     <string name="send_gallery_as_snaps_title">Send Gallery as Snaps</string>
     <string name="gallery_snap_time_title">Gallery Snaps Time Limit</string>
@@ -61,6 +62,7 @@
     <string name="more_profile_info_title">Show More Info on Profile</string>
     <string name="log_network_requests_title">Log Network Requests</string>
     <string name="network_body">Log Request Body</string>
+    <string name="global_log_level_title">Log Level</string>
 
     <string name="unlimited_snap_duration_title">Unlimited Snap/Story Duration</string>
 
@@ -85,6 +87,7 @@
     <string name="hide_story_views_description">Prevents users from knowing you have viewed their stories.</string>
     <string name="hide_story_views_local_description">Prevents stories from being marked as viewed locally.</string>
     <string name="disable_metrics_description">Disables some metrics (Graphene) and logging (Blizzard).</string>
+    <string name="audio_playback_speed_description">Sets the default audio note playback speed.</string>
     <string name="override_snap_description">Forces all images/videos sent in chats to be sent as live snaps.</string>
     <string name="override_snap_timer_description">Sets the gallery snaps\' timer (in seconds).</string>
     <string name="allow_save_snaps_description">Allows snaps to be saved to gallery as if they were saved in chat.</string>
@@ -102,6 +105,7 @@
     <string name="location_share_override_description">Overrides your shared location with the configured latitude and logitude below. I have no idea if this actually works.</string>
     <string name="more_profile_info_description">Shows more information on friends\' profile pages such as their birthday (if available).</string>
     <string name="log_network_requests_description">Logs some HTTP requests to LSPosed for debugging.</string>
+    <string name="global_log_level_description">Enable all log levels if you are experiencing problems. Include LSPosed logs in any issues on Github.</string>
 
     <string name="installation_status_title">Installation Status</string>
     <string name="installation_status_summary">Checking…</string>
@@ -109,6 +113,4 @@
     <string name="donations_title">Donations</string>
     <string name="donations_summary">If you would like to support SnapMod, you can donate by tapping here.</string>
     <string name="donations_link">https://github.com/rodit/SnapMod#donations</string>
-    <string name="global_log_level_title">Log Level</string>
-    <string name="global_log_level_description">Enable all log levels if you are experiencing problems. Include LSPosed logs in any issues on Github.</string>
 </resources>
