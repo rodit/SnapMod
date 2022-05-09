@@ -1,11 +1,13 @@
 package xyz.rodit.snapmod.features.saving
 
-import de.robv.android.xposed.XposedBridge
 import xyz.rodit.snapmod.createDummyProxy
 import xyz.rodit.snapmod.features.FeatureContext
+import xyz.rodit.snapmod.logging.XLog
 import xyz.rodit.snapmod.mappings.*
 import xyz.rodit.snapmod.util.toSnapUUID
 import xyz.rodit.snapmod.util.toUUIDString
+
+private val log = XLog("StoryHelper")
 
 typealias UsernameFetcher = (Map<*, *>) -> String?
 
@@ -29,18 +31,21 @@ fun getMediaInfo(
 
     getUsername(context, metadata) { username ->
         map[StoryMetadata.getImageMediaInfo().instance]?.let {
+            log.debug("Found image media info for story.")
             return@getUsername callback(StoryMedia(OperaMediaInfo.wrap(it), username, ".jpg"))
         }
 
         map[StoryMetadata.getVideoMediaInfo().instance]?.let {
+            log.debug("Found video media info for story.")
             return@getUsername callback(StoryMedia(OperaMediaInfo.wrap(it), username, ".mp4"))
         }
 
         map[StoryMetadata.getOverlayImageMediaInfo().instance]?.let {
+            log.debug("Found image overlay media info for story.")
             return@getUsername callback(StoryMedia(OperaMediaInfo.wrap(it), username, ".jpg"))
         }
 
-        XposedBridge.log("Error getting media info for $metadata.")
+        log.error("Error getting media info for $metadata.")
         callback(null)
     }
 }
@@ -51,9 +56,13 @@ private fun getUsername(
     val map: Map<*, *> = metadata.map
 
     val username = usernameFetchers.firstNotNullOfOrNull { it(map) }
-    if (username != null) return callback(username)
+    if (username != null) {
+        log.debug("Found username using fetchers.")
+        return callback(username)
+    }
 
     val messageId = map[MessageStoryKeys.getMessageId().instance]
+    log.debug("Trying to get username from message id: $messageId")
     if (messageId !is String) return callback("unknown")
 
     val idParts = messageId.split(':')
@@ -76,9 +85,11 @@ private fun getUsername(
             context.instances.friendsRepository.selectFriendsByUserIds(listOf(senderId))
         val friendUsername =
             if (friends.isNotEmpty()) SelectFriendsByUserIds.wrap(friends[0]).username.displayString else "unknown"
+        log.debug("Fetched message with username $friendUsername.")
         callback(friendUsername)
         true
     }
+    log.debug("Fetching message with conversation manager.")
     context.instances.conversationManager.fetchMessage(
         uuid.toSnapUUID(),
         arroyoId,

@@ -290,5 +290,13 @@
             app:summary="@string/log_network_requests_description"
             app:iconSpaceReserved="false" />
 
+        <MultiSelectListPreference
+            app:key="global_log_level"
+            app:title="@string/global_log_level_title"
+            app:summary="@string/global_log_level_description"
+            app:entries="@array/log_levels"
+            app:entryValues="@array/log_levels_values"
+            app:iconSpaceReserved="false" />
+
     </PreferenceCategory>
 </PreferenceScreen>
