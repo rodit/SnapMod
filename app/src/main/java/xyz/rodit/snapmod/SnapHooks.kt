@@ -12,6 +12,7 @@ import xyz.rodit.snapmod.features.FeatureContext
 import xyz.rodit.snapmod.features.FeatureManager
 import xyz.rodit.snapmod.features.InstanceManager
 import xyz.rodit.snapmod.logging.XLog
+import xyz.rodit.snapmod.logging.log
 import xyz.rodit.snapmod.mappings.MainActivity
 import xyz.rodit.xposed.HooksBase
 import xyz.rodit.xposed.mappings.LoadScheme
@@ -48,8 +49,7 @@ class SnapHooks : HooksBase(
 
     override fun onContextHook(context: Context) {
         Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
-            XposedBridge.log("Uncaught exception on thread $thread.")
-            XposedBridge.log(throwable)
+            log.error("Uncaught exception on thread $thread.", throwable)
         }
     }
 
