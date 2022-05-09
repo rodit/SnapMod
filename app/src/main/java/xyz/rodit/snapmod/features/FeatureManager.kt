@@ -5,6 +5,7 @@ import xyz.rodit.snapmod.features.conversations.*
 import xyz.rodit.snapmod.features.friendsfeed.FeedModifier
 import xyz.rodit.snapmod.features.info.AdditionalFriendInfo
 import xyz.rodit.snapmod.features.info.NetworkLogging
+import xyz.rodit.snapmod.features.messagemenu.MessageMenuModifier
 import xyz.rodit.snapmod.features.opera.OperaModelModifier
 import xyz.rodit.snapmod.features.saving.ChatSaving
 import xyz.rodit.snapmod.features.saving.PublicProfileSaving
@@ -30,6 +31,9 @@ class FeatureManager(context: FeatureContext) : Contextual(context) {
         add(::PreventTypingNotifications)
         add(::SnapInteractionFilter)
         add(::SnapOverrides)
+
+        // Message context menu
+        add(::MessageMenuModifier)
 
         // Opera (story/snap view)
         add(::OperaModelModifier)

@@ -1568,3 +1568,67 @@ class SelectFriendsByUserIds {
         .string contains " streakExpiration:", bind field streakExpiration next reference;
     }
 }
+
+[certain]
+class ChatMenuItem {
+
+    void $<init>(...) {
+        .field !ActionMenuOptionItemType->!SUBTITLE_OPTION_ITEM;
+    }
+}
+
+[certain]
+enum ChatMenuItemType {
+
+    [late] static this COPY;
+    [late] static this SAVE_IN_CHAT;
+    [late] static this UNSAVE_IN_CHAT;
+    [late] static this SAVE_TO_CAMERA_ROLL;
+    [late] static this ERASE_QUOTE;
+    [late] static this SNAP_REPLY;
+
+    static void $<clinit>() {
+        .string "COPY", bind field COPY next reference;
+        .string "SAVE_IN_CHAT", bind field SAVE_IN_CHAT next reference;
+        .string "UNSAVE_IN_CHAT", bind field UNSAVE_IN_CHAT next reference;
+        .string "SAVE_TO_CAMERA_ROLL", bind field SAVE_TO_CAMERA_ROLL next reference;
+        .string "ERASE_QUOTE", bind field ERASE_QUOTE next reference;
+        .string "SNAP_REPLY", bind field SNAP_REPLY next reference;
+    }
+}
+
+[certain]
+class ChatMessageActionBuilder {
+
+    [discard] Object o0;
+    [discard] Object o1;
+    [discard] Object o2;
+    Object chatModel;
+
+    * createMenu(...) {
+        .field !ChatMenuItemType->!SAVE_IN_CHAT;
+        .field !ChatMenuItemType->!UNSAVE_IN_CHAT;
+        .field !ChatMenuItemType->!SAVE_TO_CAMERA_ROLL;
+        .field !ChatMenuItemType->!ERASE_QUOTE;
+    }
+}
+
+[certain]
+class AudioNotePlaySession {
+
+    double playbackSpeed;
+
+    void $<init>(...) {
+        .string "AudioNotePlaySession";
+    }
+}
+
+class AudioNoteViewBindingDelegate expects com.snap.messaging.chat.ui.viewbinding.delegate.AudioNoteViewBindingDelegate {
+
+    !AudioNotePlaySession session;
+
+    void bindSession(!ChatModelAudioNote, ...) {
+        .string "playbackSession";
+        .new !AudioNotePlaySession;
+    }
+}

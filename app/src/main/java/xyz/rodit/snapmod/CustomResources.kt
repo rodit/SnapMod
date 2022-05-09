@@ -1,18 +1,28 @@
 package xyz.rodit.snapmod
 
 import android.content.Context
+import android.content.res.Resources
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedBridge
 
 object CustomResources {
 
-    private val strings: MutableMap<Int, String> = HashMap()
-
-    private fun putString(key: Int, value: String) {
-        strings[key] = value
-    }
+    private val strings: MutableMap<Int, String> = mutableMapOf(
+        string.menu_option_stealth_mode to "Stealth Mode",
+        string.menu_option_preview to "More Information",
+        string.chat_action_playback_speed to "Set Playback Speed"
+    )
 
     fun init() {
+        XposedBridge.hookAllMethods(Resources::class.java, "getString", object : XC_MethodHook() {
+            override fun beforeHookedMethod(param: MethodHookParam) {
+                val id = param.args[0] as Int
+                strings[id]?.let {
+                    param.result = it
+                }
+            }
+        })
+
         XposedBridge.hookAllMethods(Context::class.java, "getString", object : XC_MethodHook() {
             override fun beforeHookedMethod(param: MethodHookParam) {
                 val id = param.args[0] as Int
@@ -26,10 +36,7 @@ object CustomResources {
     object string {
         const val menu_option_stealth_mode = -100000
         const val menu_option_preview = -100001
-    }
 
-    init {
-        putString(string.menu_option_stealth_mode, "Stealth Mode")
-        putString(string.menu_option_preview, "More Information")
+        const val chat_action_playback_speed = -200000
     }
 }
