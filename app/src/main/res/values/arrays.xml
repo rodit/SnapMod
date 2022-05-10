@@ -53,6 +53,22 @@
         <item>4</item>
     </string-array>
 
+    <string-array name="update_frequencies">
+        <item>Every Launch</item>
+        <item>Every 6 Hours</item>
+        <item>Every 12 Hours</item>
+        <item>Every Day</item>
+        <item>Never</item>
+    </string-array>
+
+    <string-array name="update_frequencies_values">
+        <item>0</item>
+        <item>21600000</item>
+        <item>43200000</item>
+        <item>86400000</item>
+        <item>-1</item>
+    </string-array>
+
     <string-array name="sc_scope">
         <item>com.snapchat.android</item>
     </string-array>

@@ -17,7 +17,8 @@ class FeatureContext(
     val config: ConfigurationClient,
     val files: FileClient,
     val server: StreamServer,
-    val instances: InstanceManager
+    val instances: InstanceManager,
+    val appVersion: Long
 ) {
     val callbacks: CallbackManager = CallbackManager()
     val pinned: ConversationManager = ConversationManager(appContext.filesDir, PINNED_CONVERSATIONS_FILE)

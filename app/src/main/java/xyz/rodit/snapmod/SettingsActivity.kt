@@ -15,6 +15,7 @@ import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
+import androidx.preference.PreferenceManager
 import xyz.rodit.xposed.SettingsActivity
 import xyz.rodit.xposed.utils.PathUtils
 import java.io.File
@@ -24,6 +25,20 @@ class SettingsActivity : SettingsActivity(R.xml.root_preferences) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val minUpdateDelta = PreferenceManager.getDefaultSharedPreferences(this)
+            .getString("update_frequency", "0")!!.toLong()
+        if (minUpdateDelta >= 0) {
+            val updateCheckFile = File(filesDir, ".update")
+            val lastUpdateCheck =
+                if (updateCheckFile.exists()) updateCheckFile.lastModified() else 0
+            if (System.currentTimeMillis() - lastUpdateCheck >= minUpdateDelta) {
+                performUpdateCheck()
+            }
+        }
+    }
+
+    private fun performUpdateCheck() {
         updates.checkForUpdates("rodit", "SnapMod")
     }
 
@@ -47,6 +62,13 @@ class SettingsActivity : SettingsActivity(R.xml.root_preferences) {
                     )
                     true
                 }
+        }
+
+        fragment.findPreference<Preference>("check_for_updates")?.apply {
+            onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                performUpdateCheck()
+                true
+            }
         }
 
         setNumericInput(fragment, "override_snap_timer")

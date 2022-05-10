@@ -14,6 +14,7 @@ import xyz.rodit.snapmod.features.InstanceManager
 import xyz.rodit.snapmod.logging.XLog
 import xyz.rodit.snapmod.logging.log
 import xyz.rodit.snapmod.mappings.MainActivity
+import xyz.rodit.snapmod.util.versionCode
 import xyz.rodit.xposed.HooksBase
 import xyz.rodit.xposed.mappings.LoadScheme
 import java.util.*
@@ -85,8 +86,10 @@ class SnapHooks : HooksBase(
 
         MainActivity.attachBaseContext.hook(object : XC_MethodHook() {
             override fun beforeHookedMethod(param: MethodHookParam) {
-                featureContext!!.activity = param.thisObject as Activity
-                mainActivity = featureContext!!.activity
+                featureContext?.let {
+                    it.activity = param.thisObject as Activity
+                    mainActivity = it.activity
+                }
             }
         })
 
@@ -97,7 +100,8 @@ class SnapHooks : HooksBase(
                 config,
                 files,
                 server,
-                InstanceManager()
+                InstanceManager(),
+                appContext.versionCode
             )
 
         (appContext as Application).registerActivityLifecycleCallbacks(

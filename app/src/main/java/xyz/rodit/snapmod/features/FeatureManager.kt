@@ -11,7 +11,6 @@ import xyz.rodit.snapmod.features.saving.ChatSaving
 import xyz.rodit.snapmod.features.saving.PublicProfileSaving
 import xyz.rodit.snapmod.features.saving.StoriesSaving
 import xyz.rodit.snapmod.features.tweaks.*
-import java.util.function.Function
 
 class FeatureManager(context: FeatureContext) : Contextual(context) {
 
@@ -71,7 +70,10 @@ class FeatureManager(context: FeatureContext) : Contextual(context) {
         features.forEach { it.performHooks() }
     }
 
-    fun add(supplier: Function<FeatureContext, Feature>) {
-        features.add(supplier.apply(context))
+    fun add(supplier: (FeatureContext) -> Feature) {
+        val feature = supplier(context)
+        if (feature.support.contains(context.appVersion)) {
+            features.add(feature)
+        }
     }
 }

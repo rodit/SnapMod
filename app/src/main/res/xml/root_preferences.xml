@@ -1,18 +1,16 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <Preference app:key="installation_status"
+    <Preference
+        app:key="installation_status"
         app:title="@string/installation_status_title"
         app:summary="@string/installation_status_summary"
-        app:iconSpaceReserved="false">
+        app:iconSpaceReserved="false" />
 
-    </Preference>
-
-    <Preference app:key="donations"
+    <Preference
+        app:key="donations"
         app:title="@string/donations_title"
         app:summary="@string/donations_summary"
-        app:iconSpaceReserved="false">
-
-    </Preference>
+        app:iconSpaceReserved="false" />
 
     <PreferenceCategory app:title="@string/privacy_header"
         app:iconSpaceReserved="false">
@@ -305,5 +303,23 @@
             app:entryValues="@array/log_levels_values"
             app:iconSpaceReserved="false" />
 
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/updates_header"
+        app:iconSpaceReserved="false">
+
+        <ListPreference
+            app:key="update_frequency"
+            app:title="@string/update_frequency_title"
+            app:summary="@string/update_frequency_description"
+            app:entries="@array/update_frequencies"
+            app:entryValues="@array/update_frequencies_values"
+            app:defaultValue="0"
+            app:iconSpaceReserved="false" />
+
+        <Preference app:key="check_for_updates"
+            app:title="@string/check_for_updates_title"
+            app:summary="@string/check_for_updates_description"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 </PreferenceScreen>
