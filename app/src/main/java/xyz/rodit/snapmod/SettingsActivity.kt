@@ -34,6 +34,7 @@ class SettingsActivity : SettingsActivity(R.xml.root_preferences) {
                 if (updateCheckFile.exists()) updateCheckFile.lastModified() else 0
             if (System.currentTimeMillis() - lastUpdateCheck >= minUpdateDelta) {
                 performUpdateCheck()
+                updateCheckFile.writeBytes(byteArrayOf())
             }
         }
     }
