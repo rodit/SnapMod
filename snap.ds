@@ -529,15 +529,45 @@ class FriendProfileTransformer {
     }
 }
 
-class SaveToCameraRollActionHandler {
+[certain]
+class ChatContext {
 
-    void $<init>(Context, ...) {
-        .string "SaveToCameraRollActionHandler";
+    [discard] long feedId;
+    String conversationId;
+
+    String $toString() {
+        .string "ChatContext(feedId=";
+        .string contains "conversationId=";
+    }
+}
+
+[certain]
+enum ChatMenuItemType {
+
+    [late] static this COPY;
+    [late] static this SAVE_IN_CHAT;
+    [late] static this UNSAVE_IN_CHAT;
+    [late] static this SAVE_TO_CAMERA_ROLL;
+    [late] static this ERASE_QUOTE;
+    [late] static this SNAP_REPLY;
+
+    static void $<clinit>() {
+        .string "COPY", bind field COPY next reference;
+        .string "SAVE_IN_CHAT", bind field SAVE_IN_CHAT next reference;
+        .string "UNSAVE_IN_CHAT", bind field UNSAVE_IN_CHAT next reference;
+        .string "SAVE_TO_CAMERA_ROLL", bind field SAVE_TO_CAMERA_ROLL next reference;
+        .string "ERASE_QUOTE", bind field ERASE_QUOTE next reference;
+        .string "SNAP_REPLY", bind field SNAP_REPLY next reference;
+    }
+}
+
+class ActionMenuPresenter {
+
+    void $<init>(...) {
+        .string "ActionMenuPresenter";
     }
 
-    void exportMedia(*, *, *) {
-        .string "SaveToCameraRollActionHandler";
-    }
+    static void handleAction(this, !ChatContext, !ChatModelBase, !ChatMenuItemType, ...)
 }
 
 [certain]
@@ -1425,18 +1455,6 @@ class DiscoverFeedSection {
 }
 
 [certain]
-class ChatContext {
-
-    [discard] long feedId;
-    String conversationId;
-
-    String $toString() {
-        .string "ChatContext(feedId=";
-        .string contains "conversationId=";
-    }
-}
-
-[certain]
 class ArroyoMessageListDataProvider {
 
     void $<init>(...) {
@@ -1474,28 +1492,32 @@ class MediaExportControllerImpl {
     }
 }
 
-[certain]
-class MessageNanoBase extends MessageNano {
+[late, discard, exact]
+class NanoChatMessageArrayType {
+    static this[] ta0;
+    * o0;
+    int i0;
+    * o1;
 
-    [discard] * m0(...) {
-        .string "Tried to getExtension with a differernt Extension.";
-    }
+    void $<init>(...)
+
+    int $computeSerializedSize()
+
+    * m0()
+    boolean m1()
+
+    MessageNano $mergeFrom(*)
+    void $writeTo(*)
 }
 
-[certain]
-class NanoMessageContent extends !MessageNanoBase {
+[certain, exact]
+class NanoChatMessageContent {
 
-    static this parse(byte[])
+    [not] static *[] n0;
+    [not] String[] n1;
+    [not] byte[] n2;
 
-    #NanoChatMessageContent getChatMessageContent() {
-        .type !NanoChatMessageContent;
-    }
-}
-
-[late, exact]
-class NanoChatMessageContent extends !MessageNanoBase {
-
-    [discard] * a0;
+    [discard] #NanoChatMessageArrayType[] a0;
     int typeNum;
     String content;
 
@@ -1504,6 +1526,16 @@ class NanoChatMessageContent extends !MessageNanoBase {
     [discard] int $computeSerializedSize()
     [discard] MessageNano $mergeFrom(*)
     [discard] void $writeTo(*)
+}
+
+[certain]
+class NanoMessageContent extends < extends MessageNano > {
+
+    static this parse(byte[])
+
+    !NanoChatMessageContent getChatMessageContent() {
+        .type !NanoChatMessageContent;
+    }
 }
 
 [certain]
@@ -1574,26 +1606,6 @@ class ChatMenuItem {
 
     void $<init>(...) {
         .field !ActionMenuOptionItemType->!SUBTITLE_OPTION_ITEM;
-    }
-}
-
-[certain]
-enum ChatMenuItemType {
-
-    [late] static this COPY;
-    [late] static this SAVE_IN_CHAT;
-    [late] static this UNSAVE_IN_CHAT;
-    [late] static this SAVE_TO_CAMERA_ROLL;
-    [late] static this ERASE_QUOTE;
-    [late] static this SNAP_REPLY;
-
-    static void $<clinit>() {
-        .string "COPY", bind field COPY next reference;
-        .string "SAVE_IN_CHAT", bind field SAVE_IN_CHAT next reference;
-        .string "UNSAVE_IN_CHAT", bind field UNSAVE_IN_CHAT next reference;
-        .string "SAVE_TO_CAMERA_ROLL", bind field SAVE_TO_CAMERA_ROLL next reference;
-        .string "ERASE_QUOTE", bind field ERASE_QUOTE next reference;
-        .string "SNAP_REPLY", bind field SNAP_REPLY next reference;
     }
 }
 

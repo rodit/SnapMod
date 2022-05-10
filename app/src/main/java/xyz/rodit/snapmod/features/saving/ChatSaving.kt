@@ -54,16 +54,17 @@ class ChatSaving(context: FeatureContext) : Feature(context) {
         }
 
         // Export non-savable media (live snaps and voice notes).
-        SaveToCameraRollActionHandler.exportMedia.before(context, "allow_save_snaps") {
-            if (!ChatModelBase.isInstance(it.args[1])) return@before
-            val base = ChatModelBase.wrap(it.args[1])
+        ActionMenuPresenter.handleAction.before {
+            if (it.args[3] != ChatMenuItemType.SAVE_TO_CAMERA_ROLL().instance) return@before
+
+            val base = ChatModelBase.wrap(it.args[2])
             lastMessageData = base.messageData
 
-            if (ChatModelLiveSnap.isInstance(it.args[1])) {
+            if (ChatModelLiveSnap.isInstance(it.args[2])) {
                 // Convert live snap to saved snap.
-                val hashCode = it.args[1].hashCode()
+                val hashCode = it.args[2].hashCode()
                 val media = LiveSnapMedia.wrap(chatMediaMap[hashCode])
-                it.args[1] = ChatModelSavedSnap(
+                it.args[2] = ChatModelSavedSnap(
                     base.context,
                     base.messageData,
                     base.senderId,
@@ -79,10 +80,10 @@ class ChatSaving(context: FeatureContext) : Feature(context) {
                     true,
                     true
                 ).instance
-            } else if (ChatModelAudioNote.isInstance(it.args[1])) {
+            } else if (ChatModelAudioNote.isInstance(it.args[2])) {
                 // Resolve audio uri and resolve through proxy of RxObserver.
                 // Note: the content resolver provided by appContext cannot open a stream from the uri.
-                val audio = ChatModelAudioNote.wrap(it.args[1])
+                val audio = ChatModelAudioNote.wrap(it.args[2])
 
                 val observerProxy = Proxy.newProxyInstance(
                     context.classLoader,
@@ -110,6 +111,7 @@ class ChatSaving(context: FeatureContext) : Feature(context) {
             }
         }
 
+        // Override snap save location by custom-downloading media instead.
         MediaExportControllerImpl.exportMedia.before(context, "enable_custom_snap_download_path") {
             val messageData = lastMessageData
             if (messageData?.isNotNull != true) return@before
