@@ -5,6 +5,8 @@ import android.os.Build
 import android.os.Environment
 import xyz.rodit.xposed.client.ConfigurationClient
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.regex.Pattern
 
 object PathManager {
@@ -12,6 +14,8 @@ object PathManager {
     const val DOWNLOAD_AUDIO_NOTE = "audio_note"
     const val DOWNLOAD_PROFILE = "profile"
     const val DOWNLOAD_SNAP = "snap"
+
+    private const val DEFAULT_DATE_FORMAT = "dd-MM-yyyy_HH:mm:ss"
 
     private val PATTERN_PUBLIC_DIR = Pattern.compile("""\$(\w+)""")
     private val PATTERN_PARAMETER = Pattern.compile("%([A-Za-z]+)")
@@ -24,15 +28,21 @@ object PathManager {
         "Ringtones" to Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_RINGTONES).path
     )
     private val defaultPaths: MutableMap<String, String> = mutableMapOf(
-        DOWNLOAD_STORY to "\$Movies/SnapMod/%u_story_%t",
-        DOWNLOAD_AUDIO_NOTE to "\$Movies/SnapMod/%id_audio_%t",
-        DOWNLOAD_PROFILE to "\$Movies/SnapMod/%u_profile_%t",
-        DOWNLOAD_SNAP to "\$Movies/SnapMod/%u_snap_%t"
+        DOWNLOAD_STORY to "\$Movies/SnapMod/%u_story_%d",
+        DOWNLOAD_AUDIO_NOTE to "\$Movies/SnapMod/%id_audio_%d",
+        DOWNLOAD_PROFILE to "\$Movies/SnapMod/%u_profile_%d",
+        DOWNLOAD_SNAP to "\$Movies/SnapMod/%u_snap_%d"
     )
 
-    private fun appendDefaultParamsMap(paramsMap: Map<String, String>): Map<String, String> {
+    private fun appendDefaultParamsMap(config: ConfigurationClient, paramsMap: Map<String, String>): Map<String, String> {
         val appended: MutableMap<String, String> = HashMap(paramsMap)
         appended["t"] = System.currentTimeMillis().toString()
+        val dateFormat =
+            SimpleDateFormat(
+                config.getString("download_date_format", DEFAULT_DATE_FORMAT),
+                Locale.getDefault()
+            )
+        appended["d"] = dateFormat.format(Date())
         return appended
     }
 
@@ -42,7 +52,7 @@ object PathManager {
         paramsMap: Map<String, String>,
         extension: String
     ): File {
-        val params = appendDefaultParamsMap(paramsMap)
+        val params = appendDefaultParamsMap(config, paramsMap)
         var path = config.getString("download_path_$downloadType", defaultPaths[downloadType])
 
         var matcher = PATTERN_PUBLIC_DIR.matcher(path)

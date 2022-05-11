@@ -119,4 +119,6 @@
     <string name="update_frequency_description">Sets the minimum amount of time between SnapMod update checks. Note: SnapMod still only checks for updates when you launch it (never in the background).</string>
     <string name="check_for_updates_title">Check For Updates</string>
     <string name="check_for_updates_description">Checks for updates now.</string>
+    <string name="download_date_format_title">Date Format</string>
+    <string name="download_date_format_description">Sets the date format for substituted dates (%d) in download paths.</string>
 </resources>
