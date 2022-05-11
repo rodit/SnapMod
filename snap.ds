@@ -20,6 +20,7 @@ import java.lang.Boolean;
 import java.lang.Double;
 import java.lang.Integer;
 import java.lang.Iterable;
+import java.lang.Long;
 import java.lang.Object;
 import java.lang.String;
 import java.lang.Throwable;
@@ -252,12 +253,22 @@ enum SnapMediaType {
 
 [certain]
 class MediaPackage {
+
     @SerializedName("session_id")
-    java.lang.String sessionId;
+    String sessionId;
     @SerializedName("content_id")
-    java.lang.String contentId;
+    String contentId;
     @SerializedName("mediaId")
-    java.lang.String mediaId;
+    String mediaId;
+    @SerializedName("media")
+    #MediaPackageMedia media;
+}
+
+[late]
+class MediaPackageMedia {
+
+    @SerializedName("video_duration_ms")
+    public Long videoDurationMs;
 }
 
 [certain]
@@ -1642,5 +1653,25 @@ class AudioNoteViewBindingDelegate expects com.snap.messaging.chat.ui.viewbindin
     void bindSession(!ChatModelAudioNote, ...) {
         .string "playbackSession";
         .new !AudioNotePlaySession;
+    }
+}
+
+[certain, discard]
+class SendToControllerActionSendHandler {
+
+    void $<init>(...) {
+        .string "SendToControllerActionSendHandler";
+    }
+}
+
+[certain]
+class VideoLengthChecker {
+
+    [discard] !SendToControllerActionSendHandler o0;
+
+    * $apply(*) {
+        .string "image/";
+        .string "video/";
+        .type !MediaPackage;
     }
 }
