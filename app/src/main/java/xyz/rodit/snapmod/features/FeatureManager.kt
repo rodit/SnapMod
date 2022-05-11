@@ -48,6 +48,7 @@ class FeatureManager(context: FeatureContext) : Contextual(context) {
 
         // Tweaks
         add(::BypassVideoLength)
+        add(::BypassVideoLengthGlobal)
         add(::ConfigurationTweaks)
         add(::ConfigurationTweaks)
         add(::DisableBitmojis)
