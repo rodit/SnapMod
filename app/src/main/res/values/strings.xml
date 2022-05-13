@@ -35,6 +35,8 @@
     <string name="hide_story_views_local_title">Ignore Story Viewing (Local)</string>
     <string name="disable_metrics_title">Disable Some Metrics and Logging</string>
     <string name="audio_playback_speed_title">Audio Note Playback Speed</string>
+    <string name="auto_save_all_chats_title">Auto-Save Messages</string>
+    <string name="auto_save_types_title">Auto-Save Message Types</string>
 
     <string name="send_gallery_as_snaps_title">Send Gallery as Snaps</string>
     <string name="gallery_snap_time_title">Gallery Snaps Time Limit</string>
@@ -88,6 +90,8 @@
     <string name="hide_story_views_local_description">Prevents stories from being marked as viewed locally.</string>
     <string name="disable_metrics_description">Disables some metrics (Graphene) and logging (Blizzard).</string>
     <string name="audio_playback_speed_description">Sets the default audio note playback speed.</string>
+    <string name="auto_save_all_chats_description">Auto-saves all messages when they appear (visible to all chat participants).</string>
+    <string name="auto_save_types_description">Sets the types of message to auto-save.</string>
     <string name="override_snap_description">Forces all images/videos sent in chats to be sent as live snaps.</string>
     <string name="override_snap_timer_description">Sets the gallery snaps\' timer (in seconds).</string>
     <string name="allow_save_snaps_description">Allows snaps to be saved to gallery as if they were saved in chat.</string>

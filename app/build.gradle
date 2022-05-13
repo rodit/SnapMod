@@ -10,8 +10,8 @@ android {
         applicationId "xyz.rodit.snapmod"
         minSdk 24
         targetSdk 32
-        versionCode 20
-        versionName "1.6.1"
+        versionCode 21
+        versionName "1.6.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -30,7 +30,7 @@ android {
 
 task versionInfo {
     doLast {
-        def build = 84606
+        def build = 84608
         def infoFile = new File('app/build/version.json')
         infoFile.getParentFile().mkdirs()
         infoFile.delete()

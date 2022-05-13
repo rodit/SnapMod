@@ -5,6 +5,7 @@ import xyz.rodit.snapmod.features.FeatureContext
 import xyz.rodit.snapmod.mappings.DiscoverFeedObservableSection
 import xyz.rodit.snapmod.mappings.DiscoverViewBinder
 import xyz.rodit.snapmod.util.before
+import xyz.rodit.snapmod.util.getList
 
 class HideStorySections(context: FeatureContext) : Feature(context) {
 
@@ -12,12 +13,7 @@ class HideStorySections(context: FeatureContext) : Feature(context) {
 
     override fun onConfigLoaded(first: Boolean) {
         hiddenStorySections.clear()
-
-        hiddenStorySections.addAll(context.config.getString("disable_story_sections", "[]")
-            .drop(1).dropLast(1)
-            .split(',')
-            .filter(String::isNotBlank)
-            .map(String::trim))
+        hiddenStorySections.addAll(context.config.getList("disable_story_sections"))
     }
 
     override fun performHooks() {

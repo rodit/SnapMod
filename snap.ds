@@ -143,6 +143,13 @@ class NetworkApi expects com.snapchat.client.network_api.NetworkApi$CppProxy {
 }
 
 [certain]
+class MessageDescriptor expects com.snapchat.client.messaging.MessageDescriptor {
+
+    !UUID $getConversationId()
+    long $getMessageId()
+}
+
+[certain]
 class MessageContent expects com.snapchat.client.messaging.MessageContent {
 
     byte[] $getContent()
@@ -150,9 +157,18 @@ class MessageContent expects com.snapchat.client.messaging.MessageContent {
 }
 
 [certain]
+class MessageMetadata expects com.snapchat.client.messaging.MessageMetadata {
+
+    boolean $getIsSaveable()
+    ArrayList $getSavedBy()
+}
+
+[certain]
 class Message expects com.snapchat.client.messaging.Message {
 
+    !MessageDescriptor $getDescriptor()
     !MessageContent $getMessageContent()
+    !MessageMetadata $getMetadata()
     !UUID $getSenderId()
 }
 
@@ -169,12 +185,6 @@ class Conversation expects com.snapchat.client.messaging.Conversation {
     !UUID $getConversationId()
     String $getTitle()
     ArrayList $getParticipants()
-}
-
-[certain]
-class MessageMetadata expects com.snapchat.client.messaging.MessageMetadata {
-
-    boolean $getIsSaveable()
 }
 
 [certain]
@@ -300,19 +310,23 @@ enum MediaType {
 [late]
 interface RxObserver {
 
-    void accept(*)
     void error(Throwable)
+    void accept(*)
     void disposable(*)
 }
 
-[certain]
-class RxSupplier {
+[late]
+interface RxSupplierBase {
 
-    static this supplyNothing()
+    void subscribe(*)
+}
+
+[late]
+class RxSupplier {
 
     void subscribe(#RxObserver) {
         .string "observer is null";
-        .string contains "RxJavaPlugins.setOnSingleSubscribe";
+        .string "subscribeActual failed";
     }
 }
 
@@ -320,7 +334,7 @@ class RxSupplier {
 @*("chat_media/*/*")
 class ChatMediaHandler {
 
-    !RxSupplier resolve(Uri, Set, boolean, Set)
+    #RxSupplier resolve(Uri, Set, boolean, Set)
 }
 
 interface MessageDataModel {
@@ -375,7 +389,7 @@ class ParameterPackage {
 
     void $<init>(Boolean, Double, ...)
 
-    java.lang.String $toString() {
+    String $toString() {
         [conserve]
         .string contains "ParameterPackage(";
         .string contains "isInfiniteDuration", bind field isInfiniteDuration next reference;
@@ -397,13 +411,9 @@ interface MediaBase implements #MediaBaseBase {
 }
 
 class LiveSnapMedia implements #MediaBase {
-    [discard] static * sf0;
-
     @SerializedName("parameterPackage")
     #ParameterPackage parameterPackage;
     String mediaId;
-    [discard] String s0;
-    [discard] String s1;
     #MediaType mediaType;
 
     void $<init>()
@@ -906,8 +916,8 @@ class StoryMetadata extends !ParamsMap {
 
 class ContextStoryKeys {
 
-    [late] !MapKey contextSession;
-    [late, discard] !MapKey hideContext;
+    [late] static !MapKey contextSession;
+    [late, discard] static !MapKey hideContext;
 
     static void $<clinit>() {
         [strict]
@@ -1477,7 +1487,7 @@ class ArroyoMessageListDataProvider {
     }
 }
 
-[certain]
+[late]
 class ExportItem {
 
     String fileName;
@@ -1496,7 +1506,7 @@ class MediaExportControllerImpl {
         .string "MediaExportControllerImpl";
     }
 
-    Uri exportMedia(*, *, !ExportItem, ...) {
+    Uri exportMedia(*, *, #ExportItem, ...) {
         .string "mime_type";
         .string "_display_name";
         .string "_size";
@@ -1673,5 +1683,50 @@ class VideoLengthChecker {
         .string "image/";
         .string "video/";
         .type !MediaPackage;
+    }
+}
+
+[certain]
+enum ChatCommandSource {
+
+    @SerializedName("CHAT")
+    static this CHAT;
+    [discard]
+    @SerializedName("CAMERA")
+    static this CAMERA;
+    [discard]
+    @SerializedName("DISCOVER")
+    static this DISCOVER;
+    [discard]
+    @SerializedName("PROFILE")
+    static this PROFILE;
+    [discard]
+    @SerializedName("PUBLIC_PROFILE")
+    static this PUBLIC_PROFILE;
+    [discard]
+    @SerializedName("STORY")
+    static this STORY;
+    [discard]
+    @SerializedName("PROFILE_GALLERY_PLAYBACK")
+    static this PROFILE_GALLERY_PLAYBACK;
+}
+
+[certain]
+class ArroyoConvertMessagesAction {
+
+    * $apply(Object) {
+        .string "ArroyoMessageListDataProvider:convertMessages";
+    }
+}
+
+[certain]
+class ArroyoChatCommandsClient {
+
+    void $<init>(...) {
+        .string "ArroyoChatCommandsClient";
+    }
+
+    void saveMessage(String, boolean, !ChatCommandSource, boolean) {
+        .string "ArroyoChatCommandsClient";
     }
 }

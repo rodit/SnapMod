@@ -10,6 +10,8 @@ object CustomResources {
     private val strings: MutableMap<Int, String> = mutableMapOf(
         string.menu_option_stealth_mode to "Stealth Mode",
         string.menu_option_preview to "More Information",
+        string.menu_option_auto_save to "Auto-Save Messages",
+
         string.chat_action_playback_speed to "Set Playback Speed"
     )
 
@@ -36,6 +38,7 @@ object CustomResources {
     object string {
         const val menu_option_stealth_mode = -100000
         const val menu_option_preview = -100001
+        const val menu_option_auto_save = -100002
 
         const val chat_action_playback_speed = -200000
     }

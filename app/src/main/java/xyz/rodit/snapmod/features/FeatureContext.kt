@@ -10,6 +10,7 @@ import xyz.rodit.xposed.client.http.StreamServer
 
 private const val PINNED_CONVERSATIONS_FILE = "pinned.list"
 private const val STEALTH_CONVERSATIONS_FILE = "stealth.list"
+private const val AUTO_SAVE_CONVERSATIONS_FILE = "auto_save.list"
 
 class FeatureContext(
     val appContext: Context,
@@ -23,6 +24,7 @@ class FeatureContext(
     val callbacks: CallbackManager = CallbackManager()
     val pinned: ConversationManager = ConversationManager(appContext.filesDir, PINNED_CONVERSATIONS_FILE)
     val stealth: ConversationManager = ConversationManager(appContext.filesDir, STEALTH_CONVERSATIONS_FILE)
+    val autoSave: ConversationManager = ConversationManager(appContext.filesDir, AUTO_SAVE_CONVERSATIONS_FILE)
 
     var activity: Activity? = null
 }

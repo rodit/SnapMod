@@ -20,6 +20,7 @@ class ChatMenuModifier(context: FeatureContext) : Feature(context) {
         registerPlugin(PinOption(context))
         registerPlugin(StealthOption(context))
         registerPlugin(PreviewOption(context))
+        registerPlugin(AutoSaveOption(context))
     }
 
     private fun registerPlugin(plugin: MenuPlugin) {
