@@ -154,6 +154,21 @@
             app:summary="@string/audio_playback_speed_description"
             app:iconSpaceReserved="false"
             app:defaultValue="1.0" />
+
+        <SwitchPreferenceCompat
+            app:key="auto_save_all_chats"
+            app:title="@string/auto_save_all_chats_title"
+            app:summary="@string/auto_save_all_chats_description"
+            app:iconSpaceReserved="false" />
+
+        <MultiSelectListPreference
+            app:key="auto_save_types"
+            app:title="@string/auto_save_types_title"
+            app:summary="@string/auto_save_types_description"
+            app:entries="@array/auto_save_types"
+            app:entryValues="@array/auto_save_types_values"
+            app:iconSpaceReserved="false"
+            app:defaultValue="@array/auto_save_types_defaults" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/snaps_header"

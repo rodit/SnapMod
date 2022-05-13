@@ -24,6 +24,7 @@ class FeatureManager(context: FeatureContext) : Contextual(context) {
         add(::FeedModifier)
 
         // Conversations/chats
+        add(::AutoSave)
         add(::MessageInterceptor)
         add(::PreventBitmojiPresence)
         add(::PreventReadReceipts)

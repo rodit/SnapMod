@@ -14,6 +14,7 @@ import xyz.rodit.snapmod.features.InstanceManager
 import xyz.rodit.snapmod.logging.XLog
 import xyz.rodit.snapmod.logging.log
 import xyz.rodit.snapmod.mappings.MainActivity
+import xyz.rodit.snapmod.util.getList
 import xyz.rodit.snapmod.util.versionCode
 import xyz.rodit.xposed.HooksBase
 import xyz.rodit.xposed.mappings.LoadScheme
@@ -67,9 +68,7 @@ class SnapHooks : HooksBase(
             }, 500)
         }
 
-        XLog.globalLevel = config.getString("global_log_level", "[]").drop(1).dropLast(1).split(',')
-            .filter(String::isNotBlank)
-            .map(String::trim)
+        XLog.globalLevel = config.getList("global_log_level")
             .map(String::toInt)
             .fold(0) { a, b -> a or b }
 

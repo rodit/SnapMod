@@ -69,6 +69,29 @@
         <item>-1</item>
     </string-array>
 
+    <string-array name="auto_save_types">
+        <item>Chats</item>
+        <item>Stickers</item>
+        <item>Images/Videos</item>
+        <item>Snaps</item>
+        <item>Notes</item>
+    </string-array>
+
+    <string-array name="auto_save_types_values">
+        <item>CHAT</item>
+        <item>STICKER</item>
+        <item>EXTERNAL_MEDIA</item>
+        <item>SNAP</item>
+        <item>NOTE</item>
+    </string-array>
+
+    <string-array name="auto_save_types_defaults">
+        <item>CHAT</item>
+        <item>STICKER</item>
+        <item>EXTERNAL_MEDIA</item>
+        <item>NOTE</item>
+    </string-array>
+
     <string-array name="sc_scope">
         <item>com.snapchat.android</item>
     </string-array>

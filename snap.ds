@@ -143,6 +143,13 @@ class NetworkApi expects com.snapchat.client.network_api.NetworkApi$CppProxy {
 }
 
 [certain]
+class MessageDescriptor expects com.snapchat.client.messaging.MessageDescriptor {
+
+    !UUID $getConversationId()
+    long $getMessageId()
+}
+
+[certain]
 class MessageContent expects com.snapchat.client.messaging.MessageContent {
 
     byte[] $getContent()
@@ -150,9 +157,18 @@ class MessageContent expects com.snapchat.client.messaging.MessageContent {
 }
 
 [certain]
+class MessageMetadata expects com.snapchat.client.messaging.MessageMetadata {
+
+    boolean $getIsSaveable()
+    ArrayList $getSavedBy()
+}
+
+[certain]
 class Message expects com.snapchat.client.messaging.Message {
 
+    !MessageDescriptor $getDescriptor()
     !MessageContent $getMessageContent()
+    !MessageMetadata $getMetadata()
     !UUID $getSenderId()
 }
 
@@ -169,12 +185,6 @@ class Conversation expects com.snapchat.client.messaging.Conversation {
     !UUID $getConversationId()
     String $getTitle()
     ArrayList $getParticipants()
-}
-
-[certain]
-class MessageMetadata expects com.snapchat.client.messaging.MessageMetadata {
-
-    boolean $getIsSaveable()
 }
 
 [certain]
@@ -1673,5 +1683,50 @@ class VideoLengthChecker {
         .string "image/";
         .string "video/";
         .type !MediaPackage;
+    }
+}
+
+[certain]
+enum ChatCommandSource {
+
+    @SerializedName("CHAT")
+    static this CHAT;
+    [discard]
+    @SerializedName("CAMERA")
+    static this CAMERA;
+    [discard]
+    @SerializedName("DISCOVER")
+    static this DISCOVER;
+    [discard]
+    @SerializedName("PROFILE")
+    static this PROFILE;
+    [discard]
+    @SerializedName("PUBLIC_PROFILE")
+    static this PUBLIC_PROFILE;
+    [discard]
+    @SerializedName("STORY")
+    static this STORY;
+    [discard]
+    @SerializedName("PROFILE_GALLERY_PLAYBACK")
+    static this PROFILE_GALLERY_PLAYBACK;
+}
+
+[certain]
+class ArroyoConvertMessagesAction {
+
+    * $apply(Object) {
+        .string "ArroyoMessageListDataProvider:convertMessages";
+    }
+}
+
+[certain]
+class ArroyoChatCommandsClient {
+
+    void $<init>(...) {
+        .string "ArroyoChatCommandsClient";
+    }
+
+    void saveMessage(String, boolean, !ChatCommandSource, boolean) {
+        .string "ArroyoChatCommandsClient";
     }
 }
