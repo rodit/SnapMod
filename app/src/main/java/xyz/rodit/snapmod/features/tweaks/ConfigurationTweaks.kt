@@ -51,6 +51,11 @@ class ConfigurationTweaks(context: FeatureContext) : Feature(context) {
             { it.getString("disable_story_sections", "[]").length > 2 },
             true
         )
+
+        override("ENABLE_VOICE_NOTE_REVAMP", "enable_new_voice_notes", true)
+        override("ENABLE_VOICE_NOTES_MESSAGING_PLUGIN", "enable_new_voice_notes", true)
+
+        override("ENABLE_LONG_SNAPS", "disable_snap_splitting", true)
     }
 
     override fun performHooks() {

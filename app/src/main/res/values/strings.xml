@@ -121,10 +121,19 @@
     <string name="updates_header">Updates</string>
     <string name="update_frequency_title">Update Check Frequency</string>
     <string name="update_frequency_description">Sets the minimum amount of time between SnapMod update checks. Note: SnapMod still only checks for updates when you launch it (never in the background).</string>
+
     <string name="check_for_updates_title">Check For Updates</string>
     <string name="check_for_updates_description">Checks for updates now.</string>
+
     <string name="download_date_format_title">Date Format</string>
     <string name="download_date_format_description">Sets the date format for substituted dates (%d) in download paths.</string>
+
     <string name="show_toast_on_download_title">Show Toast</string>
     <string name="show_toast_on_download_description">If enabled, a toast message will be shown when downloads start.</string>
+
+    <string name="disable_snap_splitting_title">Disable Snap Splitting</string>
+    <string name="disable_snap_splitting_description">Stops long snaps from being split up into parts.</string>
+
+    <string name="enable_new_voice_notes_title">Enable New Voice Notes</string>
+    <string name="enable_new_voice_notes_description">Force enables the new voice note UI.</string>
 </resources>

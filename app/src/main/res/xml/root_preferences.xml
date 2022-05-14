@@ -169,6 +169,12 @@
             app:entryValues="@array/auto_save_types_values"
             app:iconSpaceReserved="false"
             app:defaultValue="@array/auto_save_types_defaults" />
+
+        <SwitchPreferenceCompat
+            app:key="enable_new_voice_notes"
+            app:title="@string/enable_new_voice_notes_title"
+            app:summary="@string/enable_new_voice_notes_description"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/snaps_header"
@@ -203,6 +209,12 @@
             app:key="unlimited_snap_duration"
             app:title="@string/unlimited_snap_duration_title"
             app:summary="@string/unlimited_snap_duration_description"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="disable_snap_splitting"
+            app:title="@string/disable_snap_splitting_title"
+            app:summary="@string/disable_snap_splitting_description"
             app:iconSpaceReserved="false" />
 
     </PreferenceCategory>
