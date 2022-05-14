@@ -271,6 +271,12 @@
             app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
+            app:key="show_toast_on_download"
+            app:title="@string/show_toast_on_download_title"
+            app:summary="@string/show_toast_on_download_description"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
             app:key="use_android_download_manager"
             app:title="@string/use_android_download_manager_title"
             app:summary="@string/use_android_download_manager_description"

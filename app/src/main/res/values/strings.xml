@@ -125,4 +125,6 @@
     <string name="check_for_updates_description">Checks for updates now.</string>
     <string name="download_date_format_title">Date Format</string>
     <string name="download_date_format_description">Sets the date format for substituted dates (%d) in download paths.</string>
+    <string name="show_toast_on_download_title">Show Toast</string>
+    <string name="show_toast_on_download_description">If enabled, a toast message will be shown when downloads start.</string>
 </resources>
