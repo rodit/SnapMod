@@ -807,6 +807,23 @@ class SendAndRecycleProcessor {
     }
 }
 
+[certain]
+enum MessageMediaSource {
+
+    [not] int i0;
+
+    static void $<clinit>() {
+        .string "CAMERA", bind field CAMERA next reference;
+        .string "CHAT", bind field CHAT next reference;
+        .string "IN_APP_NOTIFICATION", bind field IN_APP_NOTIFICATION next reference;
+        .string "DIRECT_SHARE", bind field DIRECT_SHARE next reference;
+        .string "FEED_REPLY_BUTTON", bind field FEED_REPLY_BUTTON next reference;
+        .string "GALLERY", bind field GALLERY next reference;
+        .string "GALLERY_STORY", bind field GALLERY_STORY next reference;
+        .string "CAMERA_ROLL", bind field CAMERA_ROLL next reference;
+    }
+}
+
 class MessageSenderCrossroad {
 
     [late] !MessagePayload payload;
@@ -817,6 +834,17 @@ class MessageSenderCrossroad {
     }
 
     * $apply(*) {
+    }
+}
+
+class MessageTypeChecker {
+
+    [discard] static boolean isFromCameraRoll(!MessagePayload, List) {
+        .field !MessageMediaSource->!CAMERA_ROLL;
+    }
+
+    static boolean isMediaOverLimit(List) {
+        .const 11000;
     }
 }
 
