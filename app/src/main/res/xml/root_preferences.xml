@@ -252,7 +252,7 @@
             app:key="download_path_audio_note"
             app:title="@string/download_path_audio_note_title"
             app:summary="@string/download_path_audio_note_description"
-            app:defaultValue="$Movies/SnapMod/%id_audio_%d"
+            app:defaultValue="$Movies/SnapMod/%u_audio_%d"
             app:iconSpaceReserved="false" />
 
         <EditTextPreference

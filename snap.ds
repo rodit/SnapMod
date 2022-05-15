@@ -241,6 +241,8 @@ enum ChatLayouts {
         .string "AUDIO_NOTE", bind field AUDIO_NOTE next reference;
         .string "ERASE", bind field ERASE next reference;
         .string "SAVED_SNAP", bind field SAVED_SNAP next reference;
+        .string "PLUGIN", bind field PLUGIN next reference;
+        .string "PLUGIN_STATUS", bind field PLUGIN_STATUS next reference;
     }
 }
 
@@ -346,6 +348,8 @@ interface MessageDataModel {
     String $getType()
     String getSenderUsername()
 
+    !MediaBaseBase getMedia()
+
     !MessageState getMessageState()
     !SnapPlaybackStatus getPlaybackStatus()
 }
@@ -410,6 +414,7 @@ interface MediaBase implements #MediaBaseBase {
     List l0()
 }
 
+[certain]
 class LiveSnapMedia implements #MediaBase {
     @SerializedName("parameterPackage")
     #ParameterPackage parameterPackage;
@@ -1756,5 +1761,14 @@ class ArroyoChatCommandsClient {
 
     void saveMessage(String, boolean, !ChatCommandSource, boolean) {
         .string "ArroyoChatCommandsClient";
+    }
+}
+
+[certain]
+class ChatModelPlugin {
+
+    void $<init>(Context, ...) {
+        .field !ChatLayouts->!PLUGIN;
+        .field !ChatLayouts->!PLUGIN_STATUS;
     }
 }

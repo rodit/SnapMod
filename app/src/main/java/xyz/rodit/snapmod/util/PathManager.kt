@@ -29,7 +29,7 @@ object PathManager {
     )
     private val defaultPaths: MutableMap<String, String> = mutableMapOf(
         DOWNLOAD_STORY to "\$Movies/SnapMod/%u_story_%d",
-        DOWNLOAD_AUDIO_NOTE to "\$Movies/SnapMod/%id_audio_%d",
+        DOWNLOAD_AUDIO_NOTE to "\$Movies/SnapMod/%u_audio_%d",
         DOWNLOAD_PROFILE to "\$Movies/SnapMod/%u_profile_%d",
         DOWNLOAD_SNAP to "\$Movies/SnapMod/%u_snap_%d"
     )

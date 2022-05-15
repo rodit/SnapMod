@@ -1,12 +1,17 @@
 package xyz.rodit.snapmod.features.saving
 
-import android.util.Log
+import android.net.Uri
 import xyz.rodit.snapmod.ResolutionListener
+import xyz.rodit.snapmod.Shared
 import xyz.rodit.snapmod.UriResolverSubscriber
 import xyz.rodit.snapmod.features.Feature
 import xyz.rodit.snapmod.features.FeatureContext
+import xyz.rodit.snapmod.logging.log
 import xyz.rodit.snapmod.mappings.*
-import xyz.rodit.snapmod.util.*
+import xyz.rodit.snapmod.util.PathManager
+import xyz.rodit.snapmod.util.after
+import xyz.rodit.snapmod.util.before
+import xyz.rodit.snapmod.util.download
 import xyz.rodit.xposed.client.http.StreamProvider
 import xyz.rodit.xposed.client.http.streams.CachedStreamProvider
 import xyz.rodit.xposed.client.http.streams.FileProxyStreamProvider
@@ -81,32 +86,18 @@ class ChatSaving(context: FeatureContext) : Feature(context) {
                     true
                 ).instance
             } else if (ChatModelAudioNote.isInstance(it.args[2])) {
-                // Resolve audio uri and resolve through proxy of RxObserver.
-                // Note: the content resolver provided by appContext cannot open a stream from the uri.
                 val audio = ChatModelAudioNote.wrap(it.args[2])
+                resolveAndDownload(audio.uri, base.messageData)
 
-                val observerProxy = Proxy.newProxyInstance(
-                    context.classLoader,
-                    arrayOf(RxObserver.getMappedClass()),
-                    MediaUriDownloader(
-                        context,
-                        PathManager.DOWNLOAD_AUDIO_NOTE,
-                        mapOf(
-                            "id" to base.senderId,
-                            "u" to base.messageData.senderUsername,
-                            "d" to base.messageData.senderDisplayName
-                        ),
-                        ".aac"
-                    )
-                )
+                it.result = null
+            } else if (ChatModelPlugin.isInstance(it.args[2])) {
+                val messageData = base.messageData
 
-                chatMediaHandler!!.resolve(
-                    audio.uri,
-                    emptySet<Any>(),
-                    true,
-                    emptySet<Any>()
-                ).subscribe(RxObserver.wrap(observerProxy))
+                if (messageData.type != "audio_note") return@before
+                val media = GallerySnapMedia.wrap(messageData.media.instance).media
+                val uri = createMediaUri(messageData.arroyoMessageId, media.id)
 
+                resolveAndDownload(uri, messageData)
                 it.result = null
             }
         }
@@ -125,11 +116,7 @@ class ChatSaving(context: FeatureContext) : Feature(context) {
 
             context.download(
                 PathManager.DOWNLOAD_SNAP,
-                mapOf(
-                    "u" to messageData.senderUsername,
-                    "id" to messageData.senderId,
-                    "d" to messageData.senderDisplayName
-                ),
+                createParams(messageData),
                 '.' + export.fileName.orEmpty().split('.').last(),
                 provider,
                 "${lastMessageData!!.senderDisplayName}'s snap"
@@ -139,7 +126,48 @@ class ChatSaving(context: FeatureContext) : Feature(context) {
         }
     }
 
-    private class MediaUriDownloader(context: FeatureContext, type: String, paramsMap: Map<String, String>, extension: String) :
+    private fun createParams(messageData: MessageDataModel): Map<String, String> {
+        return mapOf(
+            "d" to messageData.senderDisplayName,
+            "id" to messageData.senderId,
+            "u" to messageData.senderUsername
+        )
+    }
+
+    private fun resolveAndDownload(uri: Uri, messageData: MessageDataModel) {
+        // Resolve audio uri and resolve through proxy of RxObserver.
+        // Note: the content resolver provided by appContext cannot open a stream from the uri.
+        val observerProxy = Proxy.newProxyInstance(
+            context.classLoader,
+            arrayOf(RxObserver.getMappedClass()),
+            MediaUriDownloader(
+                context,
+                PathManager.DOWNLOAD_AUDIO_NOTE,
+                createParams(messageData),
+                ".aac"
+            )
+        )
+
+        chatMediaHandler!!.resolve(
+            uri,
+            emptySet<Any>(),
+            true,
+            emptySet<Any>()
+        ).subscribe(RxObserver.wrap(observerProxy))
+    }
+
+    private fun createMediaUri(messageId: String, mediaId: String): Uri {
+        return Uri.Builder().scheme("content").authority("${Shared.SNAPCHAT_PACKAGE}.provider")
+            .appendPath("chat_media")
+            .appendPath(messageId)
+            .appendPath(mediaId)
+            .appendQueryParameter("target", "DEFAULT")
+            .build()
+    }
+
+    private class MediaUriDownloader(
+        context: FeatureContext, type: String, paramsMap: Map<String, String>, extension: String
+    ) :
         UriResolverSubscriber(UriListener(context, type, paramsMap, extension)) {
 
         private class UriListener(
@@ -149,14 +177,14 @@ class ChatSaving(context: FeatureContext) : Feature(context) {
             ResolutionListener {
 
             override fun invoke(result: Any?) {
-                Log.d(TAG, "Accepted media stream provider: $result")
+                log.debug("Accepted media stream provider: $result")
                 val streamProvider = MediaStreamProvider.wrap(result)
                 val provider: StreamProvider =
                     CachedStreamProvider(FileProxyStreamProvider(context.appContext) { streamProvider.mediaStream })
                 try {
                     provider.provide()
                 } catch (e: IOException) {
-                    Log.e(TAG, "Error pre-providing cached stream.", e)
+                    log.error("Error pre-providing cached stream.", e)
                 }
 
                 context.download(type, paramsMap, extension, provider, "Media")
