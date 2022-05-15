@@ -74,9 +74,9 @@ class Callback expects com.snapchat.client.messaging.Callback {
 [certain]
 enum SavePolicy expects com.snapchat.client.messaging.SavePolicy {
 
-    static this PROHIBITED;
-    static this LIFETIME;
-    static this VIEW_SESSION;
+    static this $PROHIBITED;
+    static this $LIFETIME;
+    static this $VIEW_SESSION;
 }
 
 [certain]
@@ -187,78 +187,49 @@ class Conversation expects com.snapchat.client.messaging.Conversation {
     ArrayList $getParticipants()
 }
 
-[certain]
+[certain, obfuscated]
 enum MessageState {
 
-    static void $<clinit>() {
-        .string "NONE", bind field NONE next reference;
-        .string "SENT", bind field SENT next reference;
-        .string "DELIVERED", bind field DELIVERED next reference;
-        .string "VIEWED", bind field VIEWED next reference;
-        .string "SCREENSHOT", bind field SCREENSHOT next reference;
-        .string "PENDING", bind field PENDING next reference;
-    }
+    [late] static this .fields { NONE, SENT, DELIVERED, VIEWED, SCREENSHOT, PENDING }
 }
 
-[certain]
+[certain, obfuscated]
 enum SnapPlaybackStatus {
 
-    static void $<clinit>() {
-        .string "PLAYABLE", bind field PLAYABLE next reference;
-        .string "VIEWEDREPLAYABLE", bind field VIEWEDREPLAYABLE next reference;
-        .string "PLAYING", bind field PLAYING next reference;
-        .string "VIEWEDNOTREPLAYABLE", bind field VIEWEDNOTREPLAYABLE next reference;
-        .string "SAVED", bind field SAVED next reference;
-        .string "NONE", bind field NONE next reference;
-    }
+    [late] static this .fields { PLAYABLE, VIEWEDREPLAYABLE, PLAYING, VIEWEDNOTREPLAYABLE, SAVED, NONE }
 }
 
-[certain]
+[certain, obfuscated]
 enum SaveType {
 
-    static void $<clinit>() {
-        .string "SNAPCHAT_ALBUM", bind field SNAPCHAT_ALBUM next reference;
-        .string "SPECTACLES_ALBUM", bind field SPECTACLES_ALBUM next reference;
-        .string "EXTERNAL_APPS", bind field EXTERNAL_APPS next reference;
-        .string "SMS", bind field SMS next reference;
-        .string "EMAIL", bind field EMAIL next reference;
-    }
+    [late] static this .fields { SNAPCHAT_ALBUM, SPECTACLES_ALBUM, EXTERNAL_APPS, SMS, EMAIL }
 }
 
 
-[certain]
+[certain, obfuscated]
 enum ChatLayouts {
 
-    int layoutId;
-
-    static void $<clinit>() {
-        .string "UNKNOWN", bind field SNAPCHAT_ALBUM next reference;
-        .string "TEXT_WITH_MEDIA_CARDS", bind field TEXT_WITH_MEDIA_CARDS next reference;
-        .string "SNAP", bind field SNAP next reference;
-        .string "CHAT_MEDIA", bind field CHAT_MEDIA next reference;
-        .string "MEMORIES_STORY", bind field MEMORIES_STORY next reference;
-        .string "TEXT_STORY_REPLY", bind field TEXT_STORY_REPLY next reference;
-        .string "AUDIO_NOTE", bind field AUDIO_NOTE next reference;
-        .string "ERASE", bind field ERASE next reference;
-        .string "SAVED_SNAP", bind field SAVED_SNAP next reference;
-        .string "PLUGIN", bind field PLUGIN next reference;
-        .string "PLUGIN_STATUS", bind field PLUGIN_STATUS next reference;
+    [late] static this .fields {
+        UNKNOWN,
+        TEXT_WITH_MEDIA_CARDS,
+        SNAP,
+        CHAT_MEDIA,
+        MEMORIES_STORY,
+        TEXT_STORY_REPLY,
+        AUDIO_NOTE,
+        ERASE,
+        SAVED_SNAP,
+        PLUGIN,
+        PLUGIN_STATUS
     }
+
+    int layoutId;
 }
 
-[certain]
+[certain, obfuscated]
 enum SnapMediaType {
 
-    @SerializedName("text")
-    static this TEXT;
-    @SerializedName("media")
-    static this MEDIA;
-    @SerializedName("sticker")
-    static this STICKER;
-    @SerializedName("media_v3")
-    static this MEDIA_V3;
-    @SerializedName("media_v4")
-    static this MEDIA_V4;
+    [late] static this .fields { TEXT, MEDIA, STICKER, MEDIA_V3, MEDIA_V4 }
 
     String name;
 }
@@ -297,16 +268,10 @@ class MediaReference {
     }
 }
 
-[certain]
+[certain, obfuscated]
 enum MediaType {
 
-    static void $<clinit>() {
-        .string "IMAGE", bind field IMAGE next reference;
-        .string "VIDEO", bind field VIDEO next reference;
-        .string "VIDEO_NO_SOUND", bind field VIDEO_NO_SOUND next reference;
-        .string "AUDIO", bind field AUDIO next reference;
-        .string "WEB", bind field WEB next reference;
-    }
+    [late] static this .fields { IMAGE, VIDEO, VIDEO_NO_SOUND, AUDIO, WEB }
 }
 
 [late]
@@ -521,13 +486,10 @@ class FriendProfilePageData {
     }
 }
 
-[certain]
+[certain, obfuscated]
 enum ProfileSectionType {
 
-    static void $<clinit>() {
-        .string "FOOTER_INFO_ITEM", bind field FOOTER_INFO_ITEM next reference;
-        .string "IDENTITY_CAROUSEL";
-    }
+    [late] static this .fields { FOOTER_INFO_ITEM, IDENTITY_CAROUSEL }
 }
 
 class FooterInfoItem {
@@ -567,23 +529,16 @@ class ChatContext {
     }
 }
 
-[certain]
+[certain, obfuscated]
 enum ChatMenuItemType {
 
-    [late] static this COPY;
-    [late] static this SAVE_IN_CHAT;
-    [late] static this UNSAVE_IN_CHAT;
-    [late] static this SAVE_TO_CAMERA_ROLL;
-    [late] static this ERASE_QUOTE;
-    [late] static this SNAP_REPLY;
-
-    static void $<clinit>() {
-        .string "COPY", bind field COPY next reference;
-        .string "SAVE_IN_CHAT", bind field SAVE_IN_CHAT next reference;
-        .string "UNSAVE_IN_CHAT", bind field UNSAVE_IN_CHAT next reference;
-        .string "SAVE_TO_CAMERA_ROLL", bind field SAVE_TO_CAMERA_ROLL next reference;
-        .string "ERASE_QUOTE", bind field ERASE_QUOTE next reference;
-        .string "SNAP_REPLY", bind field SNAP_REPLY next reference;
+    [late] static this .fields {
+        COPY,
+        SAVE_IN_CHAT,
+        UNSAVE_IN_CHAT,
+        SAVE_TO_CAMERA_ROLL,
+        ERASE_QUOTE,
+        SNAP_REPLY
     }
 }
 
@@ -608,21 +563,17 @@ class BitmojiUriHandler {
     }
 }
 
-[certain]
+[certain, obfuscated]
 enum FriendAddMethod {
 
-    @com.google.gson.annotations.SerializedName("ADDED_BY_USERNAME")
-    static * ADDED_BY_USERNAME;
-    @com.google.gson.annotations.SerializedName("ADDED_BY_ADDED_ME_BACK")
-    static * ADDED_BY_ADDED_ME_BACK;
-    @com.google.gson.annotations.SerializedName("ADDED_BY_SUGGESTED")
-    static * ADDED_BY_SUGGESTED;
-    @com.google.gson.annotations.SerializedName("ADDED_BY_SHARED_USERNAME")
-    static * ADDED_BY_SHARED_USERNAME;
-    @com.google.gson.annotations.SerializedName("ADDED_BY_SHARED_STORY")
-    static * ADDED_BY_SHARED_STORY;
-    @com.google.gson.annotations.SerializedName("ADDED_BY_GROUP_CHAT")
-    static * ADDED_BY_GROUP_CHAT;
+    [late] static this .fields {
+        ADDED_BY_USERNAME,
+        ADDED_BY_ADDED_ME_BACK,
+        ADDED_BY_SUGGESTED,
+        ADDED_BY_SHARED_USERNAME,
+        ADDED_BY_SHARED_STORY,
+        ADDED_BY_GROUP_CHAT
+    }
 }
 
 [certain]
@@ -693,17 +644,17 @@ class OperaActionMenuOptionViewModel {
     }
 }
 
-[certain]
+[certain, obfuscated]
 enum OperaContextAction {
 
-    static void $<clinit>() {
-        .string "SEND", bind field SEND next reference;
-        .string "EDIT", bind field EDIT next reference;
-        .string "EXPORT", bind field EXPORT next reference;
-        .string "IN_APP_REPORT", bind field IN_APP_REPORT next reference;
-        .string "REPORT_AD", bind field REPORT_AD next reference;
-        .string "HIDE_AD", bind field HIDE_AD next reference;
-        .string "SAVE", bind field SAVE next reference;
+    [late] static this .fields {
+        SEND,
+        EDIT,
+        EXPORT,
+        IN_APP_REPORT,
+        REPORT_AD,
+        HIDE_AD,
+        SAVE
     }
 }
 
@@ -812,21 +763,21 @@ class SendAndRecycleProcessor {
     }
 }
 
-[certain]
+[certain, obfuscated]
 enum MessageMediaSource {
 
-    [not] int i0;
-
-    static void $<clinit>() {
-        .string "CAMERA", bind field CAMERA next reference;
-        .string "CHAT", bind field CHAT next reference;
-        .string "IN_APP_NOTIFICATION", bind field IN_APP_NOTIFICATION next reference;
-        .string "DIRECT_SHARE", bind field DIRECT_SHARE next reference;
-        .string "FEED_REPLY_BUTTON", bind field FEED_REPLY_BUTTON next reference;
-        .string "GALLERY", bind field GALLERY next reference;
-        .string "GALLERY_STORY", bind field GALLERY_STORY next reference;
-        .string "CAMERA_ROLL", bind field CAMERA_ROLL next reference;
+    [late] static this .fields {
+        CAMERA,
+        CHAT,
+        IN_APP_NOTIFICATION,
+        DIRECT_SHARE,
+        FEED_REPLY_BUTTON,
+        GALLERY,
+        GALLERY_STORY,
+        CAMERA_ROLL
     }
+
+    [not] int i0;
 }
 
 class MessageSenderCrossroad {
@@ -1292,29 +1243,16 @@ class ActionMenuActionModel {
     }
 }
 
-[certain]
+[certain, obfuscated]
 enum ActionMenuOptionItemType {
 
-    [late] static this OPTION_ITEM;
-    [late] static this OPTION_ITEM_TOGGLE;
-    [late] static this SIMPLE_OPTION_ITEM;
-    [late] static this SPINNER_OPTION_ITEM;
-    [late] static this SUBTITLE_OPTION_ITEM;
-    [late] static this FEED_OPTION_ITEM;
-
-    static void $<clinit>() {
-        [strict]
-        .string "OPTION_ITEM", bind field OPTION_ITEM next reference;
-        [strict]
-        .string "OPTION_ITEM_TOGGLE", bind field OPTION_ITEM_TOGGLE next reference;
-        [strict]
-        .string "SIMPLE_OPTION_ITEM", bind field SIMPLE_OPTION_ITEM next reference;
-        [strict]
-        .string "SPINNER_OPTION_ITEM", bind field SPINNER_OPTION_ITEM next reference;
-        [strict]
-        .string "SUBTITLE_OPTION_ITEM", bind field SUBTITLE_OPTION_ITEM next reference;
-        [strict]
-        .string "FEED_OPTION_ITEM", bind field FEED_OPTION_ITEM next reference;
+    [late] static this .fields {
+        OPTION_ITEM,
+        OPTION_ITEM_TOGGLE,
+        SIMPLE_OPTION_ITEM,
+        SPINNER_OPTION_ITEM,
+        SUBTITLE_OPTION_ITEM,
+        FEED_OPTION_ITEM
     }
 }
 
@@ -1340,26 +1278,15 @@ class ActionMenuOptionToggleItemViewModel {
     }
 }
 
-[certain, discard]
+[certain, discard, obfuscated]
 enum ChatActionType {
 
-    [late] static this CHAT_BUTTON_CLICK;
-    [late] static this SNAP_BUTTON_CLICK;
-    [late] static this AUDIO_CALL_BUTTON_CLICK;
-    [late] static this VIDEO_CALL_BUTTON_CLICK;
-    [late] static this SETTINGS_CLICK;
-
-    static void $<clinit>() {
-        [strict]
-        .string "CHAT_BUTTON_CLICK", bind field CHAT_BUTTON_CLICK next reference;
-        [strict]
-        .string "SNAP_BUTTON_CLICK", bind field SNAP_BUTTON_CLICK next reference;
-        [strict]
-        .string "AUDIO_CALL_BUTTON_CLICK", bind field AUDIO_CALL_BUTTON_CLICK next reference;
-        [strict]
-        .string "VIDEO_CALL_BUTTON_CLICK", bind field VIDEO_CALL_BUTTON_CLICK next reference;
-        [strict]
-        .string "SETTINGS_CLICK", bind field SETTINGS_CLICK next reference;
+    [late] static this .fields {
+        CHAT_BUTTON_CLICK,
+        SNAP_BUTTON_CLICK,
+        AUDIO_CALL_BUTTON_CLICK,
+        VIDEO_CALL_BUTTON_CLICK,
+        SETTINGS_CLICK
     }
 }
 
@@ -1404,24 +1331,10 @@ class FriendChatActionHandler {
     }
 }
 
-[late]
+[late, obfuscated]
 enum ConfigValueType {
 
-    [late] static this BOOLEAN;
-    [late] static this INTEGER;
-    [late] static this LONG;
-    [late] static this FLOAT;
-    [late] static this DOUBLE;
-    [late] static this STRING;
-
-    static void $<clinit>() {
-        .string "BOOLEAN", bind field BOOLEAN next reference;
-        .string "INTEGER", bind field INTEGER next reference;
-        .string "LONG", bind field LONG next reference;
-        .string "FLOAT", bind field FLOAT next reference;
-        .string "DOUBLE", bind field DOUBLE next reference;
-        .string "STRING", bind field STRING next reference;
-    }
+    [late] static this .fields { BOOLEAN, INTEGER, LONG, FLOAT, DOUBLE, STRING }
 }
 
 [late]
@@ -1438,15 +1351,10 @@ interface ConfigKeyBase {
     String getName()
 }
 
+[obfuscated]
 enum AdConfigKey implements #ConfigKeyBase {
 
-    [late] static this GLOBAL_MIN_TIME_BETWEEN_ADS;
-    [late] static this GLOBAL_MIN_SNAPS_BETWEEN_ADS;
-
-    static void $<clinit>() {
-        .string "GLOBAL_MIN_TIME_BETWEEN_ADS", bind field GLOBAL_MIN_TIME_BETWEEN_ADS next reference;
-        .string "GLOBAL_MIN_SNAPS_BETWEEN_ADS", bind field GLOBAL_MIN_SNAPS_BETWEEN_ADS next reference;
-    }
+    [late] static this .fields { GLOBAL_MIN_TIME_BETWEEN_ADS, GLOBAL_MIN_SNAPS_BETWEEN_ADS }
 }
 
 class CompositeConfigurationProvider {
@@ -1719,29 +1627,18 @@ class VideoLengthChecker {
     }
 }
 
-[certain]
+[certain, obfuscated]
 enum ChatCommandSource {
 
-    @SerializedName("CHAT")
-    static this CHAT;
-    [discard]
-    @SerializedName("CAMERA")
-    static this CAMERA;
-    [discard]
-    @SerializedName("DISCOVER")
-    static this DISCOVER;
-    [discard]
-    @SerializedName("PROFILE")
-    static this PROFILE;
-    [discard]
-    @SerializedName("PUBLIC_PROFILE")
-    static this PUBLIC_PROFILE;
-    [discard]
-    @SerializedName("STORY")
-    static this STORY;
-    [discard]
-    @SerializedName("PROFILE_GALLERY_PLAYBACK")
-    static this PROFILE_GALLERY_PLAYBACK;
+    [late] static this .fields {
+        CHAT,
+        [discard] CAMERA,
+        [discard] DISCOVER,
+        [discard] PROFILE,
+        [discard] PUBLIC_PROFILE,
+        [discard] STORY,
+        [discard] PROFILE_GALLERY_PLAYBACK
+    }
 }
 
 [certain]
