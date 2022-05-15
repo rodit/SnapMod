@@ -72,7 +72,6 @@ class SettingsActivity : SettingsActivity(R.xml.root_preferences) {
             }
         }
 
-        setNumericInput(fragment, "override_snap_timer")
         setNumericInput(fragment, "public_dp_resolution")
         setNumericInput(fragment, "location_share_lat")
         setNumericInput(fragment, "location_share_long")

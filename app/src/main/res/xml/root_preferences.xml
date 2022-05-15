@@ -186,13 +186,6 @@
             app:summary="@string/override_snap_description"
             app:iconSpaceReserved="false" />
 
-        <EditTextPreference
-            app:key="override_snap_timer"
-            app:title="@string/gallery_snap_time_title"
-            app:summary="@string/override_snap_timer_description"
-            app:iconSpaceReserved="false"
-            app:defaultValue="0" />
-
         <SwitchPreferenceCompat
             app:key="allow_save_snaps"
             app:title="@string/allow_save_snaps_title"

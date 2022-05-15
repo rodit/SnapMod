@@ -20,19 +20,11 @@ class SnapOverrides(context: FeatureContext) : Feature(context) {
             if (!GallerySnapMedia.isInstance(message.instance)) return@before
 
             val id = GallerySnapMedia.wrap(message.instance).media.id
-            val snap = LiveSnapMedia()
-            val timer = context.config.getDouble("override_snap_timer", 0.0)
-            snap.mediaId = id
-            if (context.config.getBoolean("enable_snap_type_override")) {
-                val overrideType = context.config.getString("snap_type_override", "IMAGE")
-                snap.mediaType = MediaType.valueOf(overrideType)
-            } else {
-                snap.mediaType = MediaType.IMAGE()
-            }
+            val snap = LiveSnapMedia().apply { mediaId = id }
 
             val paramPackage = ParameterPackage(
-                timer == 0.0,
-                timer,
+                true,
+                0.0,
                 null,
                 null,
                 null,
