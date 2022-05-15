@@ -29,7 +29,9 @@ class AutoSave(context: FeatureContext) : Feature(context) {
             }
 
             val messages =
-                (it.args[0] as List<*>).map { p -> Message.wrap(p?.pairFirst) }
+                (it.args[0] as List<*>).map { p -> p?.pairFirst }
+                    .filter(Message::isInstance)
+                    .map { m -> Message.wrap(m) }
             messages.filter(Message::isNotNull).forEach { m ->
                 val descriptor = m.descriptor
                 val conversationId = descriptor.conversationId.toUUIDString()
