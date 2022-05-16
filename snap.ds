@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Matrix;
 import android.net.Uri;
+import android.os.Bundle;
 
 import com.google.gson.annotations.SerializedName;
 import com.google.protobuf.nano.MessageNano;
@@ -1667,5 +1668,53 @@ class ChatModelPlugin {
     void $<init>(Context, ...) {
         .field !ChatLayouts->!PLUGIN;
         .field !ChatLayouts->!PLUGIN_STATUS;
+    }
+}
+
+[certain, discard]
+class NotificationDisplayData {
+
+    String $toString() {
+        .string "DisplayData(senderDisplayName=";
+        .string ", systemText=";
+        .string ", title=";
+    }
+}
+
+[certain]
+class NotificationData {
+
+    String id;
+    String key;
+    String recipientId;
+    String recipientUsername;
+    [discard] !NotificationDisplayData ndd0;
+    long timestamp0;
+    long timestamp1;
+    String revokeKey;
+    Bundle bundle;
+}
+
+[certain, obfuscated, discard]
+enum NotificationHandlerStatus {
+
+    [late] static this .fields {
+        HANDLER_START,
+        DISPLAY_MODEL_CREATE,
+        RETURN_EMPTY_RATE_LIMITED
+    }
+}
+
+[certain]
+class NotificationHandler {
+
+    [discard] Object o0;
+    [discard] int a0;
+    Object data;
+
+    * handle() {
+        .type !NotificationData;
+        .field !NotificationHandlerStatus->!RETURN_EMPTY_RATE_LIMITED;
+        .field !NotificationHandlerStatus->!DISPLAY_MODEL_CREATE;
     }
 }

@@ -11,6 +11,7 @@ import xyz.rodit.snapmod.features.saving.ChatSaving
 import xyz.rodit.snapmod.features.saving.PublicProfileSaving
 import xyz.rodit.snapmod.features.saving.StoriesSaving
 import xyz.rodit.snapmod.features.tweaks.*
+import xyz.rodit.snapmod.notifications.ShowMessageContent
 
 class FeatureManager(context: FeatureContext) : Contextual(context) {
 
@@ -34,6 +35,9 @@ class FeatureManager(context: FeatureContext) : Contextual(context) {
 
         // Message context menu
         add(::MessageMenuModifier)
+
+        // Notifications
+        add(::ShowMessageContent)
 
         // Opera (story/snap view)
         add(::OperaModelModifier)

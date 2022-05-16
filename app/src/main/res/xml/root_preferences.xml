@@ -86,18 +86,6 @@
             app:title="@string/hide_read_title"
             app:summary="@string/hide_read_description"
             app:iconSpaceReserved="false"/>
-
-        <SwitchPreferenceCompat
-            app:key="hide_save"
-            app:title="@string/hide_save_title"
-            app:summary="@string/hide_save_description"
-            app:iconSpaceReserved="false" />
-
-        <SwitchPreferenceCompat
-            app:key="dont_release"
-            app:title="@string/dont_release_messages_title"
-            app:summary="@string/dont_release_description"
-            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/tweaks_header"
@@ -174,6 +162,12 @@
             app:key="enable_new_voice_notes"
             app:title="@string/enable_new_voice_notes_title"
             app:summary="@string/enable_new_voice_notes_description"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="show_notification_content"
+            app:title="@string/show_notification_content_title"
+            app:summary="@string/show_notification_content_description"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
