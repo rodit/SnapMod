@@ -86,18 +86,6 @@
             app:title="@string/hide_read_title"
             app:summary="@string/hide_read_description"
             app:iconSpaceReserved="false"/>
-
-        <SwitchPreferenceCompat
-            app:key="hide_save"
-            app:title="@string/hide_save_title"
-            app:summary="@string/hide_save_description"
-            app:iconSpaceReserved="false" />
-
-        <SwitchPreferenceCompat
-            app:key="dont_release"
-            app:title="@string/dont_release_messages_title"
-            app:summary="@string/dont_release_description"
-            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/tweaks_header"
@@ -290,27 +278,29 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/location_header"
+
+    <PreferenceCategory app:title="@string/notifications_header"
         app:iconSpaceReserved="false">
 
         <SwitchPreferenceCompat
-            app:key="location_share_override"
-            app:title="@string/location_share_override_title"
-            app:summary="@string/location_share_override_description"
+            app:key="show_notification_content"
+            app:title="@string/show_notification_content_title"
+            app:summary="@string/show_notification_content_description"
             app:iconSpaceReserved="false" />
 
-        <EditTextPreference
-            app:key="location_share_lat"
-            app:title="@string/location_share_lat_title"
-            app:iconSpaceReserved="false"
-            app:defaultValue="0" />
+        <SwitchPreferenceCompat
+            app:key="show_notification_media_previews"
+            app:title="@string/show_notification_media_previews_title"
+            app:summary="@string/show_notification_media_previews_description"
+            app:iconSpaceReserved="false" />
 
-        <EditTextPreference
-            app:key="location_share_long"
-            app:title="@string/location_share_long_title"
-            app:iconSpaceReserved="false"
-            app:defaultValue="0" />
-
+        <MultiSelectListPreference
+            app:key="filtered_notification_types"
+            app:title="@string/filtered_notification_types_title"
+            app:summary="@string/filtered_notification_types_description"
+            app:entries="@array/notification_types"
+            app:entryValues="@array/notification_types_values"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/debug_header"

@@ -6,6 +6,7 @@
     <string name="tweaks_header">Tweaks</string>
     <string name="snaps_header">Snaps</string>
     <string name="downloads_header">Downloads</string>
+    <string name="notifications_header">Notifications</string>
     <string name="location_header">Location Sharing</string>
     <string name="debug_header">Information</string>
 
@@ -136,4 +137,13 @@
 
     <string name="enable_new_voice_notes_title">Enable New Voice Notes</string>
     <string name="enable_new_voice_notes_description">Force enables the new voice note UI.</string>
+
+    <string name="show_notification_content_title">Show Message In Notifications</string>
+    <string name="show_notification_content_description">Displays message content in notifications.</string>
+
+    <string name="show_notification_media_previews_title">Show Media Previews</string>
+    <string name="show_notification_media_previews_description">Shows previews in the notifications for non-text media (images and videos). Note, this requires the entire media to be downloaded so this will consume data when notifications are received.</string>
+
+    <string name="filtered_notification_types_title">Filtered Message Types</string>
+    <string name="filtered_notification_types_description">Notifications will not be shown for filtered message types.</string>
 </resources>

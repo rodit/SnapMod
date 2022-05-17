@@ -41,6 +41,18 @@
         <item>for_you</item>
     </string-array>
 
+    <string-array name="notification_types">
+        <item>Chats</item>
+        <item>Snaps</item>
+        <item>Typing</item>
+    </string-array>
+
+    <string-array name="notification_types_values">
+        <item>chat</item>
+        <item>snap</item>
+        <item>typing</item>
+    </string-array>
+
     <string-array name="log_levels">
         <item>Warnings</item>
         <item>Errors</item>

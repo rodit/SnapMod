@@ -6,6 +6,8 @@ import xyz.rodit.snapmod.features.friendsfeed.FeedModifier
 import xyz.rodit.snapmod.features.info.AdditionalFriendInfo
 import xyz.rodit.snapmod.features.info.NetworkLogging
 import xyz.rodit.snapmod.features.messagemenu.MessageMenuModifier
+import xyz.rodit.snapmod.features.notifications.FilterTypes
+import xyz.rodit.snapmod.features.notifications.ShowMessageContent
 import xyz.rodit.snapmod.features.opera.OperaModelModifier
 import xyz.rodit.snapmod.features.saving.ChatSaving
 import xyz.rodit.snapmod.features.saving.PublicProfileSaving
@@ -34,6 +36,10 @@ class FeatureManager(context: FeatureContext) : Contextual(context) {
 
         // Message context menu
         add(::MessageMenuModifier)
+
+        // Notifications
+        add(::FilterTypes)
+        add(::ShowMessageContent)
 
         // Opera (story/snap view)
         add(::OperaModelModifier)
