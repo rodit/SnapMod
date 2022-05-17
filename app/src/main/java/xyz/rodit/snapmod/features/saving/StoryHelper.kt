@@ -4,8 +4,12 @@ import xyz.rodit.snapmod.createDummyProxy
 import xyz.rodit.snapmod.features.FeatureContext
 import xyz.rodit.snapmod.logging.XLog
 import xyz.rodit.snapmod.mappings.*
+import xyz.rodit.snapmod.util.download
 import xyz.rodit.snapmod.util.toSnapUUID
 import xyz.rodit.snapmod.util.toUUIDString
+import xyz.rodit.xposed.client.http.StreamProvider
+import xyz.rodit.xposed.client.http.streams.FileProxyStreamProvider
+import java.net.URL
 
 private val mLog = XLog("StoryHelper")
 
@@ -14,8 +18,10 @@ typealias UsernameFetcher = (Map<*, *>) -> String?
 private val usernameFetchers = listOf<UsernameFetcher>(
     {
         val session = ContextSession.wrap(it[ContextStoryKeys.getContextSession().instance])
-        val snapUsername = session.info.username
-        if (snapUsername.isNotNull) snapUsername.displayString else null
+        if (session.isNull) null else {
+            val snapUsername = session.info.username
+            if (snapUsername.isNotNull) snapUsername.displayString else null
+        }
     },
     {
         val storySnap =
@@ -23,6 +29,33 @@ private val usernameFetchers = listOf<UsernameFetcher>(
         if (storySnap.isNotNull) storySnap.displayName else null
     }
 )
+
+fun downloadOperaMedia(context: FeatureContext, type: String, media: StoryMedia?) {
+    if (media == null || media.info.isNull) return
+
+    val provider: StreamProvider = FileProxyStreamProvider(context.appContext) {
+        try {
+            var stream = URL(media.info.uri).openStream()
+            val enc = media.info.encryption
+            if (enc.isNotNull) {
+                stream = enc.decryptStream(stream)
+            }
+
+            return@FileProxyStreamProvider stream
+        } catch (e: Exception) {
+            mLog.error("Error opening story media stream.", e)
+        }
+        return@FileProxyStreamProvider null
+    }
+
+    context.download(
+        type,
+        mapOf("u" to media.username),
+        media.extension,
+        provider,
+        media.username + "'s Story"
+    )
+}
 
 fun getMediaInfo(
     context: FeatureContext, metadata: ParamsMap, callback: (StoryMedia?) -> Unit

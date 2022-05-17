@@ -97,6 +97,20 @@
         <item>NOTE</item>
     </string-array>
 
+    <string-array name="chat_options">
+        <item>Pin</item>
+        <item>Stealth</item>
+        <item>Auto Save</item>
+        <item>Auto Download Snaps</item>
+    </string-array>
+
+    <string-array name="chat_options_values">
+        <item>pinning</item>
+        <item>stealth</item>
+        <item>auto_save</item>
+        <item>auto_download</item>
+    </string-array>
+
     <string-array name="auto_save_types_defaults">
         <item>CHAT</item>
         <item>STICKER</item>

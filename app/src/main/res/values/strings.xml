@@ -146,4 +146,10 @@
 
     <string name="filtered_notification_types_title">Filtered Message Types</string>
     <string name="filtered_notification_types_description">Notifications will not be shown for filtered message types.</string>
+
+    <string name="hidden_chat_options_title">Hidden Chat Options</string>
+    <string name="hidden_chat_options_description">Hides extra chat options (if you feel the chat menu is too cluttered, for example).</string>
+
+    <string name="auto_download_snaps_title">Auto-Download Snaps</string>
+    <string name="auto_download_snaps_description">Automatically downloads snaps when viewed.</string>
 </resources>
