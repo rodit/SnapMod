@@ -11,7 +11,7 @@ android {
         minSdk 24
         targetSdk 32
         versionCode 24
-        versionName "1.7.0"
+        versionName "1.7.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -30,7 +30,7 @@ android {
 
 task versionInfo {
     doLast {
-        def build = 84608
+        def build = 84609
         def infoFile = new File('app/build/version.json')
         infoFile.getParentFile().mkdirs()
         infoFile.delete()

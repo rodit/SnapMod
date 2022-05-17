@@ -2,7 +2,7 @@
 Xposed module for Snapchat.
 
 ## Setup
-To set SnapMod up, download and install the latest apk from [here](https://github.com/rodit/SnapMod/releases). When you open it, it will ask to install some bindings. Press 'Download' and be sure to kill and restart Snapchat afterwards. The latest and only fully supported version of Snapchat is **11.78.1.39**. Mappings **will not** be downloaded for previous versions of Snapchat automatically, only for the latest supported version. If you are using an older version, you must manually place the mappings in `/data/data/xyz.rodit.snapmod/files/[build].json` or `/Android/data/xyz.rodit.snapmod/files/[build].json` on your internal storage where `[build]` is the version code of Snapchat the mappings correspond to. Note, there is no guarentee the newest version of Snapmod will work with old mappings (it usually will not for a couple of features).
+To set SnapMod up, download and install the latest apk from [here](https://github.com/rodit/SnapMod/releases). When you open it, it will ask to install some bindings. Press 'Download' and be sure to kill and restart Snapchat afterwards. The latest and only fully supported version of Snapchat is **11.79.0.34**. Mappings **will not** be downloaded for previous versions of Snapchat automatically, only for the latest supported version. If you are using an older version, you must manually place the mappings in `/data/data/xyz.rodit.snapmod/files/[build].json` or `/Android/data/xyz.rodit.snapmod/files/[build].json` on your internal storage where `[build]` is the version code of Snapchat the mappings correspond to. Note, there is no guarentee the newest version of Snapmod will work with old mappings (it usually will not for a couple of features).
 
 ## Features
 - Disable camera
@@ -27,6 +27,8 @@ To set SnapMod up, download and install the latest apk from [here](https://githu
 - Per-conversation stealth mode (hide read receipts, snap views etc for individual conversations)
 - Modify audio note playback speed
 - Auto-save messages of the selected type (per conversation or globally)
+- Auto-save snaps when opened
+- Show message content (including previews of non-text media) in notifications
 
 ## Feature Suggestions
 If you would like to suggest a new feature, please do so in **Discussions**. Please do not create an Issue for feature suggetsions (they will be moved to Discussions).
