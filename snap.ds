@@ -33,6 +33,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.crypto.Cipher;
 
 [certain]
 class MainActivity expects com.snap.mushroom.MainActivity {
@@ -1706,15 +1707,67 @@ enum NotificationHandlerStatus {
 }
 
 [certain]
+class ConversationIdentifier {
+
+    String id;
+    boolean group;
+
+    String $toString() {
+        .string "ConversationIdentifier(id=";
+        .string ", isGroup=";
+    }
+}
+
+[certain]
+class ConversationIdProvider {
+
+    void $<init>(*, !NotificationData, ...)
+
+    !ConversationIdentifier getConversationIdentifier()
+}
+
+[certain]
+class DefaultConversationsRepository {
+
+    void $<init>(...) {
+        .string "DefaultConversationsRepository";
+    }
+
+    long getFeedId(String)
+}
+
+[certain]
+class MessagingNotificationHandler {
+
+    !DefaultConversationsRepository conversationRepository;
+
+    void $<init>(...) {
+        .string "MessagingNotificationHandler";
+    }
+}
+
+[certain]
 class NotificationHandler {
 
-    [discard] Object o0;
+    Object conversationIdProvider;
     [discard] int a0;
     Object data;
+    Object handler;
 
     * handle() {
         .type !NotificationData;
         .field !NotificationHandlerStatus->!RETURN_EMPTY_RATE_LIMITED;
         .field !NotificationHandlerStatus->!DISPLAY_MODEL_CREATE;
     }
+}
+
+[certain]
+class AesCrypto {
+
+    void $<init>(String, String, ...)
+    void $<init>(byte[], byte[])
+
+    InputStream encrypt(InputStream)
+
+    InputStream decrypt(InputStream)
 }

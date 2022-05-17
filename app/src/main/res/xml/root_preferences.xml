@@ -163,12 +163,6 @@
             app:title="@string/enable_new_voice_notes_title"
             app:summary="@string/enable_new_voice_notes_description"
             app:iconSpaceReserved="false" />
-
-        <SwitchPreferenceCompat
-            app:key="show_notification_content"
-            app:title="@string/show_notification_content_title"
-            app:summary="@string/show_notification_content_description"
-            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/snaps_header"
@@ -284,27 +278,21 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/location_header"
+
+    <PreferenceCategory app:title="@string/notifications_header"
         app:iconSpaceReserved="false">
 
         <SwitchPreferenceCompat
-            app:key="location_share_override"
-            app:title="@string/location_share_override_title"
-            app:summary="@string/location_share_override_description"
+            app:key="show_notification_content"
+            app:title="@string/show_notification_content_title"
+            app:summary="@string/show_notification_content_description"
             app:iconSpaceReserved="false" />
 
-        <EditTextPreference
-            app:key="location_share_lat"
-            app:title="@string/location_share_lat_title"
-            app:iconSpaceReserved="false"
-            app:defaultValue="0" />
-
-        <EditTextPreference
-            app:key="location_share_long"
-            app:title="@string/location_share_long_title"
-            app:iconSpaceReserved="false"
-            app:defaultValue="0" />
-
+        <SwitchPreferenceCompat
+            app:key="show_notification_media_previews"
+            app:title="@string/show_notification_media_previews_title"
+            app:summary="@string/show_notification_media_previews_description"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/debug_header"
