@@ -6,8 +6,9 @@ import xyz.rodit.snapmod.mappings.NotificationData
 import xyz.rodit.snapmod.mappings.NotificationHandler
 import xyz.rodit.snapmod.util.before
 import xyz.rodit.snapmod.util.getList
+import xyz.rodit.snapmod.util.toMax
 
-class FilterTypes(context: FeatureContext) : Feature(context) {
+class FilterTypes(context: FeatureContext) : Feature(context, 84608.toMax()) {
 
     private val hiddenTypes = hashSetOf<String>()
 

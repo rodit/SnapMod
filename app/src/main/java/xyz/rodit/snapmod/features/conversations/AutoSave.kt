@@ -6,12 +6,9 @@ import xyz.rodit.snapmod.logging.log
 import xyz.rodit.snapmod.mappings.ArroyoConvertMessagesAction
 import xyz.rodit.snapmod.mappings.ChatCommandSource
 import xyz.rodit.snapmod.mappings.Message
-import xyz.rodit.snapmod.util.before
-import xyz.rodit.snapmod.util.getList
-import xyz.rodit.snapmod.util.pairFirst
-import xyz.rodit.snapmod.util.toUUIDString
+import xyz.rodit.snapmod.util.*
 
-class AutoSave(context: FeatureContext) : Feature(context) {
+class AutoSave(context: FeatureContext) : Feature(context, 84608.toMax()) {
 
     private val messageTypes = hashSetOf<String>()
 

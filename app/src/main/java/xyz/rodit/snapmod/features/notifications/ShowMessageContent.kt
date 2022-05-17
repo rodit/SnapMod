@@ -23,6 +23,7 @@ import xyz.rodit.snapmod.features.FeatureContext
 import xyz.rodit.snapmod.logging.log
 import xyz.rodit.snapmod.mappings.*
 import xyz.rodit.snapmod.util.before
+import xyz.rodit.snapmod.util.toMax
 import java.io.File
 import java.io.InputStream
 import java.net.URL
@@ -35,7 +36,7 @@ private val imageSig = listOf(
     "89504e47", // png
 )
 
-class ShowMessageContent(context: FeatureContext) : Feature(context) {
+class ShowMessageContent(context: FeatureContext) : Feature(context, 84608.toMax()) {
 
     private val arroyoReader = ArroyoReader(context.appContext)
     private val gson: Gson = Gson()

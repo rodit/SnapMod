@@ -5,9 +5,10 @@ import xyz.rodit.snapmod.features.FeatureContext
 import xyz.rodit.snapmod.mappings.*
 import xyz.rodit.snapmod.util.PathManager
 import xyz.rodit.snapmod.util.after
+import xyz.rodit.snapmod.util.toMax
 import xyz.rodit.snapmod.util.toUUIDString
 
-class AutoDownloadSnaps(context: FeatureContext) : Feature(context) {
+class AutoDownloadSnaps(context: FeatureContext) : Feature(context, 84608.toMax()) {
 
     private val ignore = hashSetOf<String>()
 
