@@ -926,10 +926,13 @@ class FriendStoryKeys {
 class MessageStoryKeys {
 
     [late] !MapKey messageId;
+    [late] !MapKey snapInSavedState;
 
     static void $<clinit>() {
         [strict]
         .string "MESSAGE_ID", bind field messageId next reference;
+        [strict]
+        .string "SNAP_IN_SAVED_STATE", bind field snapInSavedState next reference;
     }
 }
 
@@ -1770,4 +1773,41 @@ class AesCrypto {
     InputStream encrypt(InputStream)
 
     InputStream decrypt(InputStream)
+}
+
+[certain]
+class ConversationStoryKeys {
+
+    [late] !MapKey conversationId;
+    [late] !MapKey senderId;
+
+    static void $<clinit>() {
+        [strict]
+        .string "CONVERSATION_ID", bind field conversationId next reference;
+        [strict]
+        .string "SENDER_ID", bind field senderId next reference;
+    }
+}
+
+[certain, obfuscated]
+enum OperaDisplayState {
+
+    [late] static this .fields { NONE, PREPARING, MINIMALLY_DISPLAYED, FULLY_DISPLAYED, ERROR }
+}
+
+class OperaPageViewController {
+
+    !StoryMetadata metadata;
+    !OperaDisplayState state;
+
+    void $<init>(...) {
+        .string "OperaPageViewController";
+    }
+
+    void onDisplayStateChanged() {
+        .field !OperaDisplayState->!FULLY_DISPLAYED;
+        .field !OperaDisplayState->!MINIMALLY_DISPLAYED;
+        .string contains "display state";
+        .string "Opera:moveNext";
+    }
 }

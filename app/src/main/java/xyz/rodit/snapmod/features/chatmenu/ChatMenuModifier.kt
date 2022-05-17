@@ -1,5 +1,9 @@
 package xyz.rodit.snapmod.features.chatmenu
 
+import xyz.rodit.snapmod.CustomResources.string.menu_option_auto_download
+import xyz.rodit.snapmod.CustomResources.string.menu_option_auto_save
+import xyz.rodit.snapmod.CustomResources.string.menu_option_stealth_mode
+import xyz.rodit.snapmod.Shared
 import xyz.rodit.snapmod.features.Feature
 import xyz.rodit.snapmod.features.FeatureContext
 import xyz.rodit.snapmod.mappings.FriendChatActionHandler
@@ -11,16 +15,28 @@ import xyz.rodit.snapmod.util.before
 
 const val EVENT_PREFIX = "CUSTOM_ACTION"
 const val EVENT_DELIMITER = "\u0000:\u0000"
+const val PIN_STRING_NAME = "action_menu_pin_conversation"
 
 class ChatMenuModifier(context: FeatureContext) : Feature(context) {
 
     private val plugins: MutableMap<String, MenuPlugin> = HashMap()
 
     override fun init() {
-        registerPlugin(PinOption(context))
-        registerPlugin(StealthOption(context))
         registerPlugin(PreviewOption(context))
-        registerPlugin(AutoSaveOption(context))
+
+        val pinTextResource = context.appContext.resources.getIdentifier(
+            PIN_STRING_NAME,
+            "string",
+            Shared.SNAPCHAT_PACKAGE
+        )
+        registerConversationToggle("pinning", pinTextResource) { it.pinned }
+        registerConversationToggle("stealth", menu_option_stealth_mode) { it.stealth }
+        registerConversationToggle("auto_save", menu_option_auto_save) { it.autoSave }
+        registerConversationToggle("auto_download", menu_option_auto_download) { it.autoDownload }
+    }
+
+    private fun registerConversationToggle(name: String, textResource: Int, manager: Manager) {
+        registerPlugin(ConversationToggleOption(context, name, textResource, manager))
     }
 
     private fun registerPlugin(plugin: MenuPlugin) {

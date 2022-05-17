@@ -159,9 +159,23 @@
             app:defaultValue="@array/auto_save_types_defaults" />
 
         <SwitchPreferenceCompat
+            app:key="auto_download_snaps"
+            app:title="@string/auto_download_snaps_title"
+            app:summary="@string/auto_download_snaps_description"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
             app:key="enable_new_voice_notes"
             app:title="@string/enable_new_voice_notes_title"
             app:summary="@string/enable_new_voice_notes_description"
+            app:iconSpaceReserved="false" />
+
+        <MultiSelectListPreference
+            app:key="hidden_chat_options"
+            app:title="@string/hidden_chat_options_title"
+            app:summary="@string/hidden_chat_options_description"
+            app:entries="@array/chat_options"
+            app:entryValues="@array/chat_options_values"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
 

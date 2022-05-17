@@ -9,6 +9,7 @@ import xyz.rodit.snapmod.features.messagemenu.MessageMenuModifier
 import xyz.rodit.snapmod.features.notifications.FilterTypes
 import xyz.rodit.snapmod.features.notifications.ShowMessageContent
 import xyz.rodit.snapmod.features.opera.OperaModelModifier
+import xyz.rodit.snapmod.features.saving.AutoDownloadSnaps
 import xyz.rodit.snapmod.features.saving.ChatSaving
 import xyz.rodit.snapmod.features.saving.PublicProfileSaving
 import xyz.rodit.snapmod.features.saving.StoriesSaving
@@ -45,6 +46,7 @@ class FeatureManager(context: FeatureContext) : Contextual(context) {
         add(::OperaModelModifier)
 
         // Saving
+        add(::AutoDownloadSnaps)
         add(::ChatSaving)
         add(::PublicProfileSaving)
         add(::StoriesSaving)
