@@ -293,6 +293,14 @@
             app:title="@string/show_notification_media_previews_title"
             app:summary="@string/show_notification_media_previews_description"
             app:iconSpaceReserved="false" />
+
+        <MultiSelectListPreference
+            app:key="filtered_notification_types"
+            app:title="@string/filtered_notification_types_title"
+            app:summary="@string/filtered_notification_types_description"
+            app:entries="@array/notification_types"
+            app:entryValues="@array/notification_types_values"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/debug_header"

@@ -143,4 +143,7 @@
 
     <string name="show_notification_media_previews_title">Show Media Previews</string>
     <string name="show_notification_media_previews_description">Shows previews in the notifications for non-text media (images and videos). Note, this requires the entire media to be downloaded so this will consume data when notifications are received.</string>
+
+    <string name="filtered_notification_types_title">Filtered Message Types</string>
+    <string name="filtered_notification_types_description">Notifications will not be shown for filtered message types.</string>
 </resources>

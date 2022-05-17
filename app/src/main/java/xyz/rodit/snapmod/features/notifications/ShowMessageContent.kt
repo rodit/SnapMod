@@ -1,4 +1,4 @@
-package xyz.rodit.snapmod.notifications
+package xyz.rodit.snapmod.features.notifications
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
