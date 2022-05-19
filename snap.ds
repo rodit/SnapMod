@@ -1824,3 +1824,20 @@ class OperaPageViewController {
         .string "Opera:moveNext";
     }
 }
+
+[certain]
+class CameraRollMediaId extends #CameraRollMediaBase {
+
+    String $toString() {
+        .string "CameraRollMediaId(mediaId=";
+        .string ", durationMs=";
+    }
+}
+
+[certain]
+class CameraRollVideoLengthChecker {
+
+    static boolean isOver60Seconds(!CameraRollMediaBase) {
+        .const 60000;
+    }
+}
