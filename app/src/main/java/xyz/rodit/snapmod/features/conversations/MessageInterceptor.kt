@@ -27,15 +27,12 @@ class MessageInterceptor(context: FeatureContext) : StealthFeature(context) {
             { MessageUpdate.wrap(it.args[2]) },
             { it.args[0].toUUIDString() },
             ObjectFilter(context, "hide_read", MessageUpdate.READ()),
-            ObjectFilter(context, "hide_save", MessageUpdate.SAVE(), MessageUpdate.UNSAVE()),
             ObjectFilter(
                 context,
                 "hide_screenshot",
                 MessageUpdate.SCREENSHOT(),
                 MessageUpdate.SCREEN_RECORD()
-            ),
-            ObjectFilter(context, "hide_replay", MessageUpdate.REPLAY()),
-            ObjectFilter(context, "dont_release", MessageUpdate.RELEASE())
+            )
         )
     }
 }
