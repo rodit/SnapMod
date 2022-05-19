@@ -340,6 +340,20 @@ class ChatModelBase {
     [discard] boolean bm0()
     [discard] boolean bm1()
     [discard] boolean bm2()
+    [discard] boolean bm3()
+    [discard] boolean bm4()
+    [discard] boolean bm5()
+    [discard] boolean bm6()
+    [discard] boolean bm7()
+    [discard] boolean bm8()
+    [discard] boolean bm9()
+    [discard] boolean bm10()
+    [discard] boolean bm11()
+    [discard] boolean bm12()
+    [discard] boolean bm13()
+    [discard] boolean bm14()
+    [discard] boolean bm15()
+    [discard] boolean bm16()
 
     boolean canSave()
     !SaveType getSaveType()
@@ -1808,5 +1822,22 @@ class OperaPageViewController {
         .field !OperaDisplayState->!MINIMALLY_DISPLAYED;
         .string contains "display state";
         .string "Opera:moveNext";
+    }
+}
+
+[certain]
+class CameraRollMediaId extends #CameraRollMediaBase {
+
+    String $toString() {
+        .string "CameraRollMediaId(mediaId=";
+        .string ", durationMs=";
+    }
+}
+
+[certain]
+class CameraRollVideoLengthChecker {
+
+    static boolean isOver60Seconds(!CameraRollMediaBase) {
+        .const 60000;
     }
 }

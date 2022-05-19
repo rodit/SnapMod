@@ -92,12 +92,6 @@
         app:iconSpaceReserved="false">
 
         <SwitchPreferenceCompat
-            app:key="save_any"
-            app:title="@string/save_any_title"
-            app:summary="@string/save_any_description"
-            app:iconSpaceReserved="false" />
-
-        <SwitchPreferenceCompat
             app:key="allow_pin_chats"
             app:title="@string/allow_pin_chats_title"
             app:summary="@string/allow_pin_chats_description"
