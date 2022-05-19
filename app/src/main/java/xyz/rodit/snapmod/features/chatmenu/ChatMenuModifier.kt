@@ -23,6 +23,7 @@ class ChatMenuModifier(context: FeatureContext) : Feature(context) {
 
     override fun init() {
         registerPlugin(PreviewOption(context))
+        registerPlugin(ExportOption(context))
 
         val pinTextResource = context.appContext.resources.getIdentifier(
             PIN_STRING_NAME,

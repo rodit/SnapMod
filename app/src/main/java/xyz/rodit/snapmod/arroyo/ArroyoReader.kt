@@ -11,7 +11,33 @@ class ArroyoReader(private val context: Context) {
 
     fun getMessageContent(conversationId: String, messageId: String): String? {
         val blob = getMessageBlob(conversationId, messageId) ?: return null
-        return followProtoString(blob, 4, 4, 2, 1)
+        return readChatMessageContent(blob)
+    }
+
+    fun getAllMessages(conversationId: String, after: Long = 0): Pair<List<ArroyoMessage>, Set<String>> {
+        val messages = mutableListOf<ArroyoMessage>()
+        val senderIds = hashSetOf<String>()
+        SQLiteDatabase.openDatabase(
+            File(context.filesDir, "../databases/arroyo.db").path,
+            null,
+            0
+        ).use {
+            it.rawQuery(
+                "SELECT message_content,creation_timestamp,sender_id FROM conversation_message WHERE client_conversation_id='$conversationId' AND creation_timestamp>$after AND content_type=1 ORDER BY creation_timestamp ASC",
+                null
+            ).use { cursor ->
+                while (cursor.moveToNext()) {
+                    val content = cursor.getBlob(0)
+                    val timestamp = cursor.getLong(1)
+                    val senderId = cursor.getString(2)
+                    val contentString = readChatMessageContent(content) ?: continue
+                    messages.add(ArroyoMessage(contentString, timestamp, senderId))
+                    senderIds.add(senderId)
+                }
+            }
+        }
+
+        return messages to senderIds
     }
 
     fun getKeyAndIv(conversationId: String, messageId: String): Pair<ByteArray, ByteArray>? {
@@ -26,6 +52,10 @@ class ArroyoReader(private val context: Context) {
         val key = followProto(blob, 4, 4, 11, 5, 1, 1, 19, 1) ?: return null
         val iv = followProto(blob, 4, 4, 11, 5, 1, 1, 19, 2) ?: return null
         return key to iv
+    }
+
+    private fun readChatMessageContent(blob: ByteArray): String? {
+        return followProtoString(blob, 4, 4, 2, 1)
     }
 
     private fun followProtoString(data: ByteArray, vararg indices: Int): String? {

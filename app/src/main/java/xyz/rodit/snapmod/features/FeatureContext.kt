@@ -2,6 +2,7 @@ package xyz.rodit.snapmod.features
 
 import android.app.Activity
 import android.content.Context
+import xyz.rodit.snapmod.arroyo.ArroyoReader
 import xyz.rodit.snapmod.features.callbacks.CallbackManager
 import xyz.rodit.snapmod.util.ConversationManager
 import xyz.rodit.xposed.client.ConfigurationClient
@@ -27,6 +28,7 @@ class FeatureContext(
     val stealth: ConversationManager = ConversationManager(appContext.filesDir, STEALTH_CONVERSATIONS_FILE)
     val autoSave: ConversationManager = ConversationManager(appContext.filesDir, AUTO_SAVE_CONVERSATIONS_FILE)
     val autoDownload: ConversationManager = ConversationManager(appContext.filesDir, AUTO_DOWNLOAD_CONVERSATIONS_FILE)
+    val arroyo = ArroyoReader(appContext)
 
     var activity: Activity? = null
 }

@@ -17,7 +17,6 @@ import androidx.core.app.NotificationCompat
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import xyz.rodit.snapmod.Shared
-import xyz.rodit.snapmod.arroyo.ArroyoReader
 import xyz.rodit.snapmod.features.Feature
 import xyz.rodit.snapmod.features.FeatureContext
 import xyz.rodit.snapmod.logging.log
@@ -38,7 +37,6 @@ private val imageSig = listOf(
 
 class ShowMessageContent(context: FeatureContext) : Feature(context, 84608.toMax()) {
 
-    private val arroyoReader = ArroyoReader(context.appContext)
     private val gson: Gson = Gson()
 
     private val notifications
@@ -78,9 +76,9 @@ class ShowMessageContent(context: FeatureContext) : Feature(context, 84608.toMax
 
                 val snap = type == "snap"
                 val (key, iv) = (if (snap)
-                    arroyoReader.getSnapKeyAndIv(conversationId, messageId)
+                    context.arroyo.getSnapKeyAndIv(conversationId, messageId)
                 else
-                    arroyoReader.getKeyAndIv(conversationId, messageId)) ?: return@before
+                    context.arroyo.getKeyAndIv(conversationId, messageId)) ?: return@before
 
                 val media = getDownloadUrls(mediaInfo)
                 val crypt = AesCrypto(key, iv)
@@ -92,10 +90,10 @@ class ShowMessageContent(context: FeatureContext) : Feature(context, 84608.toMax
                     val group = idProvider.conversationIdentifier.group
 
                     val title = (bundle.getString("ab_cnotif_body") ?: "sent Media") +
-                    if (snap)
-                        " (${if (isImage) "Image" else "Video"})"
-                    else
-                        " (Media x ${media.size})"
+                            if (snap)
+                                " (${if (isImage) "Image" else "Video"})"
+                            else
+                                " (Media x ${media.size})"
 
                     val notification = NotificationCompat.Builder(context.appContext, CHANNEL_ID)
                         .setContentTitle(bundle.getString("sender") ?: "Unknown Sender")
@@ -118,7 +116,8 @@ class ShowMessageContent(context: FeatureContext) : Feature(context, 84608.toMax
                 return@before
             }
 
-            val content = arroyoReader.getMessageContent(conversationId, messageId) ?: return@before
+            val content =
+                context.arroyo.getMessageContent(conversationId, messageId) ?: return@before
             bundle.putString("ab_cnotif_body", content)
         }
     }

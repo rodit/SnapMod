@@ -2,7 +2,7 @@ package xyz.rodit.snapmod.features.chatmenu
 
 import android.app.AlertDialog
 import de.robv.android.xposed.XC_MethodHook
-import xyz.rodit.snapmod.CustomResources
+import xyz.rodit.snapmod.CustomResources.string.menu_option_preview
 import xyz.rodit.snapmod.createDummyProxy
 import xyz.rodit.snapmod.features.FeatureContext
 import xyz.rodit.snapmod.mappings.*
@@ -11,11 +11,9 @@ import xyz.rodit.snapmod.util.toUUIDString
 import java.lang.Integer.min
 
 class PreviewOption(context: FeatureContext) :
-    ButtonOption(context, "preview", CustomResources.string.menu_option_preview) {
+    ButtonOption(context, "preview", menu_option_preview) {
 
-    override fun shouldCreate(): Boolean {
-        return true
-    }
+    override fun shouldCreate() = true
 
     override fun handleEvent(data: String?) {
         if (data == null) return

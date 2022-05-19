@@ -15,7 +15,7 @@ object PathManager {
     const val DOWNLOAD_PROFILE = "profile"
     const val DOWNLOAD_SNAP = "snap"
 
-    private const val DEFAULT_DATE_FORMAT = "dd-MM-yyyy_HH:mm:ss"
+    private const val DEFAULT_DATE_FORMAT = "dd-MM-yyyy_HH-mm-ss"
 
     private val PATTERN_PUBLIC_DIR = Pattern.compile("""\$(\w+)""")
     private val PATTERN_PARAMETER = Pattern.compile("%([A-Za-z]+)")
