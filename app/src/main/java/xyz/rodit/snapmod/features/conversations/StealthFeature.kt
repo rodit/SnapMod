@@ -10,7 +10,7 @@ import xyz.rodit.snapmod.features.FeatureContext
 import xyz.rodit.snapmod.features.shared.Filter
 
 typealias FilterObjectSupplier = (MethodHookParam) -> Any?
-typealias ConversationIdSupplier = (MethodHookParam) -> String
+typealias ConversationIdSupplier = (MethodHookParam) -> String?
 
 abstract class StealthFeature(context: FeatureContext) : Feature(context) {
 
@@ -55,7 +55,7 @@ abstract class StealthFeature(context: FeatureContext) : Feature(context) {
             MappedObject.hook(className, methodName, object : XC_MethodHook() {
                 override fun beforeHookedMethod(param: MethodHookParam) {
                     val obj = supplier?.invoke(param)
-                    val id = conversationIdSupplier!!.invoke(param)
+                    val id = conversationIdSupplier?.invoke(param) ?: return
                     val stealth = context.stealth.isEnabled(id)
 
                     if (filters[methodName]!!.any { f ->

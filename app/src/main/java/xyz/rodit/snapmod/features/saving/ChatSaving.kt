@@ -65,40 +65,43 @@ class ChatSaving(context: FeatureContext) : Feature(context) {
             val base = ChatModelBase.wrap(it.args[2])
             lastMessageData = base.messageData
 
-            if (ChatModelLiveSnap.isInstance(it.args[2])) {
-                // Convert live snap to saved snap.
-                val hashCode = it.args[2].hashCode()
-                val media = LiveSnapMedia.wrap(chatMediaMap[hashCode])
-                it.args[2] = ChatModelSavedSnap(
-                    base.context,
-                    base.messageData,
-                    base.senderId,
-                    emptyMap<Any?, Any>(),
-                    true,
-                    base.reactionsViewModel,
-                    true,
-                    0,
-                    0,
-                    media,
-                    null,
-                    base.status,
-                    true,
-                    true
-                ).instance
-            } else if (ChatModelAudioNote.isInstance(it.args[2])) {
-                val audio = ChatModelAudioNote.wrap(it.args[2])
-                resolveAndDownload(audio.uri, base.messageData)
+            when {
+                ChatModelLiveSnap.isInstance(it.args[2]) -> {
+                    // Convert live snap to saved snap.
+                    val hashCode = it.args[2].hashCode()
+                    val media = LiveSnapMedia.wrap(chatMediaMap[hashCode])
+                    it.args[2] = ChatModelSavedSnap(
+                        base.context,
+                        base.messageData,
+                        base.senderId,
+                        emptyMap<Any?, Any>(),
+                        true,
+                        base.reactionsViewModel,
+                        true,
+                        0,
+                        0,
+                        media,
+                        null,
+                        base.status,
+                        true,
+                        true
+                    ).instance
+                }
+                ChatModelAudioNote.isInstance(it.args[2]) -> {
+                    val audio = ChatModelAudioNote.wrap(it.args[2])
+                    resolveAndDownload(audio.uri, base.messageData)
+                    it.result = null
+                }
+                ChatModelPlugin.isInstance(it.args[2]) -> {
+                    val messageData = base.messageData
 
-                it.result = null
-            } else if (ChatModelPlugin.isInstance(it.args[2])) {
-                val messageData = base.messageData
+                    if (messageData.type != "audio_note") return@before
+                    val media = GallerySnapMedia.wrap(messageData.media.instance).media
+                    val uri = createMediaUri(messageData.arroyoMessageId, media.id)
 
-                if (messageData.type != "audio_note") return@before
-                val media = GallerySnapMedia.wrap(messageData.media.instance).media
-                val uri = createMediaUri(messageData.arroyoMessageId, media.id)
-
-                resolveAndDownload(uri, messageData)
-                it.result = null
+                    resolveAndDownload(uri, messageData)
+                    it.result = null
+                }
             }
         }
 
