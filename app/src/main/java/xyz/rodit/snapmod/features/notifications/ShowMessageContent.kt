@@ -67,7 +67,6 @@ class ShowMessageContent(context: FeatureContext) : Feature(context, 84608.toMax
             val messageHandler = MessagingNotificationHandler.wrap(handler.handler)
             val idProvider = ConversationIdProvider.wrap(handler.conversationIdProvider)
             val bundle = data.bundle
-            log.debug("bundle=$bundle")
             val type = bundle.get("type") ?: "unknown"
             val conversationId = bundle.getString("arroyo_convo_id")
             val messageId = bundle.getString("arroyo_message_id")
