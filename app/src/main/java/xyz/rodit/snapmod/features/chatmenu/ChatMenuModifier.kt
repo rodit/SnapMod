@@ -19,7 +19,7 @@ const val PIN_STRING_NAME = "action_menu_pin_conversation"
 
 class ChatMenuModifier(context: FeatureContext) : Feature(context) {
 
-    private val plugins: MutableMap<String, MenuPlugin> = HashMap()
+    private val plugins = mutableMapOf<String, MenuPlugin>()
 
     override fun init() {
         registerPlugin(PreviewOption(context))
