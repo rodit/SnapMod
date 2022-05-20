@@ -1,6 +1,7 @@
 package xyz.rodit.snapmod.features
 
 import xyz.rodit.snapmod.features.chatmenu.ChatMenuModifier
+import xyz.rodit.snapmod.features.chatmenu.new.NewChatMenuModifier
 import xyz.rodit.snapmod.features.conversations.*
 import xyz.rodit.snapmod.features.friendsfeed.FeedModifier
 import xyz.rodit.snapmod.features.info.AdditionalFriendInfo
@@ -22,6 +23,7 @@ class FeatureManager(context: FeatureContext) : Contextual(context) {
     fun load() {
         // Chat context menu
         add(::ChatMenuModifier)
+        add(::NewChatMenuModifier)
 
         // Friends feed
         add(::FeedModifier)

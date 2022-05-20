@@ -164,6 +164,13 @@
             app:summary="@string/enable_new_voice_notes_description"
             app:iconSpaceReserved="false" />
 
+        <SwitchPreferenceCompat
+            app:key="enable_new_chat_menu"
+            app:title="@string/enable_new_chat_menu_title"
+            app:summary="@string/enable_new_chat_menu_description"
+            app:defaultValue="true"
+            app:iconSpaceReserved="false" />
+
         <MultiSelectListPreference
             app:key="hidden_chat_options"
             app:title="@string/hidden_chat_options_title"

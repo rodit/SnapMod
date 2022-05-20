@@ -2,6 +2,7 @@
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
@@ -1013,9 +1014,10 @@ class ContextSession {
     #SnapContextInfo info;
 }
 
+[certain]
 class ContextActionMenuModel {
 
-    [late] #ContextClickHandler onClick;
+    [late] #Func1 onClick;
     !OperaContextAction action;
 
     String $toString() {
@@ -1023,12 +1025,6 @@ class ContextActionMenuModel {
         [strict]
         .string contains "onClick=", bind field onClick next reference;
     }
-}
-
-[late]
-interface ContextClickHandler {
-
-    Object $invoke(Object)
 }
 
 [certain]
@@ -1205,8 +1201,11 @@ class FeedInfoHolder extends #FeedInfoHolderBase {
     !BasicFeedInfo info;
 }
 
-[certain, discard]
+[certain]
 class FriendInfo {
+
+    String userId;
+    String displayName;
 
     String $toString() {
         .string contains "FriendInfo";
@@ -1369,12 +1368,13 @@ interface ConfigKeyBase {
     String getName()
 }
 
-[obfuscated]
+[certain, obfuscated]
 enum AdConfigKey implements #ConfigKeyBase {
 
     [late] static this .fields { GLOBAL_MIN_TIME_BETWEEN_ADS, GLOBAL_MIN_SNAPS_BETWEEN_ADS }
 }
 
+[certain]
 class CompositeConfigurationProvider {
 
     void $<init>(...) {
@@ -1840,4 +1840,127 @@ class CameraRollVideoLengthChecker {
     static boolean isOver60Seconds(!CameraRollMediaBase) {
         .const 60000;
     }
+}
+
+[certain, obfuscated]
+enum ProfileActionSheetDisplay {
+
+    [late] static this .fields { ONLY_HEADER, NO_HEADER, DEFAULT }
+}
+
+[certain, discard]
+class ProfileActionSheetProvider {
+
+    void $<init>(...) {
+        .string "ProfileActionSheetProvider";
+    }
+}
+
+[certain]
+class ProfileActionSheetCreator {
+
+    Object nestedContext;
+    Object actionMenuContext;
+
+    * apply(*) {
+        .type !ProfileActionSheetProvider;
+        .field !ProfileActionSheetDisplay->!ONLY_HEADER;
+        .field !ProfileActionSheetDisplay->!NO_HEADER;
+    }
+}
+
+[certain, obfuscated]
+enum ActionSheetType {
+
+    [late] static this .fields { PROFILE, PROFILE_ACTION_MENU }
+}
+
+[certain]
+class ActionMenuContext {
+
+    !ActionSheetType sheetType;
+    !FriendInfo friendInfo;
+    !BasicFeedInfo feedInfo;
+    !ProfileActionSheetDisplay display;
+}
+
+[certain]
+class ActionClickableCaret {
+
+    String primaryText;
+    Drawable drawable;
+    #Func0 onClick;
+
+    void $<init>(...)
+
+    String $toString() {
+        .string "ClickableCaret(primaryText=";
+        .string ", drawable=";
+    }
+}
+
+[certain]
+class ActionSwitch {
+
+    String primaryText;
+    boolean isSwitchedOn;
+    !Func1 onToggleRequested;
+    !Func1 onToggle;
+
+    void $<init>(...)
+
+    String $toString() {
+        .string "Switch(primaryText=";
+        .string ", isSwitchedOn=";
+    }
+}
+
+[certain]
+class ActionPlain {
+
+    String primaryText;
+    !Func0 onClick;
+
+    void $<init>(...)
+
+    String $toString() {
+        .string "Plain(primaryText=";
+        .string ", onClick=";
+    }
+}
+
+[certain]
+class NestedActionMenuContext {
+
+    Context context;
+    !CompositeConfigurationProvider config;
+
+    static void display(this, String, List)
+}
+
+[certain]
+class ProfileActionSheetChooser {
+
+    * choose(*) {
+        .field !ProfileActionSheetDisplay->!ONLY_HEADER;
+        .field !ProfileActionSheetDisplay->!DEFAULT;
+    }
+}
+
+[late]
+interface Func0 {
+
+    * invoke()
+}
+
+[late]
+interface Func1 {
+
+    * invoke(*)
+}
+
+[late]
+interface Func2 {
+
+    * invoke(*, *)
 }
