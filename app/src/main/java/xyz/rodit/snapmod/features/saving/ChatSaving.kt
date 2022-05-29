@@ -53,7 +53,7 @@ class ChatSaving(context: FeatureContext) : Feature(context) {
         }
 
         // Map live snap model hashCode to media object for download later.
-        ChatModelLiveSnap.constructors.after(context, "allow_save_snaps") {
+        ChatModelWithMedia.constructors.after(context, "allow_save_snaps") {
             val hashCode = it.thisObject.hashCode()
             chatMediaMap[hashCode] = it.args[6]
         }
@@ -66,7 +66,7 @@ class ChatSaving(context: FeatureContext) : Feature(context) {
             lastMessageData = base.messageData
 
             when {
-                ChatModelLiveSnap.isInstance(it.args[2]) -> {
+                ChatModelWithMedia.isInstance(it.args[2]) -> {
                     // Convert live snap to saved snap.
                     val hashCode = it.args[2].hashCode()
                     val media = LiveSnapMedia.wrap(chatMediaMap[hashCode])

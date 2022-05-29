@@ -436,7 +436,13 @@ class GallerySnapMedia {
     String getMediaType()
 }
 
-class ChatModelLiveSnap {
+[late]
+class ChatModelWithMedia {
+
+    void $<init>(Context, ...)
+}
+
+class ChatModelLiveSnap extends #ChatModelWithMedia {
 
     [discard] boolean b0;
 
