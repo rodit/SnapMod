@@ -655,6 +655,8 @@ class MemoriesPickerVideoDurationConfig {
 [certain]
 class OperaActionMenuOptionViewModel {
 
+    void $<init>(int, int, boolean, ...)
+
     java.lang.String $toString() {
         [conserve]
         .string contains "OperaActionMenuOptionViewModel";
@@ -662,6 +664,7 @@ class OperaActionMenuOptionViewModel {
         .string contains "textResource", bind field textResource next reference;
         .string contains "textColorResource", bind field textColorResource next reference;
         .string contains "eventName", bind field eventName next reference;
+        .string contains "mShouldDismissActionMenu", bind field shouldDismissActionMenu next reference;
         .string contains "isLoading", bind field isLoading next reference;
         .string contains "actionMenuId", bind field actionMenuId next reference;
     }
@@ -936,10 +939,13 @@ class ContextStoryKeys {
 class FriendStoryKeys {
 
     [late] !MapKey playableSnapStoryRecord;
+    [late] !MapKey storySnapViewReportingInfo;
 
     static void $<clinit>() {
         [strict]
         .string "PLAYABLE_STORY_SNAP_RECORD", bind field playableSnapStoryRecord next reference;
+        [strict]
+        .string "STORY_SNAP_VIEW_REPORTING_INFO", bind field storySnapViewReportingInfo next reference;
     }
 }
 
@@ -1023,6 +1029,7 @@ class ContextSession {
 [certain]
 class ContextActionMenuModel {
 
+    String text;
     [late] #Func1 onClick;
     !OperaContextAction action;
 
@@ -1950,6 +1957,39 @@ class ProfileActionSheetChooser {
     * choose(*) {
         .field !ProfileActionSheetDisplay->!ONLY_HEADER;
         .field !ProfileActionSheetDisplay->!DEFAULT;
+    }
+}
+
+[certain]
+class StoryKey {
+
+    String storyId;
+
+    String $toString() {
+        .string "StoryKey(storyId=";
+        .string ", storyKind=";
+    }
+}
+
+[certain]
+class StorySnapKey {
+
+    !StoryKey storyKey;
+
+    String $toString() {
+        .string "StorySnapKey(storyKey=";
+    }
+}
+
+[certain]
+class StorySnapViewReportingInfo {
+
+    String snapOwnerUserId;
+    !StorySnapKey storySnapKey;
+
+    String $toString() {
+        .string "StorySnapViewReportingInfo(viewReportingId=";
+        .string ", snapOwnerUserId=";
     }
 }
 

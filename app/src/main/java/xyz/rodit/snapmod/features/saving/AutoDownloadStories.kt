@@ -2,7 +2,6 @@ package xyz.rodit.snapmod.features.saving
 
 import xyz.rodit.snapmod.features.Feature
 import xyz.rodit.snapmod.features.FeatureContext
-import xyz.rodit.snapmod.mappings.MessageStoryKeys
 import xyz.rodit.snapmod.mappings.OperaDisplayState
 import xyz.rodit.snapmod.mappings.OperaPageViewController
 import xyz.rodit.snapmod.mappings.ParamsMap
@@ -18,10 +17,12 @@ class AutoDownloadStories(context: FeatureContext) : Feature(context, 84608.toMa
             if (viewController.state.instance != OperaDisplayState.FULLY_DISPLAYED().instance) return@after
 
             val params = ParamsMap.wrap(viewController.metadata.instance)
-            val map = params.map
-            if (map.containsKey(MessageStoryKeys.getSnapInSavedState().instance)) return@after
+            if (params.isChat) return@after
 
-            if (!context.config.getBoolean("auto_download_stories")) return@after
+            val storyId = params.storyId
+            if (!context.config.getBoolean("auto_download_stories")
+                && !context.autoDownloadStories.isEnabled(storyId)
+            ) return@after
 
             getMediaInfo(context, params) { info ->
                 downloadOperaMedia(

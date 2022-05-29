@@ -19,7 +19,7 @@ class AutoDownloadSnaps(context: FeatureContext) : Feature(context, 84608.toMax(
 
             val params = ParamsMap.wrap(viewController.metadata.instance)
             val map = params.map
-            if (!map.containsKey(MessageStoryKeys.getSnapInSavedState().instance)) return@after
+            if (!params.isChat) return@after
 
             val messageId = map[MessageStoryKeys.getMessageId().instance] as String?
             val conversationId = UUID.wrap(map[ConversationStoryKeys.getConversationId().instance])

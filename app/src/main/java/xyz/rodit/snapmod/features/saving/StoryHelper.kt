@@ -135,4 +135,15 @@ private fun getUsername(
     )
 }
 
-class StoryMedia(val info: OperaMediaInfo, val username: String, val extension: String, val map: Map<*, *>)
+val ParamsMap.isChat: Boolean
+    get() = map.containsKey(MessageStoryKeys.getSnapInSavedState().instance)
+
+val ParamsMap.storyId: String?
+    get() {
+        val reportingInfo = map[FriendStoryKeys.getStorySnapViewReportingInfo().instance]
+        return if (reportingInfo is Collection<*>) StorySnapViewReportingInfo.wrap(reportingInfo.first()).storySnapKey.storyKey.storyId else null
+    }
+
+class StoryMedia(
+    val info: OperaMediaInfo, val username: String, val extension: String, val map: Map<*, *>
+)

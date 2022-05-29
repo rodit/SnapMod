@@ -2,6 +2,7 @@ package xyz.rodit.snapmod.features.opera
 
 import xyz.rodit.snapmod.features.Contextual
 import xyz.rodit.snapmod.features.FeatureContext
+import xyz.rodit.snapmod.mappings.ParamsMap
 import xyz.rodit.snapmod.mappings.StoryAutoAdvanceMode
 import xyz.rodit.snapmod.mappings.StoryMediaPlaybackMode
 
@@ -13,11 +14,11 @@ class SnapDurationModifier(context: FeatureContext) : Contextual(context), Opera
     override val isEnabled: Boolean
         get() = context.config.getBoolean("unlimited_snap_duration")
 
-    override fun shouldOverride(key: String): Boolean {
+    override fun shouldOverride(params: ParamsMap, key: String): Boolean {
         return KEY_AUTO_ADVANCE_MODE == key || KEY_MEDIA_PLAYBACK_MODE == key
     }
 
-    override fun override(key: String, value: Any): Any {
+    override fun override(params: ParamsMap, key: String, value: Any): Any {
         if (KEY_AUTO_ADVANCE_MODE == key) {
             return StoryAutoAdvanceMode.NO_AUTO_ADVANCE().instance
         } else if (KEY_MEDIA_PLAYBACK_MODE == key) {
