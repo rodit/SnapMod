@@ -7,7 +7,6 @@ import xyz.rodit.snapmod.mappings.ContextActionMenuModel
 import xyz.rodit.snapmod.mappings.Func1
 import xyz.rodit.snapmod.mappings.OperaContextAction
 import xyz.rodit.snapmod.mappings.ParamsMap
-import xyz.rodit.snapmod.util.PathManager
 import xyz.rodit.snapmod.util.after
 
 class StoriesSaving(context: FeatureContext) : Feature(context) {

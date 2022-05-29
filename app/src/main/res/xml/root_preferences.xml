@@ -159,6 +159,12 @@
             app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
+            app:key="auto_download_stories"
+            app:title="@string/auto_download_stories_title"
+            app:summary="@string/auto_download_stories_description"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
             app:key="enable_new_voice_notes"
             app:title="@string/enable_new_voice_notes_title"
             app:summary="@string/enable_new_voice_notes_description"

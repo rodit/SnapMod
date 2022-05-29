@@ -153,6 +153,9 @@
     <string name="auto_download_snaps_title">Auto-Download Snaps</string>
     <string name="auto_download_snaps_description">Automatically downloads snaps when viewed.</string>
 
+    <string name="auto_download_stories_title">Auto-Download Stories</string>
+    <string name="auto_download_stories_description">Automatically downloads stories when viewed.</string>
+
     <string name="enable_new_chat_menu_title">Enable New Chat Menu</string>
     <string name="enable_new_chat_menu_description">Enables the new chat context menu (recommended).</string>
 </resources>
