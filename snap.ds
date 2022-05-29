@@ -513,7 +513,7 @@ class FooterInfoItem {
 
     String text;
 
-    void $<init>(String, long) {
+    void $<init>(String, long, ...) {
         .field !ProfileSectionType->!FOOTER_INFO_ITEM;
     }
 }
@@ -525,7 +525,7 @@ class FriendProfileTransformer {
 
     void $<init>(Object, int)
 
-    * $apply(...) {
+    * apply(...) {
         .string "Required value was null.";
         .string "performanceLogger";
         .method Collections->singletonList;

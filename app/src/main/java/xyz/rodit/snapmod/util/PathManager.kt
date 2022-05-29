@@ -20,6 +20,7 @@ object PathManager {
     private val PATTERN_PUBLIC_DIR = Pattern.compile("""\$(\w+)""")
     private val PATTERN_PARAMETER = Pattern.compile("%([A-Za-z]+)")
     private val publicDirs: MutableMap<String, String> = mutableMapOf(
+        "Downloads" to Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).path,
         "Movies" to Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).path,
         "Pictures" to Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).path,
         "Alarms" to Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_ALARMS).path,
