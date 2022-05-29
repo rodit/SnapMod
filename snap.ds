@@ -525,7 +525,7 @@ class FriendProfileTransformer {
 
     void $<init>(Object, int)
 
-    * apply(...) {
+    * $apply(...) {
         .string "Required value was null.";
         .string "performanceLogger";
         .method Collections->singletonList;
