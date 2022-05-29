@@ -20,8 +20,8 @@ class StoriesSaving(context: FeatureContext) : Feature(context) {
 
             val clickProxy = Func1.getMappedClass().createDelegate(context.classLoader) { _, args ->
                 val map = ParamsMap.wrap(args[0])
-                getMediaInfo(context, map) {
-                    downloadOperaMedia(context, PathManager.DOWNLOAD_STORY, it)
+                getMediaInfo(context, map) { info ->
+                    downloadOperaMedia(context, null, info)
                 }
                 null
             }
