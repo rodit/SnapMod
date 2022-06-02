@@ -13,10 +13,11 @@ class AutoSaveOption(context: FeatureContext) : Contextual(context), MenuPlugin 
     override val isEnabled = true
 
     override fun createActions(params: ParamsMap): Collection<OperaActionMenuOptionViewModel> {
-        return setOf(
+        val storyId = params.storyId
+        return if (storyId == null) emptySet() else setOf(
             OperaActionMenuOptionViewModel(
                 0,
-                if (context.autoDownloadStories.isEnabled(params.storyId))
+                if (context.autoDownloadStories.isEnabled(storyId))
                     CustomResources.string.menu_story_disable_auto_download
                 else
                     CustomResources.string.menu_story_enable_auto_download,

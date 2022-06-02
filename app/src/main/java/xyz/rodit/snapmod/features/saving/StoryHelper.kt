@@ -140,8 +140,12 @@ val ParamsMap.isChat: Boolean
 
 val ParamsMap.storyId: String?
     get() {
-        val reportingInfo = map[FriendStoryKeys.getStorySnapViewReportingInfo().instance]
-        return if (reportingInfo is Collection<*>) StorySnapViewReportingInfo.wrap(reportingInfo.first()).storySnapKey.storyKey.storyId else null
+        return try {
+            val reportingInfo = map[FriendStoryKeys.getStorySnapViewReportingInfo().instance]
+            if (reportingInfo is Collection<*>) StorySnapViewReportingInfo.wrap(reportingInfo.first()).storySnapKey.storyKey.storyId else null
+        } catch (ex: NullPointerException) {
+            null
+        }
     }
 
 class StoryMedia(
