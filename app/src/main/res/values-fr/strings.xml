@@ -50,7 +50,7 @@
     <string name="snap_type_override_title">🧪 Remplacement du type de Snap</string>
     <string name="bypass_video_length_restrictions_title">Contourner les restrictions de longueur des vidéos</string>
     
-	<string name="download_path_story_title">Chemin de téléchargement des stories</string>
+    <string name="download_path_story_title">Chemin de téléchargement des stories</string>
     <string name="download_path_snap_title">Chemin de téléchargement des Snaps</string>
     <string name="download_path_audio_note_title">Chemin de téléchargement des notes audio</string>
     <string name="download_path_profile_title">Chemin de téléchargement des images du profil public</string>
@@ -58,18 +58,18 @@
     <string name="enable_custom_snap_download_path_description">Force le chemin de téléchargement du snap personnalisé ci-dessus à être utilisé pour enregistrer les snaps grâce à l\'action Enregistrer dans la pellicule.</string>
     <string name="use_android_download_manager_title">Utiliser le gestionnaire de téléchargement Android</string>
     
-	<string name="location_share_override_title">🧪 Remplacer le partage de la localisation</string>
+    <string name="location_share_override_title">🧪 Remplacer le partage de la localisation</string>
     <string name="location_share_lat_title">🧪 Latitude</string>
     <string name="location_share_long_title">🧪 Longitude</string>
     
-	<string name="more_profile_info_title">Afficher plus d\'informations sur le profil</string>
+    <string name="more_profile_info_title">Afficher plus d\'informations sur le profil</string>
     <string name="log_network_requests_title">Journaliser les requêtes réseau</string>
     <string name="network_body">Enregistrer le corps de la requête</string>
     <string name="global_log_level_title">Niveau du journal</string>
     
-	<string name="unlimited_snap_duration_title">Durée de l\'illimitée des Snaps/Stories</string>
+    <string name="unlimited_snap_duration_title">Durée de l\'illimitée des Snaps/Stories</string>
     
-	<string name="disable_camera_description">Désactive la caméra dans toutes les parties de l\'application. Cela améliore considérablement les performances et le temps de démarrage.</string>
+    <string name="disable_camera_description">Désactive la caméra dans toutes les parties de l\'application. Cela améliore considérablement les performances et le temps de démarrage.</string>
     <string name="hide_read_description">Empêche l\'envoi des accusées de lecture.</string>
     <string name="hide_save_description">Empêche l\'envoi du message de chat save/unsave.</string>
     <string name="hide_screenshot_description">Empêche l\'envoi des notifications de captures d\'écran.</string>
@@ -113,51 +113,51 @@
     <string name="log_network_requests_description">Enregistre certaines requêtes HTTP à LSPosed pour débogage.</string>
     <string name="global_log_level_description">Activer tous les niveaux de log si vous rencontrez des problèmes. Inclure les logs LSPosed dans n\'importe quel problème sur GitHub.</string>
     
-	<string name="installation_status_title">Statut de l\'installation</string>
+    <string name="installation_status_title">Statut de l\'installation</string>
     <string name="installation_status_summary">Vérification…</string>
     
-	<string name="donations_title">Dons</string>
+    <string name="donations_title">Dons</string>
     <string name="donations_summary">Si vous souhaitez soutenir SnapMod, vous pouvez faire un don en appuyant ici.</string>
     <string name="donations_link">https://github.com/rodit/SnapMod#donations</string>
     
-	<string name="updates_header">Mises à jour</string>
+    <string name="updates_header">Mises à jour</string>
     <string name="update_frequency_title">Fréquence de vérification des mises à jour</string>
     <string name="update_frequency_description">Définit le délai minimum entre les vérifications des mises à jour de SnapMod. Remarque : SnapMod vérifie les mises à jour que lorsque vous le lancez (jamais en arrière-plan).</string>
     
-	<string name="check_for_updates_title">Vérifier les mises à jour</string>
+    <string name="check_for_updates_title">Vérifier les mises à jour</string>
     <string name="check_for_updates_description">Vérifie les mises à jour maintenant.</string>
     
-	<string name="download_date_format_title">Format de la date</string>
+    <string name="download_date_format_title">Format de la date</string>
     <string name="download_date_format_description">Définit le format de la date pour les dates substituées (%d) dans les chemins de téléchargement.</string>
     
-	<string name="show_toast_on_download_title">Montrer le toast</string>
+    <string name="show_toast_on_download_title">Montrer le toast</string>
     <string name="show_toast_on_download_description">Si activé, un message toast sera affiché au démarrage des téléchargements.</string>
     
-	<string name="disable_snap_splitting_title">Désactiver le découpage des Snaps</string>
+    <string name="disable_snap_splitting_title">Désactiver le découpage des Snaps</string>
     <string name="disable_snap_splitting_description">Empêche les longs snaps d\'être divisés en plusieurs parties.</string>
     
-	<string name="enable_new_voice_notes_title">Activer les nouvelles notes vocales</string>
+    <string name="enable_new_voice_notes_title">Activer les nouvelles notes vocales</string>
     <string name="enable_new_voice_notes_description">Force l\'activation de la nouvelle interface des notes vocales.</string>
     
-	<string name="show_notification_content_title">Afficher le message dans les notifications</string>
+    <string name="show_notification_content_title">Afficher le message dans les notifications</string>
     <string name="show_notification_content_description">Affiche le contenu du message dans les notifications.</string>
     
-	<string name="show_notification_media_previews_title">Afficher les aperçus des médias</string>
+    <string name="show_notification_media_previews_title">Afficher les aperçus des médias</string>
     <string name="show_notification_media_previews_description">Affiche les aperçus dans les notifications pour les médias non textuels (images et vidéos). Notez que cela nécessite le téléchargement de l\'intégralité du média, ce qui entraîne une consommation de données lors de la réception des notifications.</string>
     
-	<string name="filtered_notification_types_title">Types des messages filtrés</string>
+    <string name="filtered_notification_types_title">Types des messages filtrés</string>
     <string name="filtered_notification_types_description">Les notifications ne seront pas affichées pour les types de messages filtrés.</string>
     
-	<string name="hidden_chat_options_title">Options de chat cachées</string>
+    <string name="hidden_chat_options_title">Options de chat cachées</string>
     <string name="hidden_chat_options_description">Masque les options de chat supplémentaires (si vous trouvez que le menu du chat est trop encombré, par exemple).</string>
     
-	<string name="auto_download_snaps_title">Téléchargement automatique des Snaps</string>
+    <string name="auto_download_snaps_title">Téléchargement automatique des Snaps</string>
     <string name="auto_download_snaps_description">Télécharger automatiquement les snaps lorsque vous les visualisez.</string>
     
-	<string name="auto_download_stories_title">Téléchargement automatique des Stories</string>
+    <string name="auto_download_stories_title">Téléchargement automatique des Stories</string>
     <string name="auto_download_stories_description">Télécharger automatiquement les stories lorsque vous les visualisez.</string>
     
-	<string name="enable_new_chat_menu_title">Activer le nouveau menu du chat</string>
+    <string name="enable_new_chat_menu_title">Activer le nouveau menu du chat</string>
     <string name="enable_new_chat_menu_description">Active le nouveau menu contextuel du chat (recommandé).</string>
     <string name="enable_story_list_title">Activer la liste des Stories</string>
     <string name="enable_story_list_description">Remplace le carrousel des stories par une liste.</string>
