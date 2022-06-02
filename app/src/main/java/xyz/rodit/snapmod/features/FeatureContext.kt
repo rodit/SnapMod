@@ -13,6 +13,7 @@ private const val PINNED_CONVERSATIONS_FILE = "pinned.list"
 private const val STEALTH_CONVERSATIONS_FILE = "stealth.list"
 private const val AUTO_SAVE_CONVERSATIONS_FILE = "auto_save.list"
 private const val AUTO_DOWNLOAD_CONVERSATIONS_FILE = "auto_download.list"
+private const val AUTO_DOWNLOAD_STORIES_FILE = "auto_download_stories.list"
 
 class FeatureContext(
     val appContext: Context,
@@ -28,6 +29,7 @@ class FeatureContext(
     val stealth: ConversationManager = ConversationManager(appContext.filesDir, STEALTH_CONVERSATIONS_FILE)
     val autoSave: ConversationManager = ConversationManager(appContext.filesDir, AUTO_SAVE_CONVERSATIONS_FILE)
     val autoDownload: ConversationManager = ConversationManager(appContext.filesDir, AUTO_DOWNLOAD_CONVERSATIONS_FILE)
+    val autoDownloadStories: ConversationManager = ConversationManager(appContext.filesDir, AUTO_DOWNLOAD_STORIES_FILE)
     val arroyo = ArroyoReader(appContext)
 
     var activity: Activity? = null

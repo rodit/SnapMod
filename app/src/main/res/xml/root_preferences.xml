@@ -159,6 +159,12 @@
             app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
+            app:key="auto_download_stories"
+            app:title="@string/auto_download_stories_title"
+            app:summary="@string/auto_download_stories_description"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
             app:key="enable_new_voice_notes"
             app:title="@string/enable_new_voice_notes_title"
             app:summary="@string/enable_new_voice_notes_description"
@@ -177,6 +183,12 @@
             app:summary="@string/hidden_chat_options_description"
             app:entries="@array/chat_options"
             app:entryValues="@array/chat_options_values"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="enable_story_list"
+            app:title="@string/enable_story_list_title"
+            app:summary="@string/enable_story_list_description"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
@@ -241,21 +253,28 @@
             app:key="download_path_story"
             app:title="@string/download_path_story_title"
             app:summary="@string/download_path_story_description"
-            app:defaultValue="$Movies/SnapMod/%u_story_%d"
+            app:defaultValue="$Downloads/SnapMod/%u_story_%d"
+            app:iconSpaceReserved="false" />
+
+        <EditTextPreference
+            app:key="download_path_snap"
+            app:title="@string/download_path_snap_title"
+            app:summary="@string/download_path_snap_description"
+            app:defaultValue="$Downloads/SnapMod/%u_snap_%d"
             app:iconSpaceReserved="false" />
 
         <EditTextPreference
             app:key="download_path_audio_note"
             app:title="@string/download_path_audio_note_title"
             app:summary="@string/download_path_audio_note_description"
-            app:defaultValue="$Movies/SnapMod/%u_audio_%d"
+            app:defaultValue="$Downloads/SnapMod/%u_audio_%d"
             app:iconSpaceReserved="false" />
 
         <EditTextPreference
             app:key="download_path_profile"
             app:title="@string/download_path_profile_title"
             app:summary="@string/download_path_profile_description"
-            app:defaultValue="$Movies/SnapMod/%u_profile_%d"
+            app:defaultValue="$Downloads/SnapMod/%u_profile_%d"
             app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
@@ -265,17 +284,10 @@
             app:iconSpaceReserved="false" />
 
         <EditTextPreference
-            app:key="download_path_snap"
-            app:title="@string/download_path_snap_title"
-            app:summary="@string/download_path_snap_description"
-            app:defaultValue="$Movies/SnapMod/%u_snap_%d"
-            app:iconSpaceReserved="false" />
-
-        <EditTextPreference
             app:key="download_date_format"
             app:title="@string/download_date_format_title"
             app:summary="@string/download_date_format_description"
-            app:defaultValue="dd-MM-yyyy_HH:mm:ss"
+            app:defaultValue="dd-MM-yyyy_HH-mm-ss"
             app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat

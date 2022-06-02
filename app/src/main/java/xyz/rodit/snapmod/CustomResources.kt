@@ -14,7 +14,10 @@ object CustomResources {
         string.menu_option_auto_download to "Auto-Download Snaps",
         string.menu_option_export to "Export...",
 
-        string.chat_action_playback_speed to "Set Playback Speed"
+        string.chat_action_playback_speed to "Set Playback Speed",
+
+        string.menu_story_enable_auto_download to "Enable Auto-Download Stories",
+        string.menu_story_disable_auto_download to "Disable Auto-Download Stories"
     )
 
     fun init() {
@@ -37,6 +40,10 @@ object CustomResources {
         })
     }
 
+    fun get(id: Int): String? {
+        return strings[id]
+    }
+
     object string {
         const val menu_option_stealth_mode = -100000
         const val menu_option_preview = -100001
@@ -45,5 +52,8 @@ object CustomResources {
         const val menu_option_export = -100004
 
         const val chat_action_playback_speed = -200000
+
+        const val menu_story_enable_auto_download = -300000
+        const val menu_story_disable_auto_download = -300001
     }
 }

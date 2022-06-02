@@ -23,7 +23,9 @@ fun FeatureContext.download(
     description: String? = null
 ) {
     if (config.getBoolean("show_toast_on_download")) {
-        Toast.makeText(appContext, "Download started.", Toast.LENGTH_SHORT).show()
+        activity?.runOnUiThread {
+            Toast.makeText(appContext, "Download started.", Toast.LENGTH_SHORT).show()
+        }
     }
 
     val uuid = UUID.randomUUID().toString()

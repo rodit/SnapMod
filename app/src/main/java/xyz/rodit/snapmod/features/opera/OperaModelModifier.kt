@@ -18,9 +18,10 @@ class OperaModelModifier(context: FeatureContext) : Feature(context) {
     override fun performHooks() {
         // Modify opera model map on insert.
         ParamsMap.put.before {
+            val params = ParamsMap.wrap(it.thisObject)
             val key = MapKey.wrap(it.args[0]).name
-            plugins.filter { p -> p.isEnabled && p.shouldOverride(key) }
-                .forEach { p -> it.args[1] = p.override(key, it.args[1]) }
+            plugins.filter { p -> p.isEnabled && p.shouldOverride(params, key) }
+                .forEach { p -> it.args[1] = p.override(params, key, it.args[1]) }
         }
     }
 }

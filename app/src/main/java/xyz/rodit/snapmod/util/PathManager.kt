@@ -20,6 +20,7 @@ object PathManager {
     private val PATTERN_PUBLIC_DIR = Pattern.compile("""\$(\w+)""")
     private val PATTERN_PARAMETER = Pattern.compile("%([A-Za-z]+)")
     private val publicDirs: MutableMap<String, String> = mutableMapOf(
+        "Downloads" to Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).path,
         "Movies" to Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).path,
         "Pictures" to Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).path,
         "Alarms" to Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_ALARMS).path,
@@ -28,10 +29,10 @@ object PathManager {
         "Ringtones" to Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_RINGTONES).path
     )
     private val defaultPaths: MutableMap<String, String> = mutableMapOf(
-        DOWNLOAD_STORY to "\$Movies/SnapMod/%u_story_%d",
-        DOWNLOAD_AUDIO_NOTE to "\$Movies/SnapMod/%u_audio_%d",
-        DOWNLOAD_PROFILE to "\$Movies/SnapMod/%u_profile_%d",
-        DOWNLOAD_SNAP to "\$Movies/SnapMod/%u_snap_%d"
+        DOWNLOAD_STORY to "\$Downloads/SnapMod/%u_story_%d",
+        DOWNLOAD_AUDIO_NOTE to "\$Downloads/SnapMod/%u_audio_%d",
+        DOWNLOAD_PROFILE to "\$Downloads/SnapMod/%u_profile_%d",
+        DOWNLOAD_SNAP to "\$Downloads/SnapMod/%u_snap_%d"
     )
 
     private fun appendDefaultParamsMap(config: ConfigurationClient, paramsMap: Map<String, String>): Map<String, String> {
@@ -39,7 +40,8 @@ object PathManager {
         appended["t"] = System.currentTimeMillis().toString()
         val dateFormat =
             SimpleDateFormat(
-                config.getString("download_date_format", DEFAULT_DATE_FORMAT),
+                config.getString("download_date_format", DEFAULT_DATE_FORMAT)
+                    .replace(':', '-'),
                 Locale.getDefault()
             )
         appended["d"] = dateFormat.format(Date())

@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 
 import com.google.gson.annotations.SerializedName;
 import com.google.protobuf.nano.MessageNano;
@@ -436,7 +437,13 @@ class GallerySnapMedia {
     String getMediaType()
 }
 
-class ChatModelLiveSnap {
+[late]
+class ChatModelWithMedia {
+
+    void $<init>(Context, ...)
+}
+
+class ChatModelLiveSnap extends #ChatModelWithMedia {
 
     [discard] boolean b0;
 
@@ -513,19 +520,19 @@ class FooterInfoItem {
 
     String text;
 
-    void $<init>(String, long) {
+    void $<init>(String, long, ...) {
         .field !ProfileSectionType->!FOOTER_INFO_ITEM;
     }
 }
 
-class FriendProfileTransformer {
+class FriendProfileTransformer implements #Func2 {
 
     [discard] int i0;
     [discard] Object target;
 
     void $<init>(Object, int)
 
-    * $apply(...) {
+    * apply(...) {
         .string "Required value was null.";
         .string "performanceLogger";
         .method Collections->singletonList;
@@ -649,6 +656,8 @@ class MemoriesPickerVideoDurationConfig {
 [certain]
 class OperaActionMenuOptionViewModel {
 
+    void $<init>(int, int, boolean, ...)
+
     java.lang.String $toString() {
         [conserve]
         .string contains "OperaActionMenuOptionViewModel";
@@ -656,6 +665,7 @@ class OperaActionMenuOptionViewModel {
         .string contains "textResource", bind field textResource next reference;
         .string contains "textColorResource", bind field textColorResource next reference;
         .string contains "eventName", bind field eventName next reference;
+        .string contains "mShouldDismissActionMenu", bind field shouldDismissActionMenu next reference;
         .string contains "isLoading", bind field isLoading next reference;
         .string contains "actionMenuId", bind field actionMenuId next reference;
     }
@@ -930,10 +940,13 @@ class ContextStoryKeys {
 class FriendStoryKeys {
 
     [late] !MapKey playableSnapStoryRecord;
+    [late] !MapKey storySnapViewReportingInfo;
 
     static void $<clinit>() {
         [strict]
         .string "PLAYABLE_STORY_SNAP_RECORD", bind field playableSnapStoryRecord next reference;
+        [strict]
+        .string "STORY_SNAP_VIEW_REPORTING_INFO", bind field storySnapViewReportingInfo next reference;
     }
 }
 
@@ -1017,6 +1030,7 @@ class ContextSession {
 [certain]
 class ContextActionMenuModel {
 
+    String text;
     [late] #Func1 onClick;
     !OperaContextAction action;
 
@@ -1765,10 +1779,10 @@ class MessagingNotificationHandler {
 [certain]
 class NotificationHandler {
 
-    Object data;
-    [discard] int a0;
-    Object handler;
     Object conversationIdProvider;
+    [discard] int a0;
+    Object data;
+    Object handler;
 
     * handle() {
         .type !NotificationData;
@@ -1782,6 +1796,10 @@ class AesCrypto {
 
     void $<init>(String, String, ...)
     void $<init>(byte[], byte[])
+
+    Cipher getCipher() {
+        .string "AES/CBC/PKCS5Padding";
+    }
 
     InputStream encrypt(InputStream)
 
@@ -1873,6 +1891,8 @@ class ProfileActionSheetCreator {
 enum ActionSheetType {
 
     [late] static this .fields { PROFILE, PROFILE_ACTION_MENU }
+
+    [not] int i0;
 }
 
 [certain]
@@ -1945,6 +1965,85 @@ class ProfileActionSheetChooser {
         .field !ProfileActionSheetDisplay->!ONLY_HEADER;
         .field !ProfileActionSheetDisplay->!DEFAULT;
     }
+}
+
+[certain]
+class StoryKey {
+
+    String storyId;
+
+    String $toString() {
+        .string "StoryKey(storyId=";
+        .string ", storyKind=";
+    }
+}
+
+[certain]
+class StorySnapKey {
+
+    !StoryKey storyKey;
+
+    String $toString() {
+        .string "StorySnapKey(storyKey=";
+    }
+}
+
+[certain]
+class StorySnapViewReportingInfo {
+
+    String snapOwnerUserId;
+    !StorySnapKey storySnapKey;
+
+    String $toString() {
+        .string "StorySnapViewReportingInfo(viewReportingId=";
+        .string ", snapOwnerUserId=";
+    }
+}
+
+[certain, obfuscated]
+enum DfSectionType {
+
+    [late] static this .fields { FRIENDS_SECTION, SUBSCRIBED_SECTION, FOR_YOU_SECTION, UNKNOWN_SECTION }
+}
+
+[certain]
+class DfSectionController {
+
+    !DfSectionType sectionType;
+
+    [discard] void $<init>(...) {
+        .string "DfSectionController";
+    }
+}
+
+[certain, discard]
+class DiscoverFeedAdapterBase extends #AdapterBase {
+
+    [discard] void $<init>(...) {
+        .string "df:dfa:init";
+    }
+}
+
+[certain]
+class AllTabsDiscoverFeedAdapter extends !DiscoverFeedAdapterBase {
+
+    [discard] void $<init>(...) {
+        .string "AllTabsDiscoverFeedAdapter";
+    }
+}
+
+[late]
+class AdapterBase {
+
+    void addSection(#AdapterSection)
+}
+
+[late]
+interface AdapterSection {
+
+    [discard] String getClassName()
+    [discard] void m0(View, ...)
+    [discard] void m1(View, ...)
 }
 
 [late]

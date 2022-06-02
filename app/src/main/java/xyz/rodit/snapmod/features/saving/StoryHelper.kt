@@ -4,6 +4,7 @@ import xyz.rodit.snapmod.createDummyProxy
 import xyz.rodit.snapmod.features.FeatureContext
 import xyz.rodit.snapmod.logging.XLog
 import xyz.rodit.snapmod.mappings.*
+import xyz.rodit.snapmod.util.PathManager
 import xyz.rodit.snapmod.util.download
 import xyz.rodit.snapmod.util.toSnapUUID
 import xyz.rodit.snapmod.util.toUUIDString
@@ -30,7 +31,7 @@ private val usernameFetchers = listOf<UsernameFetcher>(
     }
 )
 
-fun downloadOperaMedia(context: FeatureContext, type: String, media: StoryMedia?) {
+fun downloadOperaMedia(context: FeatureContext, type: String?, media: StoryMedia?) {
     if (media == null || media.info.isNull) return
 
     val provider: StreamProvider = FileProxyStreamProvider(context.appContext) {
@@ -48,12 +49,16 @@ fun downloadOperaMedia(context: FeatureContext, type: String, media: StoryMedia?
         return@FileProxyStreamProvider null
     }
 
+    val finalType = type
+        ?: if (media.map.containsKey(MessageStoryKeys.getMessageId().instance)) PathManager.DOWNLOAD_SNAP else PathManager.DOWNLOAD_STORY
+    val typeString = if (finalType == PathManager.DOWNLOAD_SNAP) "Snap" else "Story"
+
     context.download(
-        type,
+        finalType,
         mapOf("u" to media.username),
         media.extension,
         provider,
-        media.username + "'s Story"
+        "${media.username}'s $typeString"
     )
 }
 
@@ -65,17 +70,17 @@ fun getMediaInfo(
     getUsername(context, metadata) { username ->
         map[StoryMetadata.getImageMediaInfo().instance]?.let {
             mLog.debug("Found image media info for story.")
-            return@getUsername callback(StoryMedia(OperaMediaInfo.wrap(it), username, ".jpg"))
+            return@getUsername callback(StoryMedia(OperaMediaInfo.wrap(it), username, ".jpg", map))
         }
 
         map[StoryMetadata.getVideoMediaInfo().instance]?.let {
             mLog.debug("Found video media info for story.")
-            return@getUsername callback(StoryMedia(OperaMediaInfo.wrap(it), username, ".mp4"))
+            return@getUsername callback(StoryMedia(OperaMediaInfo.wrap(it), username, ".mp4", map))
         }
 
         map[StoryMetadata.getOverlayImageMediaInfo().instance]?.let {
             mLog.debug("Found image overlay media info for story.")
-            return@getUsername callback(StoryMedia(OperaMediaInfo.wrap(it), username, ".jpg"))
+            return@getUsername callback(StoryMedia(OperaMediaInfo.wrap(it), username, ".jpg", map))
         }
 
         mLog.error("Error getting media info for $metadata.")
@@ -130,4 +135,15 @@ private fun getUsername(
     )
 }
 
-class StoryMedia(val info: OperaMediaInfo, val username: String, val extension: String)
+val ParamsMap.isChat: Boolean
+    get() = map.containsKey(MessageStoryKeys.getSnapInSavedState().instance)
+
+val ParamsMap.storyId: String?
+    get() {
+        val reportingInfo = map[FriendStoryKeys.getStorySnapViewReportingInfo().instance]
+        return if (reportingInfo is Collection<*>) StorySnapViewReportingInfo.wrap(reportingInfo.first()).storySnapKey.storyKey.storyId else null
+    }
+
+class StoryMedia(
+    val info: OperaMediaInfo, val username: String, val extension: String, val map: Map<*, *>
+)

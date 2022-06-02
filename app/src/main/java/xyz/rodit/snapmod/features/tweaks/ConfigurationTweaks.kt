@@ -52,6 +52,8 @@ class ConfigurationTweaks(context: FeatureContext) : Feature(context) {
             true
         )
 
+        override("ENABLE_DF_FRIENDS_SECTION_LIST_VIEW", "enable_story_list", true)
+
         override("ENABLE_VOICE_NOTE_REVAMP", "enable_new_voice_notes", true)
         override("ENABLE_VOICE_NOTES_MESSAGING_PLUGIN", "enable_new_voice_notes", true)
 
