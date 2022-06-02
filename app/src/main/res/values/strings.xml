@@ -158,4 +158,6 @@
 
     <string name="enable_new_chat_menu_title">Enable New Chat Menu</string>
     <string name="enable_new_chat_menu_description">Enables the new chat context menu (recommended).</string>
+    <string name="enable_story_list_title">Enable Story List</string>
+    <string name="enable_story_list_description">Replaces the default story carousel with a list.</string>
 </resources>

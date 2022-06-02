@@ -7,7 +7,7 @@ abstract class ButtonOption(context: FeatureContext, name: String, private val t
     MenuPlugin(context, name) {
 
     override fun createModel(key: String?): Any {
-        val actionDataModel = SendChatActionDataModel(createEventData(key!!), false, null)
+        val actionDataModel = SendChatActionDataModel(createEventData(key!!), false)
         val action = SendChatAction(actionDataModel)
         val textViewModel = ActionMenuOptionTextViewModel(textResource, null, null, null, null, 62)
         return ActionMenuOptionItemViewModel(

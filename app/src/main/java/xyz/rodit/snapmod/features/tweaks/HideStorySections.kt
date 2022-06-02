@@ -7,7 +7,7 @@ import xyz.rodit.snapmod.mappings.DiscoverViewBinder
 import xyz.rodit.snapmod.util.before
 import xyz.rodit.snapmod.util.getList
 
-class HideStorySections(context: FeatureContext) : Feature(context) {
+class HideStorySections(context: FeatureContext) : Feature(context, 0L..84609L) {
 
     private val hiddenStorySections: MutableSet<String> = HashSet()
 

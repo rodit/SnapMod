@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 
 import com.google.gson.annotations.SerializedName;
 import com.google.protobuf.nano.MessageNano;
@@ -524,14 +525,14 @@ class FooterInfoItem {
     }
 }
 
-class FriendProfileTransformer {
+class FriendProfileTransformer implements #Func2 {
 
     [discard] int i0;
     [discard] Object target;
 
     void $<init>(Object, int)
 
-    * $apply(...) {
+    * apply(...) {
         .string "Required value was null.";
         .string "performanceLogger";
         .method Collections->singletonList;
@@ -1778,10 +1779,10 @@ class MessagingNotificationHandler {
 [certain]
 class NotificationHandler {
 
-    Object data;
-    [discard] int a0;
-    Object handler;
     Object conversationIdProvider;
+    [discard] int a0;
+    Object data;
+    Object handler;
 
     * handle() {
         .type !NotificationData;
@@ -1795,6 +1796,10 @@ class AesCrypto {
 
     void $<init>(String, String, ...)
     void $<init>(byte[], byte[])
+
+    Cipher getCipher() {
+        .string "AES/CBC/PKCS5Padding";
+    }
 
     InputStream encrypt(InputStream)
 
@@ -1886,6 +1891,8 @@ class ProfileActionSheetCreator {
 enum ActionSheetType {
 
     [late] static this .fields { PROFILE, PROFILE_ACTION_MENU }
+
+    [not] int i0;
 }
 
 [certain]
@@ -1991,6 +1998,52 @@ class StorySnapViewReportingInfo {
         .string "StorySnapViewReportingInfo(viewReportingId=";
         .string ", snapOwnerUserId=";
     }
+}
+
+[certain, obfuscated]
+enum DfSectionType {
+
+    [late] static this .fields { FRIENDS_SECTION, SUBSCRIBED_SECTION, FOR_YOU_SECTION, UNKNOWN_SECTION }
+}
+
+[certain]
+class DfSectionController {
+
+    !DfSectionType sectionType;
+
+    [discard] void $<init>(...) {
+        .string "DfSectionController";
+    }
+}
+
+[certain, discard]
+class DiscoverFeedAdapterBase extends #AdapterBase {
+
+    [discard] void $<init>(...) {
+        .string "df:dfa:init";
+    }
+}
+
+[certain]
+class AllTabsDiscoverFeedAdapter extends !DiscoverFeedAdapterBase {
+
+    [discard] void $<init>(...) {
+        .string "AllTabsDiscoverFeedAdapter";
+    }
+}
+
+[late]
+class AdapterBase {
+
+    void addSection(#AdapterSection)
+}
+
+[late]
+interface AdapterSection {
+
+    [discard] String getClassName()
+    [discard] void m0(View, ...)
+    [discard] void m1(View, ...)
 }
 
 [late]

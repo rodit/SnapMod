@@ -65,6 +65,7 @@ class FeatureManager(context: FeatureContext) : Contextual(context) {
         add(::HideFriends)
         add(::HideStoryReadReceipts)
         add(::HideStorySections)
+        add(::HideStorySectionsLegacy)
         add(::LocationOverride)
     }
 

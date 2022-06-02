@@ -184,6 +184,12 @@
             app:entries="@array/chat_options"
             app:entryValues="@array/chat_options_values"
             app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="enable_story_list"
+            app:title="@string/enable_story_list_title"
+            app:summary="@string/enable_story_list_description"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/snaps_header"
