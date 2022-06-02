@@ -8,12 +8,10 @@ import android.content.Intent
 import android.os.Handler
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedBridge
-import de.robv.android.xposed.XposedHelpers
 import xyz.rodit.snapmod.features.FeatureContext
 import xyz.rodit.snapmod.features.FeatureManager
 import xyz.rodit.snapmod.features.InstanceManager
 import xyz.rodit.snapmod.logging.XLog
-import xyz.rodit.snapmod.logging.dump
 import xyz.rodit.snapmod.logging.log
 import xyz.rodit.snapmod.mappings.MainActivity
 import xyz.rodit.snapmod.util.getList
