@@ -10,8 +10,8 @@ android {
         applicationId "xyz.rodit.snapmod"
         minSdk 24
         targetSdk 32
-        versionCode 26
-        versionName "1.7.3"
+        versionCode 27
+        versionName "1.8.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -22,15 +22,22 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    namespace 'xyz.rodit.snapmod'
+
+    lint {
+        disable 'MissingTranslation'
     }
 }
 
 task versionInfo {
     doLast {
-        def build = 84609
+        def build = 84612
         def infoFile = new File('app/build/version.json')
         infoFile.getParentFile().mkdirs()
         infoFile.delete()
