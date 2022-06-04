@@ -525,18 +525,18 @@ class FooterInfoItem {
     }
 }
 
-class FriendProfileTransformer implements #Func2 {
+class FriendProfileTransformer {
 
     [discard] int i0;
-    [discard] Object target;
+    Object section;
+    Object data;
 
-    void $<init>(Object, int)
+    void $<init>(Object, Object, int)
 
-    * apply(...) {
+    * $apply(...) {
         .string "Required value was null.";
         .string "performanceLogger";
         .method Collections->singletonList;
-        .field this->!target;
         .new !FooterInfoItem;
     }
 }
@@ -1874,7 +1874,7 @@ class ProfileActionSheetProvider {
     }
 }
 
-[certain]
+[certain, conserve]
 class ProfileActionSheetCreator {
 
     Object nestedContext;
