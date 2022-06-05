@@ -192,6 +192,52 @@
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="@string/camera_header"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            app:key="camera_readme"
+            app:title="@string/camera_title"
+            app:summary="@string/camera_description"
+            app:iconSpaceReserved="false" />
+
+        <ListPreference
+            app:key="custom_image_resolution"
+            app:title="@string/custom_image_resolution_title"
+            app:entries="@array/default_resolutions"
+            app:entryValues="@array/default_resolutions_values"
+            app:defaultValue="0"
+            app:iconSpaceReserved="false" />
+
+        <ListPreference
+            app:key="custom_video_resolution"
+            app:title="@string/custom_video_resolution_title"
+            app:entries="@array/default_resolutions"
+            app:entryValues="@array/default_resolutions_values"
+            app:defaultValue="0"
+            app:iconSpaceReserved="false" />
+
+        <EditTextPreference
+            app:key="custom_video_fps"
+            app:title="@string/custom_video_fps_title"
+            app:dialogMessage="@string/custom_video_fps_default"
+            app:defaultValue="0"
+            app:iconSpaceReserved="false" />
+
+        <EditTextPreference
+            app:key="custom_video_bitrate"
+            app:title="@string/custom_video_bitrate_title"
+            app:dialogMessage="@string/custom_video_bitrate_default"
+            app:defaultValue="0"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="force_source_encoding"
+            app:title="@string/force_source_encoding_title"
+            app:summary="@string/force_source_encoding_description"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
     <PreferenceCategory app:title="@string/snaps_header"
         app:iconSpaceReserved="false">
 

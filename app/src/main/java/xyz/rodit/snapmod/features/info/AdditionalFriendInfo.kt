@@ -17,7 +17,8 @@ class AdditionalFriendInfo(context: FeatureContext) : Feature(context) {
     override fun performHooks() {
         // Show more info in friend profile footer.
         FriendProfileTransformer.apply.after(context, "more_profile_info") {
-            if (!FriendProfilePageData.isInstance(it.args[0]) || it.result !is List<*>) return@after
+            val transformer = FriendProfileTransformer.wrap(it.thisObject)
+            if (!FriendProfilePageData.isInstance(transformer.data) || it.result !is List<*>) return@after
 
             val viewModelList = it.result as List<*>
             if (viewModelList.isEmpty()) return@after
@@ -25,7 +26,7 @@ class AdditionalFriendInfo(context: FeatureContext) : Feature(context) {
             val viewModel = viewModelList[0]!!
             if (!FooterInfoItem.isInstance(viewModel)) return@after
 
-            val data = FriendProfilePageData.wrap(it.args[0])
+            val data = FriendProfilePageData.wrap(transformer.data)
             val friendDate = Date(max(data.addedTimestamp, data.reverseAddedTimestamp))
             val birthday = if (data.birthday.isNull) CalendarDate(13, -1) else data.birthday
 

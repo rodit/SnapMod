@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.graphics.Matrix;
+import android.media.MediaFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -239,6 +240,21 @@ enum SnapMediaType {
 }
 
 [certain]
+class MediaPackageMedia {
+
+    @SerializedName("video_duration_ms")
+    Long videoDurationMs;
+    @SerializedName("camera_api")
+    String cameraApi;
+    @SerializedName("media_file_size_bytes")
+    public Long fileSize;
+    @SerializedName("height")
+    Integer height;
+    @SerializedName("width")
+    Integer width;
+}
+
+[certain]
 class MediaPackage {
 
     @SerializedName("session_id")
@@ -248,14 +264,7 @@ class MediaPackage {
     @SerializedName("mediaId")
     String mediaId;
     @SerializedName("media")
-    #MediaPackageMedia media;
-}
-
-[late]
-class MediaPackageMedia {
-
-    @SerializedName("video_duration_ms")
-    public Long videoDurationMs;
+    !MediaPackageMedia media;
 }
 
 [certain]
@@ -525,18 +534,18 @@ class FooterInfoItem {
     }
 }
 
-class FriendProfileTransformer implements #Func2 {
+class FriendProfileTransformer {
 
     [discard] int i0;
-    [discard] Object target;
+    Object section;
+    Object data;
 
-    void $<init>(Object, int)
+    void $<init>(Object, Object, int)
 
-    * apply(...) {
+    * $apply(...) {
         .string "Required value was null.";
         .string "performanceLogger";
         .method Collections->singletonList;
-        .field this->!target;
         .new !FooterInfoItem;
     }
 }
@@ -1874,7 +1883,7 @@ class ProfileActionSheetProvider {
     }
 }
 
-[certain]
+[certain, conserve]
 class ProfileActionSheetCreator {
 
     Object nestedContext;
@@ -2044,6 +2053,65 @@ interface AdapterSection {
     [discard] String getClassName()
     [discard] void m0(View, ...)
     [discard] void m1(View, ...)
+}
+
+[certain]
+class SnapSize {
+
+    @SerializedName("width")
+    int width;
+    @SerializedName("height")
+    int height;
+
+    void $<init>(int, int)
+
+    void $<init>(this)
+
+    String $toString() {
+        .string contains "W x H";
+    }
+}
+
+[certain]
+class RecordingCodecConfiguration {
+
+    !SnapSize resolution;
+    int bitrate;
+
+    String $toString() {
+        .string "RecordingCodecConfiguration(resolution=";
+    }
+}
+
+[certain]
+class ScCameraSettings {
+
+    !SnapSize previewResolution;
+    !SnapSize pictureResolution;
+
+    String $toString() {
+        .string "ScCameraSettings{mScFocusMode=";
+        .string ", mPreviewResolution=";
+        .string ", mPictureResolution=";
+    }
+}
+
+[certain, obfuscated]
+enum MediaQualityLevel {
+
+    [late] static this .fields { LEVEL_NONE, LEVEL_1, LEVEL_MAX, UNRECOGNIZED_VALUE }
+}
+
+[certain]
+class TranscodingRequest {
+
+    !MediaQualityLevel qualityLevel;
+
+    String $toString() {
+        .string "TranscodingRequest(caller=";
+        .string ", sourceInfo=";
+        .string ", mediaQualityLevel=";
+    }
 }
 
 [late]

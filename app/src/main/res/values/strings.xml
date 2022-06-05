@@ -4,6 +4,7 @@
     <string name="title_activity_settings">Settings</string>
     <string name="privacy_header">Privacy</string>
     <string name="tweaks_header">Tweaks</string>
+    <string name="camera_header">🧪 Camera</string>
     <string name="snaps_header">Snaps</string>
     <string name="downloads_header">Downloads</string>
     <string name="notifications_header">Notifications</string>
@@ -158,6 +159,23 @@
 
     <string name="enable_new_chat_menu_title">Enable New Chat Menu</string>
     <string name="enable_new_chat_menu_description">Enables the new chat context menu (recommended).</string>
+
     <string name="enable_story_list_title">Enable Story List</string>
     <string name="enable_story_list_description">Replaces the default story carousel with a list.</string>
+
+    <string name="camera_title">Notice</string>
+    <string name="camera_description">Tap to read.</string>
+    <string name="camera_dialog_description">Note, increasing video resolution, FPS and bitrate all have an effect on the media size. This means high quality videos will take up a lot of storage space and will take a long time to upload and download for the recipient.</string>
+
+    <string name="custom_image_resolution_title">Image Resolution</string>
+    <string name="custom_video_resolution_title">Video Resolution</string>
+
+    <string name="custom_video_fps_title">Video FPS</string>
+    <string name="custom_video_fps_default">Set to 0 for default FPS.</string>
+
+    <string name="custom_video_bitrate_title">Video Bitrate (bps)</string>
+    <string name="custom_video_bitrate_default">Set to 0 for default bitrate. Higher bitrate leads to higher quality but also larger file sizes. For example, 4k videos typically have a bitrate of 60000000 to 100000000 bps.</string>
+
+    <string name="force_source_encoding_title">Force Source Encoding</string>
+    <string name="force_source_encoding_description">Forces Snapchat to use the source resolution and bitrate when saving/sending videos and images. This must be enabled for custom video/image resolution to be noticeable.</string>
 </resources>

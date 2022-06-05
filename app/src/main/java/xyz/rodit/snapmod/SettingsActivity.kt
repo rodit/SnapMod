@@ -3,6 +3,9 @@ package xyz.rodit.snapmod
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.graphics.ImageFormat
+import android.hardware.camera2.CameraCharacteristics
+import android.hardware.camera2.CameraManager
 import android.net.Uri
 import android.os.Bundle
 import android.text.InputType
@@ -14,6 +17,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.preference.EditTextPreference
+import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import xyz.rodit.xposed.SettingsActivity
@@ -76,6 +80,8 @@ class SettingsActivity : SettingsActivity(R.xml.root_preferences) {
         setNumericInput(fragment, "location_share_lat")
         setNumericInput(fragment, "location_share_long")
         setNumericInput(fragment, "audio_playback_speed")
+        setNumericInput(fragment, "custom_video_fps")
+        setNumericInput(fragment, "custom_video_bitrate")
 
         (fragment.findPreference<Preference>("hidden_friends") as EditTextPreference?)?.apply {
             setOnBindEditTextListener {
@@ -83,6 +89,30 @@ class SettingsActivity : SettingsActivity(R.xml.root_preferences) {
                 it.inputType = InputType.TYPE_TEXT_FLAG_MULTI_LINE
                 it.isSingleLine = false
                 it.setSelection(it.text.length)
+            }
+        }
+
+        val camera = getSystemService(CAMERA_SERVICE) as CameraManager
+        val characteristics = camera.getCameraCharacteristics(camera.cameraIdList[0])
+        val config = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
+        config?.let { c ->
+            val sizes = c.getOutputSizes(ImageFormat.JPEG)
+            val strings = sizes.map { s -> "${s.width}x${s.height}" }.toTypedArray()
+            sequenceOf(
+                "custom_image_resolution",
+                "custom_video_resolution"
+            ).map { fragment.findPreference<ListPreference>(it) }
+                .filterNotNull()
+                .forEach {
+                    it.entries = strings + "Default"
+                    it.entryValues = strings + "0"
+                }
+        }
+
+        fragment.findPreference<Preference>("camera_readme")?.apply {
+            onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                showCameraReadme()
+                true
             }
         }
     }
@@ -99,6 +129,13 @@ class SettingsActivity : SettingsActivity(R.xml.root_preferences) {
         AlertDialog.Builder(this)
             .setTitle(R.string.installation_status_title)
             .setMessage(getInstallationSummary(true))
+            .show()
+    }
+
+    private fun showCameraReadme() {
+        AlertDialog.Builder(this)
+            .setTitle(R.string.camera_title)
+            .setMessage(R.string.camera_dialog_description)
             .show()
     }
 

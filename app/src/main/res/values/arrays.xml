@@ -118,6 +118,14 @@
         <item>NOTE</item>
     </string-array>
 
+    <string-array name="default_resolutions">
+        <item>Default</item>
+    </string-array>
+
+    <string-array name="default_resolutions_values">
+        <item>0</item>
+    </string-array>
+
     <string-array name="sc_scope">
         <item>com.snapchat.android</item>
     </string-array>
