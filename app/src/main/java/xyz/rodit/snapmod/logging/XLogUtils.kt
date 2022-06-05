@@ -2,6 +2,8 @@ package xyz.rodit.snapmod.logging
 
 import android.util.Log
 import de.robv.android.xposed.XC_MethodHook
+import de.robv.android.xposed.XposedBridge
+import de.robv.android.xposed.XposedHelpers
 import java.util.*
 
 private val logMap = WeakHashMap<Any, XLog>()
@@ -44,4 +46,13 @@ fun XLog.dumpMethodCall(param: XC_MethodHook.MethodHookParam) {
                 "Arguments:\n" +
                 param.args.mapIndexed { i, o -> "$i: $o" }.joinToString("\n")
     )
+}
+
+fun XLog.dumpConstruction(className: String, classLoader: ClassLoader) {
+    val cls = XposedHelpers.findClass(className, classLoader)
+    XposedBridge.hookAllConstructors(cls, object : XC_MethodHook() {
+        override fun afterHookedMethod(param: MethodHookParam) {
+            debug("${param.thisObject}")
+        }
+    })
 }
