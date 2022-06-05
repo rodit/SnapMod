@@ -30,6 +30,7 @@ To set SnapMod up, download and install the latest apk from [here](https://githu
 - Auto-save snaps when opened
 - Auto-save stories when viewed (per story or globally)
 - Show message content (including previews of non-text media) in notifications
+- Disable compression/transcoding of sent/saved media
 
 ## Feature Suggestions
 If you would like to suggest a new feature, please do so in **Discussions**. Please do not create an Issue for feature suggetsions (they will be moved to Discussions).
