@@ -322,8 +322,8 @@ interface MessageDataModel {
     String getArroyoMessageId()
     String getSenderDisplayName()
     String getConversationId()
-    String getSenderId()
     String $getType()
+    String getSenderId()
     String getSenderUsername()
 
     !MediaBaseBase getMedia()
@@ -1612,7 +1612,7 @@ class ChatMenuItem {
     }
 }
 
-[certain]
+[certain, conserve]
 class ChatMessageActionBuilder {
 
     [discard] Object o0;
@@ -1788,10 +1788,10 @@ class MessagingNotificationHandler {
 [certain]
 class NotificationHandler {
 
-    Object conversationIdProvider;
-    [discard] int a0;
     Object data;
+    [discard] int a0;
     Object handler;
+    Object conversationIdProvider;
 
     * handle() {
         .type !NotificationData;
@@ -1886,8 +1886,8 @@ class ProfileActionSheetProvider {
 [certain, conserve]
 class ProfileActionSheetCreator {
 
-    Object nestedContext;
     Object actionMenuContext;
+    Object nestedContext;
 
     * apply(*) {
         .type !ProfileActionSheetProvider;
