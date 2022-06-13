@@ -1,5 +1,6 @@
 package xyz.rodit.snapmod.features
 
+import okhttp3.internal.toImmutableList
 import xyz.rodit.snapmod.features.chatmenu.ChatMenuModifier
 import xyz.rodit.snapmod.features.chatmenu.new.NewChatMenuModifier
 import xyz.rodit.snapmod.features.conversations.*
@@ -9,6 +10,7 @@ import xyz.rodit.snapmod.features.info.NetworkLogging
 import xyz.rodit.snapmod.features.messagemenu.MessageMenuModifier
 import xyz.rodit.snapmod.features.notifications.FilterTypes
 import xyz.rodit.snapmod.features.notifications.ShowMessageContent
+import xyz.rodit.snapmod.features.opera.CustomStoryOptions
 import xyz.rodit.snapmod.features.opera.OperaModelModifier
 import xyz.rodit.snapmod.features.saving.*
 import xyz.rodit.snapmod.features.tweaks.*
@@ -16,6 +18,7 @@ import xyz.rodit.snapmod.features.tweaks.*
 class FeatureManager(context: FeatureContext) : Contextual(context) {
 
     private val features: MutableList<Feature> = ArrayList()
+    val pubFeatures get() = features.toImmutableList()
 
     fun load() {
         // Chat context menu
@@ -42,6 +45,7 @@ class FeatureManager(context: FeatureContext) : Contextual(context) {
         add(::ShowMessageContent)
 
         // Opera (story/snap view)
+        add(::CustomStoryOptions)
         add(::OperaModelModifier)
 
         // Saving
@@ -67,7 +71,8 @@ class FeatureManager(context: FeatureContext) : Contextual(context) {
         add(::HideStoryReadReceipts)
         add(::HideStorySections)
         add(::HideStorySectionsLegacy)
-        add(::LocationOverride)
+        // add(::LocationOverride)
+        add(::PinStories)
     }
 
     fun init() {
@@ -87,5 +92,9 @@ class FeatureManager(context: FeatureContext) : Contextual(context) {
         if (feature.support.contains(context.appVersion)) {
             features.add(feature)
         }
+    }
+
+    inline fun <reified T> get(): T where T : Feature {
+        return pubFeatures.filterIsInstance<T>().first()
     }
 }

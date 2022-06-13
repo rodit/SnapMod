@@ -2114,6 +2114,56 @@ class TranscodingRequest {
     }
 }
 
+[certain]
+class DataWithPagination {
+
+    !SnapIterable dataModels;
+    boolean hasMore;
+
+    String $toString() {
+        .string "DataWithPagination(dataModels=";
+        .string ", hasMore=";
+    }
+}
+
+[certain]
+class DfSectionControllerActions {
+
+    [discard] int i0;
+    Object sectionController;
+
+    * $apply(*) {
+        .string "df:sectioncontroller:toViewModels";
+    }
+}
+
+[certain]
+class FriendStoryData implements #StoryData {
+
+    [late] String storyRecordStoryId;
+    [late] String displayName;
+
+    String $toString() {
+        .string "FriendStoryData(mixerStoryMetaData=";
+        [strict]
+        .string ", storyRecordStoryId=", bind field storyRecordStoryId next reference;
+        [strict]
+        .string ", displayName=", bind field displayName next reference;
+    }
+}
+
+[certain, exact]
+class StoryViewModel {
+
+    !StoryData storyData;
+    [discard] Integer i0;
+
+    void $<init>(!StoryData, Integer)
+
+    boolean $equals(*)
+    int $hashCode()
+}
+
 [late]
 interface Func0 {
 

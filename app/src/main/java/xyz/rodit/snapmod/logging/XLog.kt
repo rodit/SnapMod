@@ -15,7 +15,7 @@ private val levelNames = mapOf(
 
 class XLog(private val tag: String) {
 
-    var level: Int = LOG_NONE
+    var level: Int = LOG_ERROR or LOG_WARN or LOG_DEBUG
 
     fun put(level: Int, message: String) {
         if ((globalLevel or this.level) and level == 0 || !levelNames.containsKey(level)) return

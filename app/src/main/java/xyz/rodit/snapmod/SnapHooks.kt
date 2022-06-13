@@ -31,7 +31,6 @@ class SnapHooks : HooksBase(
 
     private var mainActivity: Activity? = null
     private var featureContext: FeatureContext? = null
-    private var features: FeatureManager? = null
     private var queueFeatureConfig = false
 
     override fun onPackageLoad() {
@@ -72,8 +71,8 @@ class SnapHooks : HooksBase(
             .map(String::toInt)
             .fold(0) { a, b -> a or b }
 
-        if (features != null) {
-            features!!.onConfigLoaded(first)
+        if (featureContext != null) {
+            featureContext!!.features.onConfigLoaded(first)
         } else {
             queueFeatureConfig = true
         }
@@ -107,7 +106,7 @@ class SnapHooks : HooksBase(
             FeatureContextUpdater(featureContext!!)
         )
 
-        features = FeatureManager(featureContext!!).apply {
+        featureContext!!.features.apply {
             load()
             init()
             performHooks()

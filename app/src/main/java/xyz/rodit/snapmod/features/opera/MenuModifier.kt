@@ -34,6 +34,6 @@ class MenuModifier(context: FeatureContext) : Contextual(context), OperaPlugin {
 
     init {
         plugins.add(SaveMenuOption(context))
-        plugins.add(AutoSaveOption(context))
+        plugins.add(context.features.get<CustomStoryOptions>())
     }
 }

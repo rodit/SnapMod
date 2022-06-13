@@ -16,8 +16,7 @@ object CustomResources {
 
         string.chat_action_playback_speed to "Set Playback Speed",
 
-        string.menu_story_enable_auto_download to "Enable Auto-Download Stories",
-        string.menu_story_disable_auto_download to "Disable Auto-Download Stories"
+        string.menu_story_custom_options to "SnapMod:CUSTOM_STORY_OPTIONS"
     )
 
     fun init() {
@@ -53,7 +52,6 @@ object CustomResources {
 
         const val chat_action_playback_speed = -200000
 
-        const val menu_story_enable_auto_download = -300000
-        const val menu_story_disable_auto_download = -300001
+        const val menu_story_custom_options = -300000
     }
 }

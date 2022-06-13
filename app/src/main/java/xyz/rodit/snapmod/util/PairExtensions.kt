@@ -4,10 +4,18 @@ import de.robv.android.xposed.XposedHelpers
 
 val Any.pairFirst: Any?
     get() {
-        return XposedHelpers.getObjectField(this, "a")
+        return try {
+            XposedHelpers.getObjectField(this, "a")
+        } catch (ex: Throwable) {
+            null
+        }
     }
 
 val Any.pairSecond: Any?
     get() {
-        return XposedHelpers.getObjectField(this, "b")
+        return try {
+            XposedHelpers.getObjectField(this, "b")
+        } catch (ex: Throwable) {
+            null
+        }
     }
