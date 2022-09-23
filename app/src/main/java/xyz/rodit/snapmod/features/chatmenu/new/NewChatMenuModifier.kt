@@ -37,7 +37,7 @@ class NewChatMenuModifier(context: FeatureContext) : Feature(context) {
     override fun performHooks() {
         // Force new chat action menu
         ProfileActionSheetChooser.choose.before {
-            it.args[0] = context.config.getBoolean("enable_new_chat_menu", true)
+            it.args[0] = true
         }
 
         // Add subsection
@@ -46,6 +46,9 @@ class NewChatMenuModifier(context: FeatureContext) : Feature(context) {
 
             val newItems = (it.args[0] as List<*>).toMutableList()
             val creator = ProfileActionSheetCreator.wrap(it.thisObject)
+            if (!NestedActionMenuContext.isInstance(creator.nestedContext)
+                || !ActionMenuContext.isInstance(creator.actionMenuContext)) return@before
+
             val nestedContext = NestedActionMenuContext.wrap(creator.nestedContext)
             val actionContext = ActionMenuContext.wrap(creator.actionMenuContext)
             val key = actionContext.feedInfo.key

@@ -4,10 +4,9 @@ import okhttp3.internal.toImmutableList
 import xyz.rodit.snapmod.features.chatmenu.ChatMenuModifier
 import xyz.rodit.snapmod.features.chatmenu.new.NewChatMenuModifier
 import xyz.rodit.snapmod.features.conversations.*
-import xyz.rodit.snapmod.features.friendsfeed.FeedModifier
+import xyz.rodit.snapmod.features.friendsfeed.PinChats
 import xyz.rodit.snapmod.features.info.AdditionalFriendInfo
 import xyz.rodit.snapmod.features.info.NetworkLogging
-import xyz.rodit.snapmod.features.messagemenu.MessageMenuModifier
 import xyz.rodit.snapmod.features.notifications.FilterTypes
 import xyz.rodit.snapmod.features.notifications.ShowMessageContent
 import xyz.rodit.snapmod.features.opera.CustomStoryOptions
@@ -26,7 +25,7 @@ class FeatureManager(context: FeatureContext) : Contextual(context) {
         add(::NewChatMenuModifier)
 
         // Friends feed
-        add(::FeedModifier)
+        add(::PinChats)
 
         // Conversations/chats
         add(::AutoSave)
@@ -36,9 +35,6 @@ class FeatureManager(context: FeatureContext) : Contextual(context) {
         add(::PreventTypingNotifications)
         add(::SnapInteractionFilter)
         add(::SnapOverrides)
-
-        // Message context menu
-        add(::MessageMenuModifier)
 
         // Notifications
         add(::FilterTypes)
@@ -66,12 +62,10 @@ class FeatureManager(context: FeatureContext) : Contextual(context) {
         add(::ConfigurationTweaks)
         add(::ConfigurationTweaks)
         add(::DisableBitmojis)
-        // add(::FriendAddOverride);
-        add(::HideFriends)
+        // add(::HideFriends)
         add(::HideStoryReadReceipts)
         add(::HideStorySections)
         add(::HideStorySectionsLegacy)
-        // add(::LocationOverride)
         add(::PinStories)
     }
 

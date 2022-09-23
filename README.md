@@ -2,36 +2,10 @@
 Xposed module for Snapchat.
 
 ## Setup
-To set SnapMod up, download and install the latest apk from [here](https://github.com/rodit/SnapMod/releases). When you open it, it will ask to install some bindings. Press 'Download' and be sure to kill and restart Snapchat afterwards. The latest and only fully supported version of Snapchat is **11.82.0.32** (as of SnapMod 1.8.3). Mappings **will not** be downloaded for previous versions of Snapchat automatically, only for the latest supported version. If you are using an older version, you must manually place the mappings in `/data/data/xyz.rodit.snapmod/files/[build].json` or `/Android/data/xyz.rodit.snapmod/files/[build].json` on your internal storage where `[build]` is the version code of Snapchat the mappings correspond to. Note, there is no guarentee the newest version of Snapmod will work with old mappings (it usually will not for a couple of features).
+To set SnapMod up, download and install the latest apk from [here](https://github.com/rodit/SnapMod/releases). When you open it, it will ask to install some bindings. Press 'Download' and be sure to kill and restart Snapchat afterwards. The latest and only fully supported version of Snapchat is **11.96.0.31** (as of SnapMod 1.8.5). Mappings **will not** be downloaded for previous versions of Snapchat automatically, only for the latest supported version. If you are using an older version, you must manually place the mappings in `/data/data/xyz.rodit.snapmod/files/[build].json` or `/Android/data/xyz.rodit.snapmod/files/[build].json` on your internal storage where `[build]` is the version code of Snapchat the mappings correspond to. Note, there is no guarentee the newest version of Snapmod will work with old mappings (it usually will not for a couple of features).
 
 ## Features
-- Disable camera
-- Hide:
-  - Read receipts
-  - Chat saves/unsaves
-  - Screenshot/screen recording notifications
-  - Save to camera roll notifications
-  - Conversation presence (Bitmoji in bottom left)
-  - Typing status
-  - Story views
-  - Snap views
-- Block ads
-- Pin conversations
-- Save any media (including snaps and audio notes) to camera roll
-- Disable Bitmojis
-- Send snaps from gallery
-- Download stories
-- Bypass video length restriction from drawer in chat
-- Show more info on profile (birthday, friendship status)
-- Disable some metrics/logging
-- Per-conversation stealth mode (hide read receipts, snap views etc for individual conversations)
-- Modify audio note playback speed
-- Auto-save messages of the selected type (per conversation or globally)
-- Auto-save snaps when opened
-- Auto-save stories when viewed (per story or globally)
-- Show message content (including previews of non-text media) in notifications
-- Disable compression/transcoding of sent/saved media
-- Pin stories
+For a full list of features and their status, please visit the wiki [here](https://github.com/rodit/SnapMod/wiki/Features).
 
 ## Feature Suggestions
 If you would like to suggest a new feature, please do so in **Discussions**. Please do not create an Issue for feature suggetsions (they will be moved to Discussions).

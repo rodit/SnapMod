@@ -1,6 +1,7 @@
 #option access_modifiers strict
 
 import android.app.Activity;
+import android.app.Notification;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.graphics.Matrix;
@@ -8,11 +9,10 @@ import android.media.MediaFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.RemoteViews;
 
 import com.google.gson.annotations.SerializedName;
-import com.google.protobuf.nano.MessageNano;
 
-import com.snap.chat_reactions.ChatReactionsBelowMessageViewModel;
 import com.snap.imageloading.view.SnapImageView;
 import com.snapchat.client.messaging.Conversation;
 import com.snapchat.client.messaging.FetchConversationWithMessagesCallback;
@@ -30,6 +30,7 @@ import java.lang.String;
 import java.lang.Throwable;
 import java.lang.UnsupportedOperationException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -144,7 +145,6 @@ class PresenceSession expects com.snapchat.talkcorev3.PresenceSession$CppProxy {
 class NetworkApi expects com.snapchat.client.network_api.NetworkApi$CppProxy {
 
     void $submit(...)
-    void $submitToNetworkManagerDirectly(...)
 }
 
 [certain]
@@ -342,29 +342,10 @@ class ChatModelBase {
     boolean boolField;
     [discard] boolean b0;
     #MediaDownloadStatus status;
-    ChatReactionsBelowMessageViewModel reactionsViewModel;
 
     String $toString() {
         .string contains "ChatViewModelV1";
     }
-
-    [discard] boolean bm0()
-    [discard] boolean bm1()
-    [discard] boolean bm2()
-    [discard] boolean bm3()
-    [discard] boolean bm4()
-    [discard] boolean bm5()
-    [discard] boolean bm6()
-    [discard] boolean bm7()
-    [discard] boolean bm8()
-    [discard] boolean bm9()
-    [discard] boolean bm10()
-    [discard] boolean bm11()
-    [discard] boolean bm12()
-    [discard] boolean bm13()
-    [discard] boolean bm14()
-    [discard] boolean bm15()
-    [discard] boolean bm16()
 
     boolean canSave()
     !SaveType getSaveType()
@@ -467,25 +448,12 @@ class ChatModelSavedSnap {
     !MediaType mediaType;
     [discard] Uri u0;
     [discard] Uri u1;
-    !LiveSnapMedia media;
 
-    void $<init>(Context, !MessageDataModel, String, Map, boolean, ChatReactionsBelowMessageViewModel, boolean, int, int, !LiveSnapMedia, String, ...) {
+    void $<init>(Context, !MessageDataModel, String, Map, boolean, *, boolean, int, int, !LiveSnapMedia, String, ...) {
         .field !ChatLayouts->!SAVED_SNAP;
         .method TimeUnit->toMillis;
-        .method Double->isNaN;
         .method Context->getResources;
     }
-}
-
-class ChatModelAudioNote extends !ChatModelBase {
-
-    [discard] java.lang.String s0;
-    [discard] java.lang.String s1;
-    [discard] boolean b0;
-
-    void $<init>(Context, !ChatLayouts, !MessageDataModel, *, java.lang.String, java.util.Map, boolean, ...)
-
-    Uri getUri()
 }
 
 [certain]
@@ -625,28 +593,6 @@ class FriendActionClient {
     }
 
     * sendFriendAction(!FriendActionRequest)
-}
-
-[certain]
-class LocationMessage {
-
-    [discard] java.lang.String s0;
-    [discard] java.lang.String s1;
-    double latitude;
-    double longitude;
-
-    [discard] java.lang.String sm0() {
-        .string "share_location";
-    }
-}
-
-class LocationMessageBuilder {
-
-    * build(*, String, Conversation, Map) {
-        .type !LocationMessage;
-    }
-
-    * transform(*, *, !MediaReference)
 }
 
 [certain]
@@ -1158,16 +1104,15 @@ class ProfileMyFriendsSection {
         .string "ProfileMyFriendsSection";
     }
 
-    List filter(List, String) {
+    List filter(String, List) {
         .type !DisplayInfoContainer;
     }
 }
 
-[certain]
+[certain, discard]
 class FriendsFeedRecordHolder {
 
     [late] #SnapIterable records;
-    #EmojiMap emojis;
 
     String $toString() {
         .string contains "records=";
@@ -1181,6 +1126,8 @@ class FriendsFeedView {
 
     [late] String key;
     [late] String friendmojiCategories;
+    [late] Long lastInteractionTimestamp;
+    [late] Long pinnedTimestamp;
 
     String $toString() {
         .string contains "FriendsFeedView";
@@ -1188,15 +1135,23 @@ class FriendsFeedView {
         .string contains "key:", bind field key next reference;
         [strict]
         .string contains "friendmojiCategories:", bind field friendmojiCategories next reference;
+        [strict]
+        .string contains "lastInteractionTimestamp:", bind field lastInteractionTimestamp next reference;
+        [strict]
+        .string contains "pinnedTimestamp:", bind field pinnedTimestamp next reference;
     }
 }
 
-[late, exact]
-class EmojiMap {
+[certain]
+class FriendsFeedConfig {
 
-    Map map;
+    [late] boolean isPinConversationsEnabled;
 
-    void $<init>(Map)
+    String $toString() {
+        .string contains "FriendsFeedConfig";
+        [strict]
+        .string ", isPinConversationsEnabled=", bind field isPinConversationsEnabled next reference;
+    }
 }
 
 [late]
@@ -1470,14 +1425,14 @@ class ArroyoMessageListDataProvider {
 }
 
 [late]
-class ExportItem {
+class DestinationInfo {
 
-    String fileName;
-    Uri uri;
+    Uri destinationUri;
+    String actualFileName;
 
     String $toString() {
-        .string "ExportItem(actualFileName=";
-        .string ", uri=";
+        .string "DestinationInfo(destinationUri=";
+        .string ", actualFileName=";
     }
 }
 
@@ -1488,56 +1443,10 @@ class MediaExportControllerImpl {
         .string "MediaExportControllerImpl";
     }
 
-    Uri exportMedia(*, *, #ExportItem, ...) {
+    Uri exportMedia(*, *, #DestinationInfo, ...) {
         .string "mime_type";
         .string "_display_name";
         .string "_size";
-    }
-}
-
-[late, discard, exact]
-class NanoChatMessageArrayType {
-    static this[] ta0;
-    * o0;
-    int i0;
-    * o1;
-
-    void $<init>(...)
-
-    int $computeSerializedSize()
-
-    * m0()
-    boolean m1()
-
-    MessageNano $mergeFrom(*)
-    void $writeTo(*)
-}
-
-[certain, exact]
-class NanoChatMessageContent {
-
-    [not] static *[] n0;
-    [not] String[] n1;
-    [not] byte[] n2;
-
-    [discard] #NanoChatMessageArrayType[] a0;
-    int typeNum;
-    String content;
-
-    void $<init>(...)
-
-    [discard] int $computeSerializedSize()
-    [discard] MessageNano $mergeFrom(*)
-    [discard] void $writeTo(*)
-}
-
-[certain]
-class NanoMessageContent extends < extends MessageNano > {
-
-    static this parse(byte[])
-
-    !NanoChatMessageContent getChatMessageContent() {
-        .type !NanoChatMessageContent;
     }
 }
 
@@ -1566,26 +1475,7 @@ class DefaultFetchMessageCallback extends FetchMessageCallback {
     void $onFetchMessageComplete(...)
 }
 
-[certain, discard]
-class FriendRepositoryAction {
-
-    String $toString() {
-        .string "Friend.sq:selectFriendsByUserIds";
-    }
-}
-
 [certain]
-class FriendsRepository {
-
-    void $<init>(...) {
-        .string "FriendRepository";
-    }
-
-    List selectFriendsByUserIds(List) {
-        .new !FriendRepositoryAction;
-    }
-}
-
 class SelectFriendsByUserIds {
 
     !SnapUsername username;
@@ -1604,47 +1494,38 @@ class SelectFriendsByUserIds {
     }
 }
 
+[certain, discard]
+class SelectFriendsByUserIdsCaller {
+
+    static this INSTANCE;
+
+    * call(...) {
+        .new !SelectFriendsByUserIds;
+    }
+}
+
+[certain, discard]
+class FriendRepositorySqlActions {
+
+    * func0(...) {
+        .string "Friend.sq";
+        .string "countMutualFriends";
+    }
+
+    * observeSelectFriendsByUserIds(Collection) {
+        .field !SelectFriendsByUserIdsCaller->!INSTANCE;
+    }
+}
+
 [certain]
-class ChatMenuItem {
+class FriendsRepository {
 
     void $<init>(...) {
-        .field !ActionMenuOptionItemType->!SUBTITLE_OPTION_ITEM;
+        .string "FriendRepository";
     }
-}
 
-[certain, conserve]
-class ChatMessageActionBuilder {
-
-    [discard] Object o0;
-    [discard] Object o1;
-    [discard] Object o2;
-    Object chatModel;
-
-    * createMenu(...) {
-        .field !ChatMenuItemType->!SAVE_IN_CHAT;
-        .field !ChatMenuItemType->!UNSAVE_IN_CHAT;
-        .field !ChatMenuItemType->!SAVE_TO_CAMERA_ROLL;
-        .field !ChatMenuItemType->!ERASE_QUOTE;
-    }
-}
-
-[certain]
-class AudioNotePlaySession {
-
-    double playbackSpeed;
-
-    void $<init>(...) {
-        .string "AudioNotePlaySession";
-    }
-}
-
-class AudioNoteViewBindingDelegate expects com.snap.messaging.chat.ui.viewbinding.delegate.AudioNoteViewBindingDelegate {
-
-    !AudioNotePlaySession session;
-
-    void bindSession(!ChatModelAudioNote, ...) {
-        .string "playbackSession";
-        .new !AudioNotePlaySession;
+    List selectFriendsByUserIds(List) {
+        .method !FriendRepositorySqlActions->!observeSelectFriendsByUserIds;
     }
 }
 
@@ -1697,7 +1578,7 @@ class ArroyoChatCommandsClient {
         .string "ArroyoChatCommandsClient";
     }
 
-    void saveMessage(String, boolean, !ChatCommandSource, boolean) {
+    void saveMessage(!ChatContext, String, boolean, boolean, !ChatCommandSource, boolean) {
         .string "ArroyoChatCommandsClient";
     }
 }
@@ -1711,92 +1592,24 @@ class ChatModelPlugin {
     }
 }
 
-[certain, discard]
-class NotificationDisplayData {
-
-    String $toString() {
-        .string "DisplayData(senderDisplayName=";
-        .string ", systemText=";
-        .string ", title=";
-    }
-}
-
 [certain]
-class NotificationData {
-
-    String id;
-    String key;
-    String recipientId;
-    String recipientUsername;
-    [discard] !NotificationDisplayData ndd0;
-    long timestamp0;
-    long timestamp1;
-    String revokeKey;
-    Bundle bundle;
-}
-
-[certain, obfuscated, discard]
-enum NotificationHandlerStatus {
-
-    [late] static this .fields {
-        HANDLER_START,
-        DISPLAY_MODEL_CREATE,
-        RETURN_EMPTY_RATE_LIMITED
-    }
-}
-
-[certain]
-class ConversationIdentifier {
-
-    String id;
-    boolean group;
-
-    String $toString() {
-        .string "ConversationIdentifier(id=";
-        .string ", isGroup=";
-    }
-}
-
-[certain]
-class ConversationIdProvider {
-
-    void $<init>(*, !NotificationData, ...)
-
-    !ConversationIdentifier getConversationIdentifier()
-}
-
-[certain]
-class DefaultConversationsRepository {
+class NotificationBuilderUtil {
 
     void $<init>(...) {
-        .string "DefaultConversationsRepository";
-    }
-
-    long getFeedId(String)
-}
-
-[certain]
-class MessagingNotificationHandler {
-
-    !DefaultConversationsRepository conversationRepository;
-
-    void $<init>(...) {
-        .string "MessagingNotificationHandler";
+        .string "android.support.allowGeneratedReplies";
+        .string "android.car.EXTENSIONS";
     }
 }
 
 [certain]
-class NotificationHandler {
+class SnapNotificationBuilder {
 
-    Object data;
-    [discard] int a0;
-    Object handler;
-    Object conversationIdProvider;
+    [discard] Notification baseNotification;
+    [discard] Context context;
+    [discard] RemoteViews remoteViews;
 
-    * handle() {
-        .type !NotificationData;
-        .field !NotificationHandlerStatus->!RETURN_EMPTY_RATE_LIMITED;
-        .field !NotificationHandlerStatus->!DISPLAY_MODEL_CREATE;
+    Notification build() {
+        .new !NotificationBuilderUtil;
     }
 }
 
@@ -1811,7 +1624,6 @@ class AesCrypto {
     }
 
     InputStream encrypt(InputStream)
-
     InputStream decrypt(InputStream)
 }
 
@@ -1886,8 +1698,8 @@ class ProfileActionSheetProvider {
 [certain, conserve]
 class ProfileActionSheetCreator {
 
-    Object actionMenuContext;
     Object nestedContext;
+    Object actionMenuContext;
 
     * apply(*) {
         .type !ProfileActionSheetProvider;
@@ -1950,7 +1762,7 @@ class ActionPlain {
     String primaryText;
     !Func0 onClick;
 
-    void $<init>(...)
+    void $<init>(String, !Func0)
 
     String $toString() {
         .string "Plain(primaryText=";
@@ -1962,7 +1774,6 @@ class ActionPlain {
 class NestedActionMenuContext {
 
     Context context;
-    !CompositeConfigurationProvider config;
 
     static void display(this, String, List)
 }

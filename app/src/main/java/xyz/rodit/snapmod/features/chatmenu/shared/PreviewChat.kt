@@ -1,12 +1,16 @@
 package xyz.rodit.snapmod.features.chatmenu.shared
 
 import android.app.AlertDialog
+import android.util.Base64
 import de.robv.android.xposed.XC_MethodHook
+import xyz.rodit.snapmod.arroyo.followProtoString
 import xyz.rodit.snapmod.createDummyProxy
 import xyz.rodit.snapmod.features.FeatureContext
 import xyz.rodit.snapmod.mappings.*
 import xyz.rodit.snapmod.util.toSnapUUID
 import xyz.rodit.snapmod.util.toUUIDString
+import xyz.rodit.xposed.utils.StreamUtils
+import java.io.File
 
 fun previewChat(context: FeatureContext, key: String) {
     val uuid = key.toSnapUUID()
@@ -48,9 +52,7 @@ private fun displayPreview(context: FeatureContext, param: XC_MethodHook.MethodH
                     val displayName = userMap[uuidString]?.displayName ?: "Unknown"
                     previewText.append('\n').append(displayName).append(": ")
                     if (m.messageContent.contentType.instance == ContentType.CHAT().instance) {
-                        val chatMessage =
-                            NanoMessageContent.parse(m.messageContent.content).chatMessageContent.content
-                        previewText.append(chatMessage)
+                        previewText.append(followProtoString(m.messageContent.content as ByteArray, 2, 1))
                     } else {
                         previewText.append(m.messageContent.contentType.instance)
                     }
@@ -58,7 +60,7 @@ private fun displayPreview(context: FeatureContext, param: XC_MethodHook.MethodH
             }
     }
 
-    userMap.values.find { f -> f.streakExpiration ?: 0L > 0L }?.let { f ->
+    userMap.values.find { f -> (f.streakExpiration ?: 0L) > 0L }?.let { f ->
         val hourDiff =
             (f.streakExpiration - System.currentTimeMillis()).toDouble() / 3600000.0
         previewText.append("\n\nStreak Expires in ")

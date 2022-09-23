@@ -14,6 +14,5 @@ class NetworkLogging(context: FeatureContext) : Feature(context) {
         val hook = { it: XC_MethodHook.MethodHookParam -> XposedBridge.log(it.args[0].toString()) }
 
         NetworkApi.submit.before(context, "log_network_requests", hook)
-        NetworkApi.submitToNetworkManagerDirectly.before(context, "log_network_requests", hook)
     }
 }

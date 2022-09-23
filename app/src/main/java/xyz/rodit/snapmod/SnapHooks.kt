@@ -9,7 +9,6 @@ import android.os.Handler
 import de.robv.android.xposed.XC_MethodHook
 import de.robv.android.xposed.XposedBridge
 import xyz.rodit.snapmod.features.FeatureContext
-import xyz.rodit.snapmod.features.FeatureManager
 import xyz.rodit.snapmod.features.InstanceManager
 import xyz.rodit.snapmod.logging.XLog
 import xyz.rodit.snapmod.logging.log

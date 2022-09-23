@@ -47,47 +47,60 @@ class ArroyoReader(private val context: Context) {
         return Base64.decode(key, Base64.DEFAULT) to Base64.decode(iv, Base64.DEFAULT)
     }
 
-    fun getSnapKeyAndIv(conversationId: String, messageId: String): Pair<ByteArray, ByteArray>? {
+    fun getSnapData(conversationId: String, messageId: String): Triple<ByteArray, ByteArray, String>? {
         val blob = getMessageBlob(conversationId, messageId) ?: return null
         val key = followProto(blob, 4, 4, 11, 5, 1, 1, 19, 1) ?: return null
         val iv = followProto(blob, 4, 4, 11, 5, 1, 1, 19, 2) ?: return null
-        return key to iv
+        val urlKey = followProtoString(blob, 4, 5, 1, 3, 2, 2) ?: return null
+        return Triple(key, iv, urlKey)
     }
 
     private fun readChatMessageContent(blob: ByteArray): String? {
         return followProtoString(blob, 4, 4, 2, 1)
     }
 
-    private fun followProtoString(data: ByteArray, vararg indices: Int): String? {
-        val proto = followProto(data, *indices)
-        return if (proto != null) String(proto) else null
-    }
-
-    private fun followProto(data: ByteArray, vararg indices: Int): ByteArray? {
-        var current = data
-        indices.forEach { i ->
-            val parts = ProtoReader(current).read()
-            current = parts.firstOrNull { it.index == i }?.value ?: return null
-        }
-
-        return current
-    }
-
-    private fun getMessageBlob(conversationId: String, messageId: String): ByteArray? {
+    private fun getMessageBlob(conversationId: String, messageId: String, retries: Int = 10): ByteArray? {
         SQLiteDatabase.openDatabase(
             File(context.filesDir, "../databases/arroyo.db").path,
             null,
             0
         ).use {
-            it.rawQuery(
-                "SELECT message_content FROM conversation_message WHERE client_conversation_id='$conversationId' AND server_message_id=$messageId",
-                null
-            ).use { cursor ->
-                if (cursor.moveToFirst()) return cursor.getBlob(0)
-                else log.debug("No result in db.")
+            fun getBlob(): ByteArray? {
+                it.rawQuery(
+                    "SELECT message_content FROM conversation_message WHERE client_conversation_id='$conversationId' AND server_message_id=$messageId",
+                    null
+                ).use { cursor ->
+                    if (cursor.moveToFirst()) return cursor.getBlob(0)
+                }
+                return null
             }
+            for (i in 1..retries) {
+                val blob = getBlob()
+                if (blob != null) {
+                    return blob
+                }
+                if (retries > 0) {
+                    Thread.sleep(500)
+                }
+            }
+            log.debug("No message found in db after $retries retries, conversationId: $conversationId, messageId: $messageId")
         }
 
         return null
     }
+}
+
+fun followProtoString(data: ByteArray, vararg indices: Int): String? {
+    val proto = followProto(data, *indices)
+    return if (proto != null) String(proto) else null
+}
+
+fun followProto(data: ByteArray, vararg indices: Int): ByteArray? {
+    var current = data
+    indices.forEach { i ->
+        val parts = ProtoReader(current).read()
+        current = parts.firstOrNull { it.index == i }?.value ?: return null
+    }
+
+    return current
 }

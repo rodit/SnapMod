@@ -45,8 +45,10 @@ class AutoSave(context: FeatureContext) : Feature(context, 84608.toMax()) {
 
                 val arroyoId = createArroyoId(conversationId, descriptor.messageId)
                 context.instances.chatCommandsClient.saveMessage(
+                    null,
                     arroyoId,
                     true,
+                    false,
                     ChatCommandSource.CHAT(),
                     false
                 )

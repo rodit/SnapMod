@@ -46,7 +46,7 @@ class ChatSaving(context: FeatureContext) : Feature(context) {
         // Override save type to gallery to allow saving any snaps.
         ChatModelBase.getSaveType.before(context, "allow_save_snaps") {
             if (ChatModelLiveSnap.isInstance(it.thisObject)
-                || ChatModelAudioNote.isInstance(it.thisObject)
+                || ChatModelPlugin.isInstance(it.thisObject)
             ) {
                 it.result = SaveType.SNAPCHAT_ALBUM().instance
             }
@@ -76,21 +76,15 @@ class ChatSaving(context: FeatureContext) : Feature(context) {
                         base.senderId,
                         emptyMap<Any?, Any>(),
                         true,
-                        base.reactionsViewModel,
+                        null,
                         true,
                         0,
                         0,
                         media,
                         null,
                         base.status,
-                        true,
                         true
                     ).instance
-                }
-                ChatModelAudioNote.isInstance(it.args[2]) -> {
-                    val audio = ChatModelAudioNote.wrap(it.args[2])
-                    resolveAndDownload(audio.uri, base.messageData)
-                    it.result = null
                 }
                 ChatModelPlugin.isInstance(it.args[2]) -> {
                     val messageData = base.messageData
@@ -109,18 +103,18 @@ class ChatSaving(context: FeatureContext) : Feature(context) {
         MediaExportControllerImpl.exportMedia.before(context, "enable_custom_snap_download_path") {
             val messageData = lastMessageData
             if (messageData?.isNotNull != true) return@before
-            val export = ExportItem.wrap(it.args[2])
+            val destination = DestinationInfo.wrap(it.args[2])
 
             val provider = FileProxyStreamProvider(context.appContext) {
                 FileInputStream(
-                    export.uri.path?.let(::File)
+                    destination.actualFileName?.let(::File)
                 )
             }
 
             context.download(
                 PathManager.DOWNLOAD_SNAP,
                 createParams(messageData),
-                '.' + export.fileName.orEmpty().split('.').last(),
+                '.' + destination.actualFileName.orEmpty().split('.').last(),
                 provider,
                 "${lastMessageData!!.senderDisplayName}'s snap"
             )
