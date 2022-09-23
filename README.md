@@ -8,7 +8,7 @@ To set SnapMod up, download and install the latest apk from [here](https://githu
 For a full list of features and their status, please visit the wiki [here](https://github.com/rodit/SnapMod/wiki/Features).
 
 ## Feature Suggestions
-If you would like to suggest a new feature, please do so in **Discussions**. Please do not create an Issue for feature suggetsions (they will be moved to Discussions).
+If you would like to suggest a new feature, please do so in **Discussions**. Please do not create an Issue for feature suggestions (they will be moved to Discussions).
 
 ## Issues
 If you have an issue please post a log from LSPosed (I have no interest in supporting other Xposed implementations, although SnapMod should work fine with them) and a description of the issue. It is **extremely** unhelpful to just say "something doesn't work" or "I can't download stories."
