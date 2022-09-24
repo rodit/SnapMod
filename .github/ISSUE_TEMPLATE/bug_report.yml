@@ -59,6 +59,8 @@ body:
       description: By creating this issue I made sure that ...
       options:
         - label: I am using the latest supported Snapchat version.
+          required: true
         - label: I am using the latest Snapmod version.
+          required: true
         - label: There is no issue already describing my problem.
           required: true
