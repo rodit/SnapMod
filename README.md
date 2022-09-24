@@ -11,7 +11,7 @@ For a full list of features and their status, please visit the wiki [here](https
 If you would like to suggest a new feature, please do so in **Discussions**. Please do not create an Issue for feature suggestions (they will be moved to Discussions).
 
 ## Issues
-If you have an issue please post a log from LSPosed (I have no interest in supporting other Xposed implementations, although SnapMod should work fine with them) and a description of the issue. It is **extremely** unhelpful to just say "something doesn't work" or "I can't download stories."
+Before creating an issue, please check if an issue describing your problem already exists also please post a log from LSPosed (I have no interest in supporting other Xposed implementations, although SnapMod should work fine with them) and a description of the issue. It is **extremely** unhelpful to just say "something doesn't work" or "I can't download stories."
 
 ## Troubleshooting
 If anything doesn't work, the first thing you should try is killing and relaunching Snapchat (through the system settings app, not recent app list) **TWICE** and then trying again. This will ensure any cached mappings are updated. This is especially important after updating SnapMod and its mappings.
