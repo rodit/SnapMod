@@ -1,5 +1,5 @@
 name: "Bug report"
-description: Create an issue describing a bug.
+description: Report an issue to help the project improve.
 title: "[BUG] - <title>"
 labels: [
   "bug"
