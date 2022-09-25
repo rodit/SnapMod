@@ -75,7 +75,7 @@ To use this Xposed module, you'll need a rooted or a non-rooted phone (😱).
   - Module update checking
 
 # Issues
-> **Warning** Please do not create feature requests or common questions in GitHub Issues, use **Discussions**.
+> **Warning** Please do not create duplicate issues. Refrain from creating feature requests or common questions in GitHub Issues, use **Discussions** for these.
 
 ## Troubleshooting
 If nothing works, the first thing to do is: kill the Snapchat app process through system settings and after that relaunch it and do this twice. This will make sure any cached mappings are updated.
