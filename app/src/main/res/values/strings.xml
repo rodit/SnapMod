@@ -136,9 +136,6 @@
     <string name="disable_snap_splitting_title">Disable Snap Splitting</string>
     <string name="disable_snap_splitting_description">Stops long snaps from being split up into parts.</string>
 
-    <string name="enable_new_voice_notes_title">Enable New Voice Notes</string>
-    <string name="enable_new_voice_notes_description">Force enables the new voice note UI.</string>
-
     <string name="show_notification_content_title">Show Message In Notifications</string>
     <string name="show_notification_content_description">Displays message content in notifications.</string>
 
@@ -156,9 +153,6 @@
 
     <string name="auto_download_stories_title">Auto-Download Stories</string>
     <string name="auto_download_stories_description">Automatically downloads stories when viewed.</string>
-
-    <string name="enable_new_chat_menu_title">Enable New Chat Menu</string>
-    <string name="enable_new_chat_menu_description">Enables the new chat context menu (recommended).</string>
 
     <string name="enable_story_list_title">Enable Story List</string>
     <string name="enable_story_list_description">Replaces the default story carousel with a list.</string>

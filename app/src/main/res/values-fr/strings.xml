@@ -136,9 +136,6 @@
     <string name="disable_snap_splitting_title">Désactiver le découpage des Snaps</string>
     <string name="disable_snap_splitting_description">Empêche les longs snaps d\'être divisés en plusieurs parties.</string>
     
-    <string name="enable_new_voice_notes_title">Activer les nouvelles notes vocales</string>
-    <string name="enable_new_voice_notes_description">Force l\'activation de la nouvelle interface des notes vocales.</string>
-    
     <string name="show_notification_content_title">Afficher le message dans les notifications</string>
     <string name="show_notification_content_description">Affiche le contenu du message dans les notifications.</string>
     
@@ -156,9 +153,7 @@
     
     <string name="auto_download_stories_title">Téléchargement automatique des Stories</string>
     <string name="auto_download_stories_description">Télécharger automatiquement les stories lorsque vous les visualisez.</string>
-    
-    <string name="enable_new_chat_menu_title">Activer le nouveau menu du chat</string>
-    <string name="enable_new_chat_menu_description">Active le nouveau menu contextuel du chat (recommandé).</string>
+
     <string name="enable_story_list_title">Activer la liste des Stories</string>
     <string name="enable_story_list_description">Remplace le carrousel des stories par une liste.</string>
 </resources>
