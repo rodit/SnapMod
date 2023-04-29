@@ -35,11 +35,6 @@ class NewChatMenuModifier(context: FeatureContext) : Feature(context) {
     }
 
     override fun performHooks() {
-        // Force new chat action menu
-        ProfileActionSheetChooser.choose.before {
-            it.args[0] = true
-        }
-
         // Add subsection
         ProfileActionSheetCreator.apply.before {
             if (it.args[0] !is List<*>) return@before

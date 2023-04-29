@@ -511,10 +511,7 @@ class FriendProfileTransformer {
     void $<init>(Object, Object, int)
 
     * $apply(...) {
-        .string "Required value was null.";
-        .string "performanceLogger";
-        .method Collections->singletonList;
-        .new !FooterInfoItem;
+        .string "LOOK:ContentManagerResourceResolver#createall";
     }
 }
 
@@ -1058,11 +1055,7 @@ class PublicProfileTileTransformer {
     }
 }
 
-[certain]
-class ComposerFriend expects com.snap.composer.people.Friend {
 
-    #ComposerUser $getUser()
-}
 
 [late]
 class ComposerUser {
@@ -1070,15 +1063,7 @@ class ComposerUser {
     String $getUsername()
 }
 
-[certain]
-class FriendStoringProxy {
 
-    boolean $perform(...) {
-        .method *->getFriends;
-        .method *->getBestFriends;
-        .new #FriendListener;
-    }
-}
 
 [late]
 class FriendListener {
@@ -1097,17 +1082,7 @@ class DisplayInfoContainer {
     }
 }
 
-[certain]
-class ProfileMyFriendsSection {
 
-    [discard] * m0(...) {
-        .string "ProfileMyFriendsSection";
-    }
-
-    List filter(String, List) {
-        .type !DisplayInfoContainer;
-    }
-}
 
 [certain, discard]
 class FriendsFeedRecordHolder {
@@ -1681,30 +1656,17 @@ class CameraRollVideoLengthChecker {
     }
 }
 
-[certain, obfuscated]
-enum ProfileActionSheetDisplay {
 
-    [late] static this .fields { ONLY_HEADER, NO_HEADER, DEFAULT }
-}
-
-[certain, discard]
-class ProfileActionSheetProvider {
-
-    void $<init>(...) {
-        .string "ProfileActionSheetProvider";
-    }
-}
 
 [certain, conserve]
 class ProfileActionSheetCreator {
 
-    Object nestedContext;
+
     Object actionMenuContext;
+    Object nestedContext;
 
     * apply(*) {
-        .type !ProfileActionSheetProvider;
-        .field !ProfileActionSheetDisplay->!ONLY_HEADER;
-        .field !ProfileActionSheetDisplay->!NO_HEADER;
+        .string "Notification not supported for ";
     }
 }
 
@@ -1712,8 +1674,6 @@ class ProfileActionSheetCreator {
 enum ActionSheetType {
 
     [late] static this .fields { PROFILE, PROFILE_ACTION_MENU }
-
-    [not] int i0;
 }
 
 [certain]
@@ -1722,7 +1682,6 @@ class ActionMenuContext {
     !ActionSheetType sheetType;
     !FriendInfo friendInfo;
     !BasicFeedInfo feedInfo;
-    !ProfileActionSheetDisplay display;
 }
 
 [certain]
@@ -1778,14 +1737,7 @@ class NestedActionMenuContext {
     static void display(this, String, List)
 }
 
-[certain]
-class ProfileActionSheetChooser {
 
-    * choose(*) {
-        .field !ProfileActionSheetDisplay->!ONLY_HEADER;
-        .field !ProfileActionSheetDisplay->!DEFAULT;
-    }
-}
 
 [certain]
 class StoryKey {
